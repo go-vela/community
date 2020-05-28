@@ -16,7 +16,7 @@ staleLabel: stale
 markComment: >
   This issue has been automatically marked as stale due to no recent activity for the last 60 days.
 
-  It will be closed if no further activity occurs.
+  It will be closed if no further activity occurs in the next 30 days.
 
   Thank you for your contributions!
 
