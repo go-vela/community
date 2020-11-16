@@ -8,8 +8,11 @@ Instead of building backwards compatibility we want all secrets to be encrypted 
 
 * [Go Installed](https://golang.org/doc/install)
   * Along with packages referenced in `main.go` file in this directory
+  * Tip: packages can be downloaded with `go.mod`
+* Address to vela server
+* encryption key used for v0.7.0 installation
 * Vela user account with admin access
-  * Specifically, token from that account with the admin authorization
+  * username and token will be required to run script
 
 **Usage:**
 
