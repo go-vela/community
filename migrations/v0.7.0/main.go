@@ -32,6 +32,7 @@ type server struct {
 func main() {
 	s := server{
 		Addr:     os.Getenv("VELA_ADDR"),
+		Key:      os.Getenv("VELA_KEY"),
 		Username: os.Getenv("VELA_USERNAME"),
 		Password: os.Getenv("VELA_PASSWORD"),
 		OTP:      os.Getenv("VELA_OTP"),
