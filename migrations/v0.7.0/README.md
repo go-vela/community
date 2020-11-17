@@ -11,8 +11,7 @@ Instead of building backwards compatibility we want all secrets to be encrypted 
   * Tip: packages can be downloaded with `go.mod`
 * Address to vela server
 * encryption key used for v0.7.0 installation
-* Vela user account with admin access
-  * username and token will be required to run script
+* Vela user account token with admin access
 
 **Usage:**
 
@@ -20,7 +19,6 @@ Instead of building backwards compatibility we want all secrets to be encrypted 
 # run the script within this directory
 export VELA_ADDR=<server_addr>
 export VELA_KEY=<server_key>
-export VELA_USERNAME=<admin_username>
 export VELA_TOKEN=<admin_token>
 
 # if applicable

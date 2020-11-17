@@ -9,7 +9,6 @@ import (
 	"os"
 
 	"github.com/go-vela/sdk-go/vela"
-	"github.com/go-vela/types/library"
 	"github.com/sirupsen/logrus"
 )
 
@@ -17,13 +16,9 @@ import (
 // interact with a Vela server
 type server struct {
 	// information about server
-	Addr string
-	Key  string
-
-	// information for login
-	Username string
-	Password string
-	OTP      string
+	Addr  string
+	Key   string
+	Token string
 
 	// clients for interaction
 	vela *vela.Client
@@ -31,11 +26,9 @@ type server struct {
 
 func main() {
 	s := server{
-		Addr:     os.Getenv("VELA_ADDR"),
-		Key:      os.Getenv("VELA_KEY"),
-		Username: os.Getenv("VELA_USERNAME"),
-		Password: os.Getenv("VELA_PASSWORD"),
-		OTP:      os.Getenv("VELA_OTP"),
+		Addr:  os.Getenv("VELA_ADDR"),
+		Key:   os.Getenv("VELA_KEY"),
+		Token: os.Getenv("VELA_TOKEN"),
 	}
 
 	logrus.Info("validating script setup")
@@ -70,19 +63,9 @@ func (s *server) validate() error {
 		return fmt.Errorf("key is not properly configured; invalid length specified: %d", len(s.Key))
 	}
 
-	// check the username is set
-	if len(s.Username) == 0 {
+	// check the token is set
+	if len(s.Token) == 0 {
 		return fmt.Errorf("username is not properly configured")
-	}
-
-	// check the password is set
-	if len(s.Password) == 0 {
-		return fmt.Errorf("password is not properly configured")
-	}
-
-	// check the otp is set
-	if len(s.OTP) == 0 {
-		logrus.Warn("authentication without otp")
 	}
 
 	return nil
@@ -96,18 +79,8 @@ func (s *server) login() error {
 		return fmt.Errorf("unable to create client: %w", err)
 	}
 
-	// Login to application and get token
-	auth, _, err := c.Authorization.Login(&library.Login{
-		Username: &s.Addr,
-		Password: &s.Username,
-		OTP:      &s.OTP,
-	})
-	if err != nil {
-		return fmt.Errorf("unable to login: %w", err)
-	}
-
 	// Set new token in existing client
-	c.Authentication.SetTokenAuth(*auth.Token)
+	c.Authentication.SetTokenAuth(s.Token)
 
 	// add the client to the server
 	s.vela = c
