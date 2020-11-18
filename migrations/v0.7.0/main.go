@@ -4,6 +4,7 @@ import (
 	"crypto/aes"
 	"crypto/cipher"
 	"crypto/rand"
+	"encoding/base64"
 	"fmt"
 	"io"
 	"os"
@@ -98,16 +99,16 @@ func (s *server) modify() error {
 	}
 
 	// update each secret value to be encrypted
-	for _, secret := range secrets {
+	for _, secret := range *secrets {
 		encVal, err := encrypt([]byte(secret.GetValue()), s.Key)
 		if err != nil {
 			return fmt.Errorf("unable to encrypt secret %s: %w", secret.GetName(), err)
 		}
 
-		secret.SetName(encVal)
+		secret.SetValue(encVal)
 
 		// get the list of secrets from the database
-		_, _, err = s.vela.Admin.Secret.Update(secret)
+		_, _, err = s.vela.Admin.Secret.Update(&secret)
 		if err != nil {
 			return fmt.Errorf("unable to update secret %s: %w", secret.GetName(), err)
 		}
@@ -117,7 +118,7 @@ func (s *server) modify() error {
 }
 
 // This func is a direct copy of Vela's encrypt implementation:
-// TODO: Add link
+// https://github.com/go-vela/server/blob/master/secret/native/crypto.go#L22
 func encrypt(data []byte, key string) (string, error) {
 	// within the validate process we enforce a 64 bit key which
 	// ensures all secrets are encrypted with AES-256:
@@ -142,5 +143,11 @@ func encrypt(data []byte, key string) (string, error) {
 		return "", err
 	}
 
-	return string(gcm.Seal(nonce, nonce, data, nil)), nil
+	// encrypt the data with the randomly generated nonce
+	encData := gcm.Seal(nonce, nonce, data, nil)
+
+	// encode the encrypt data to make it network safe
+	sEnc := base64.StdEncoding.EncodeToString(encData)
+
+	return sEnc, nil
 }

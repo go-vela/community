@@ -21,8 +21,6 @@ export VELA_ADDR=<server_addr>
 export VELA_KEY=<server_key>
 export VELA_TOKEN=<admin_token>
 
-# if applicable
-export VELA_OTP=<admin_OTP>
-
+# execute program
 go run main.go
 ```
