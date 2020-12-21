@@ -104,10 +104,11 @@ Given all above, we're left to pick and choose which parts of the above we like.
 #### Option MVP:
 ```
 - System set max builds at the repo level.
+- Allow an override for particular repos (give larger max for larger team is the use case)
 - User set repo max in the setting page. (possibly set a default for repos at the org level)
 - When max builds is reached:
   - queue the build (FIFO queue)
-  - builds triggered by tag events ignore queue (is this easily achievable from a tech perspective? so we prioritize prod deploys is the thought - could also prioritize Pull Request events as well)
+  - builds triggered by [a configurable set of] events ignore queue
 
 pro:
 - protects system stability
