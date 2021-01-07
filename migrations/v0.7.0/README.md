@@ -16,11 +16,22 @@ Instead of building backwards compatibility we want all secrets to be encrypted 
 **Usage:**
 
 ```sh
+# clone repo and change directory into the v0.7.0 directoy
+git clone https://github.com/go-vela/community
+cd community/migrations/v0.7.0
+
+# build docker image for executing script
+docker build -t target/vela-migration:local .
+
 # run the script within this directory
 export VELA_ADDR=<server_addr>
 export VELA_KEY=<server_key>
 export VELA_TOKEN=<admin_token>
 
-# execute program
-go run main.go
+# execute docker image
+docker run --rm  \
+    -e VELA_ADDR \
+    -e VELA_KEY \
+    -e VELA_TOKEN \
+    target/vela-migration:local
 ```
