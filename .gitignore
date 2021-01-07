@@ -1,0 +1,2 @@
+# ignore all downstream directories
+*/**/release/
