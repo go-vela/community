@@ -14,7 +14,7 @@ WORKDIR /opt/go-vela/community
 
 RUN make clean
 
-RUN make build-static-ci
+RUN make build-static
 
 ################################################################################
 ##  docker build --no-cache --target binary -t target/vela-migration:certs .  ##
