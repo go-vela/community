@@ -1,3 +1,7 @@
+# Copyright (c) 2021 Target Brands, Inc. All rights reserved.
+#
+# Use of this source code is governed by the LICENSE file in this repository.
+
 # The `clean` target is intended to clean the workspace
 # and prepare the local changes for submission.
 #
