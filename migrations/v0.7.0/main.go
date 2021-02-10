@@ -126,7 +126,7 @@ func (s *server) modify() error {
 
 	logrus.Infof("iterating through list of %d secrets", len(*secrets))
 
-	// iterate through ll secrets stored in database
+	// iterate through all secrets stored in database
 	for _, secret := range *secrets {
 		// create output string for secret
 		var output string
