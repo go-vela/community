@@ -14,6 +14,7 @@ import (
 	"os"
 
 	"github.com/go-vela/sdk-go/vela"
+	"github.com/go-vela/types/constants"
 	"github.com/sirupsen/logrus"
 )
 
@@ -30,6 +31,26 @@ type server struct {
 }
 
 func main() {
+	// set the log level for the utility
+	switch os.Getenv("VELA_LOG_LEVEL") {
+	case "t", "trace", "Trace", "TRACE":
+		logrus.SetLevel(logrus.TraceLevel)
+	case "d", "debug", "Debug", "DEBUG":
+		logrus.SetLevel(logrus.DebugLevel)
+	case "w", "warn", "Warn", "WARN":
+		logrus.SetLevel(logrus.WarnLevel)
+	case "e", "error", "Error", "ERROR":
+		logrus.SetLevel(logrus.ErrorLevel)
+	case "f", "fatal", "Fatal", "FATAL":
+		logrus.SetLevel(logrus.FatalLevel)
+	case "p", "panic", "Panic", "PANIC":
+		logrus.SetLevel(logrus.PanicLevel)
+	case "i", "info", "Info", "INFO":
+		fallthrough
+	default:
+		logrus.SetLevel(logrus.InfoLevel)
+	}
+
 	s := server{
 		Addr:  os.Getenv("VELA_ADDR"),
 		Key:   os.Getenv("VELA_KEY"),
@@ -42,13 +63,13 @@ func main() {
 		logrus.Fatal(err)
 	}
 
-	logrus.Info("establish a connection with the server")
+	logrus.Info("establishing a connection with the server")
 	err = s.login()
 	if err != nil {
 		logrus.Fatal(err)
 	}
 
-	logrus.Info("execute the update to encrypt secrets")
+	logrus.Info("modifying secrets with encryption")
 	err = s.modify()
 	if err != nil {
 		logrus.Fatal(err)
@@ -57,20 +78,19 @@ func main() {
 
 // validate the server information
 func (s *server) validate() error {
-
-	// check the addr is set
+	// check if the addr is set
 	if len(s.Addr) == 0 {
-		return fmt.Errorf("addr is not properly configured")
+		return fmt.Errorf("VELA_ADDR is not properly configured")
 	}
 
-	// check the key is set
-	if len(s.Key) != 32 {
-		return fmt.Errorf("key is not properly configured; invalid length specified: %d", len(s.Key))
-	}
-
-	// check the token is set
+	// check if the token is set
 	if len(s.Token) == 0 {
-		return fmt.Errorf("username is not properly configured")
+		return fmt.Errorf("VELA_TOKEN is not properly configured")
+	}
+
+	// check if the key is set
+	if len(s.Key) != 32 {
+		return fmt.Errorf("VELA_KEY is not properly configured; invalid length specified: %d", len(s.Key))
 	}
 
 	return nil
@@ -96,25 +116,51 @@ func (s *server) login() error {
 // modify reads the secrets in the database and encrypts the
 // value then updates the secret to contain the encrypted value.
 func (s *server) modify() error {
-	// get the list of secrets from the database
+	logrus.Infof("retrieving all secrets from %s", s.Addr)
+
+	// send API call to capture list of secrets from the database
 	secrets, _, err := s.vela.Admin.Secret.GetAll(nil)
 	if err != nil {
 		return fmt.Errorf("unable to retrieve secrets: %w", err)
 	}
 
-	// update each secret value to be encrypted
+	logrus.Infof("iterating through list of %d secrets", len(*secrets))
+
+	// iterate through all secrets stored in database
 	for _, secret := range *secrets {
-		encVal, err := encrypt([]byte(secret.GetValue()), s.Key)
-		if err != nil {
-			return fmt.Errorf("unable to encrypt secret %s: %w", secret.GetName(), err)
+		// create output string for secret
+		var output string
+
+		// format the output string based off secret type
+		switch secret.GetType() {
+		case constants.SecretRepo:
+			// syntax: repo/<org>/<repo>/<name>
+			output = fmt.Sprintf("repo/%s/%s/%s", secret.GetOrg(), secret.GetRepo(), secret.GetName())
+		case constants.SecretOrg:
+			// syntax: org/<org>/*/<name>
+			output = fmt.Sprintf("org/%s/*/%s", secret.GetOrg(), secret.GetName())
+		case constants.SecretShared:
+			// syntax: shared/<org>/<team>/<name>
+			output = fmt.Sprintf("shared/%s/%s/%s", secret.GetOrg(), secret.GetTeam(), secret.GetName())
 		}
 
+		logrus.Debugf("encrypting secret %s", output)
+
+		// encrypt secret value using provided key
+		encVal, err := encrypt([]byte(secret.GetValue()), s.Key)
+		if err != nil {
+			return fmt.Errorf("unable to encrypt secret %s: %w", output, err)
+		}
+
+		// set new secret value that is encrypted
 		secret.SetValue(encVal)
 
-		// get the list of secrets from the database
+		logrus.Debugf("updating encrypted secret %s", output)
+
+		// send API call to update secret in database
 		_, _, err = s.vela.Admin.Secret.Update(&secret)
 		if err != nil {
-			return fmt.Errorf("unable to update secret %s: %w", secret.GetName(), err)
+			return fmt.Errorf("unable to update secret %s: %w", output, err)
 		}
 	}
 
