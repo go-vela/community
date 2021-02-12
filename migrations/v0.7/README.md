@@ -1,4 +1,6 @@
-# v0.7.2 migration
+# v0.7 migration
+
+_Please note: this notice applies when upgrading to the latest v0.7.x release._
 
 When migrating from Vela version [v0.6.0](https://github.com/go-vela/community/blob/master/releases/v0.6.0.md) to [v0.7.2](https://github.com/go-vela/community/blob/master/releases/v0.7.2.md) the Vela administrator will want to ensure the following actions are being performed:
 
