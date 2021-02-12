@@ -7,6 +7,7 @@ When migrating from Vela version [v0.6.0](https://github.com/go-vela/community/b
 1. Update tables in the Postgres database
    * `ALTER TABLE users ADD COLUMN IF NOT EXISTS refresh_token VARCHAR(500);`
    * `ALTER TABLE builds ADD COLUMN IF NOT EXISTS deploy_payload VARCHAR(2000);`
+   * `ALTER TABLE workers ADD COLUMN IF NOT EXISTS build_limit INTEGER;`
 
 1. Configure the Vela OAuth App's callback (in GitHub) to point to `<vela-server>/authenticate` (do not use the UI for the address)
 
