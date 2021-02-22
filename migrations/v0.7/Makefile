@@ -9,6 +9,20 @@
 .PHONY: clean
 clean: tidy vet fmt fix
 
+# The `build` target is intended to compile
+# the Go source code into a binary.
+#
+# Usage: `make build`
+.PHONY: build
+build: build-darwin build-linux build-windows
+
+# The `build-static` target is intended to compile
+# the Go source code into a statically linked binary.
+#
+# Usage: `make build-static`
+.PHONY: build-static
+build-static: build-darwin-static build-linux-static build-windows-static
+
 # The `tidy` target is intended to clean up
 # the Go module files (go.mod & go.sum).
 #
@@ -49,31 +63,111 @@ fix:
 	@echo "### Fixing Go Code"
 	@go fix ./...
 
-# The `build` target is intended to compile
-# the Go source code into a binary.
+# The `build-darwin` target is intended to compile the
+# Go source code into a Darwin compatible (MacOS) binary.
 #
-# Usage: `make build`
-.PHONY: build
-build:
+# Usage: `make build-darwin`
+.PHONY: build-darwin
+build-darwin:
 	@echo
-	@echo "### Building release/vela-migration binary"
-	GOOS=linux CGO_ENABLED=0 \
+	@echo "### Building release/darwin/amd64/vela-migration binary"
+	GOOS=darwin CGO_ENABLED=0 GOARCH=amd64 \
 		go build -a \
-		-o release/vela-migration \
+		-o release/darwin/amd64/vela-migration \
 		github.com/go-vela/community/migrations/v0.7
 
-# The `build-static` target is intended to compile
-# the Go source code into a statically linked binary.
+# The `build-linux` target is intended to compile the
+# Go source code into a Linux compatible binary.
 #
-# Usage: `make build-static`
-.PHONY: build-static
-build-static:
+# Usage: `make build-linux`
+.PHONY: build-linux
+build-linux:
 	@echo
-	@echo "### Building static release/vela-migration binary"
-	GOOS=linux CGO_ENABLED=0 \
+	@echo "### Building release/linux/amd64/vela-migration binary"
+	GOOS=linux CGO_ENABLED=0 GOARCH=amd64 \
+		go build -a \
+		-o release/linux/amd64/vela-migration \
+		github.com/go-vela/community/migrations/v0.7
+	@echo
+	@echo "### Building release/linux/arm64/vela-migration binary"
+	GOOS=linux CGO_ENABLED=0 GOARCH=arm64 \
+		go build -a \
+		-o release/linux/arm64/vela-migration \
+		github.com/go-vela/community/migrations/v0.7
+	@echo
+	@echo "### Building release/linux/arm/vela-migration binary"
+	GOOS=linux CGO_ENABLED=0 GOARCH=arm \
+		go build -a \
+		-o release/linux/arm/vela-migration \
+		github.com/go-vela/community/migrations/v0.7
+
+# The `build-windows` target is intended to compile the
+# Go source code into a Windows compatible binary.
+#
+# Usage: `make build-windows`
+.PHONY: build-windows
+build-windows:
+	@echo
+	@echo "### Building release/windows/amd64/vela-migration binary"
+	GOOS=windows CGO_ENABLED=0 GOARCH=amd64 \
+		go build -a \
+		-o release/windows/amd64/vela-migration \
+		github.com/go-vela/community/migrations/v0.7
+
+# The `build-darwin-static` target is intended to compile the
+# Go source code into a statically linked, Darwin compatible (MacOS) binary.
+#
+# Usage: `make build-darwin-static`
+.PHONY: build-darwin-static
+build-darwin-static:
+	@echo
+	@echo "### Building release/darwin/amd64/vela-migration binary"
+	GOOS=darwin CGO_ENABLED=0 GOARCH=amd64 \
 		go build -a \
 		-ldflags '-s -w -extldflags "-static"' \
-		-o release/vela-migration \
+		-o release/darwin/amd64/vela-migration \
+		github.com/go-vela/community/migrations/v0.7
+
+# The `build-linux-static` target is intended to compile the
+# Go source code into a statically linked, Linux compatible binary.
+#
+# Usage: `make build-linux-static`
+.PHONY: build-linux-static
+build-linux-static:
+	@echo
+	@echo "### Building release/linux/amd64/vela-migration binary"
+	GOOS=linux CGO_ENABLED=0 GOARCH=amd64 \
+		go build -a \
+		-ldflags '-s -w -extldflags "-static"' \
+		-o release/linux/amd64/vela-migration \
+		github.com/go-vela/community/migrations/v0.7
+	@echo
+	@echo "### Building release/linux/arm64/vela-migration binary"
+	GOOS=linux CGO_ENABLED=0 GOARCH=arm64 \
+		go build -a \
+		-ldflags '-s -w -extldflags "-static"' \
+		-o release/linux/arm64/vela-migration \
+		github.com/go-vela/community/migrations/v0.7
+	@echo
+	@echo "### Building release/linux/arm/vela-migration binary"
+	GOOS=linux CGO_ENABLED=0 GOARCH=arm \
+		go build -a \
+		-ldflags '-s -w -extldflags "-static"' \
+		-o release/linux/arm/vela-migration \
+		github.com/go-vela/community/migrations/v0.7
+
+# The `build-windows-static` target is intended to compile the
+# Go source code into a statically linked, Windows compatible binary.
+#
+# Usage: `make build-windows-static`
+.PHONY: build-windows-static
+build-windows-static:
+	@echo
+	@echo "### Building release/windows/amd64/vela-migration binary"
+	GOOS=windows CGO_ENABLED=0 GOARCH=amd64 \
+		go build -a \
+		-ldflags '-s -w -extldflags "-static"' \
+		-o release/windows/amd64/vela-migration \
 		github.com/go-vela/community/migrations/v0.7
 
 # The `build-static-ci` target is intended to compile
@@ -89,3 +183,29 @@ build-static-ci:
 		-ldflags '-s -w -extldflags "-static"' \
 		-o release/vela-migration \
 		github.com/go-vela/community/migrations/v0.7
+
+# The `docker-build` target is intended to build
+# the Docker image for the utility.
+#
+# Usage: `make docker-build`
+.PHONY: docker-build
+docker-build:
+	@echo
+	@echo "### Building target/vela-migration:local image"
+	@docker build --no-cache -t target/vela-migration:local .
+
+# The `docker-run` target is intended to execute
+# the Docker image for the utility.
+#
+# Usage: `make docker-run`
+.PHONY: docker-run
+docker-run:
+	@echo
+	@echo "### Executing target/vela-migration:local image"
+	@docker run --rm \
+		-e VELA_DATABASE_DRIVER \
+		-e VELA_DATABASE_CONFIG \
+		-e VELA_DATABASE_CONNECTION_OPEN \
+		-e VELA_DATABASE_CONNECTION_IDLE \
+		-e VELA_DATABASE_CONNECTION_LIFE \
+		target/vela-migration:local
