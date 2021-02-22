@@ -72,12 +72,30 @@ func (d *db) New(c *cli.Context) error {
 func (d *db) Exec() error {
 	logrus.Debug("executing workload from provided configuration")
 
+	// TODO: remove this hack
+	//
+	// this allows us to "ignore" the error messages
+	// returned from GetBuildLogs()
+	//
+	// capture current log level
+	currentLevel := logrus.GetLevel()
+	// only output panic level logs
+	logrus.SetLevel(logrus.PanicLevel)
+
 	logrus.Info("capturing all builds from the database")
 	// capture all builds from the database
 	builds, err := d.Client.GetBuildList()
 	if err != nil {
 		return err
 	}
+
+	// TODO: remove this hack
+	//
+	// this allows us to "ignore" the error messages
+	// returned from GetBuildLogs()
+	//
+	// output intended level of logs
+	logrus.SetLevel(currentLevel)
 
 	// iterate through all builds from the database
 	for _, build := range builds {
@@ -97,7 +115,7 @@ func (d *db) Exec() error {
 			}
 		}
 
-		logrus.Infof("all logs updated for build %d", build.GetID())
+		logrus.Debugf("all logs updated for build %d", build.GetID())
 	}
 
 	return nil
