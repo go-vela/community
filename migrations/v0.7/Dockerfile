@@ -14,7 +14,7 @@ WORKDIR /opt/go-vela/community
 
 RUN make clean
 
-RUN make build-static
+RUN make build-linux-static
 
 ################################################################################
 ##  docker build --no-cache --target binary -t target/vela-migration:certs .  ##
@@ -30,7 +30,7 @@ RUN apk add --update --no-cache ca-certificates
 
 FROM scratch
 
-COPY --from=binary /opt/go-vela/community/release/vela-migration /bin/vela-migration
+COPY --from=binary /opt/go-vela/community/release/linux/amd64/vela-migration /bin/vela-migration
 COPY --from=certs /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
 
 CMD ["/bin/vela-migration"]
