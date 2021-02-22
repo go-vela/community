@@ -110,6 +110,19 @@ func (d *db) Exec() error {
 
 		// iterate through all logs for the build from the database
 		for _, log := range logs {
+			// cast to database type
+			l := database.LogFromLibrary(log)
+
+			// attempt to decompress data for the resource
+			//
+			// https://pkg.go.dev/github.com/go-vela/types/database#Log.Decompress
+			err = l.Decompress()
+			if err == nil {
+				logrus.Tracef("able to decompress log %d - skipping", l.ID.Int64)
+
+				continue
+			}
+
 			// update log entry with compression in the database
 			err = d.Client.UpdateLog(log)
 			if err != nil {
