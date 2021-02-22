@@ -66,5 +66,5 @@ func run(c *cli.Context) error {
 		return err
 	}
 
-	return nil
+	return d.Exec()
 }

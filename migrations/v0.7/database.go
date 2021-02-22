@@ -65,9 +65,47 @@ func (d *db) New(c *cli.Context) error {
 	return nil
 }
 
+// Exec takes the provided configuration and attempts to
+// capture all logs from the database. After capturing all
+// logs from the database, we'll update the log entry with
+// a compressed data field.
+func (d *db) Exec() error {
+	logrus.Debug("executing workload from provided configuration")
+
+	logrus.Info("capturing all builds from the database")
+	// capture all builds from the database
+	builds, err := d.Client.GetBuildList()
+	if err != nil {
+		return err
+	}
+
+	// iterate through all builds from the database
+	for _, build := range builds {
+		logrus.Infof("capturing all logs for build %d", build.GetID())
+		// capture all logs for the build from the database
+		logs, err := d.Client.GetBuildLogs(build.GetID())
+		if err != nil {
+			return err
+		}
+
+		// iterate through all logs for the build from the database
+		for _, log := range logs {
+			// update log entry with compression in the database
+			err = d.Client.UpdateLog(log)
+			if err != nil {
+				return err
+			}
+		}
+
+		logrus.Infof("all logs updated for build %d", build.GetID())
+	}
+
+	return nil
+}
+
 // Validate verifies the provided database is configured properly.
 func (d *db) Validate() error {
-	logrus.Info("validating provided database configuration")
+	logrus.Debug("validating provided database configuration")
 
 	// check if the database driver is set
 	if len(d.Driver) == 0 {
