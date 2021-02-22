@@ -10,6 +10,7 @@ import (
 
 	"github.com/go-vela/server/database"
 	"github.com/go-vela/types/constants"
+	dbTypes "github.com/go-vela/types/database"
 
 	"github.com/sirupsen/logrus"
 	"github.com/urfave/cli/v2"
@@ -82,11 +83,30 @@ func (d *db) Exec() error {
 	// iterate through all builds from the database
 	for _, build := range builds {
 		logrus.Infof("capturing all logs for build %d", build.GetID())
+
+		// TODO: remove this hack
+		//
+		// this allows us to "ignore" the error messages
+		// returned from GetBuildLogs()
+		//
+		// capture current log level
+		currentLevel := logrus.GetLevel()
+		// only output panic level logs
+		logrus.SetLevel(logrus.PanicLevel)
+
 		// capture all logs for the build from the database
 		logs, err := d.Client.GetBuildLogs(build.GetID())
 		if err != nil {
 			return err
 		}
+
+		// TODO: remove this hack
+		//
+		// this allows us to "ignore" the error messages
+		// returned from GetBuildLogs()
+		//
+		// output intended level of logs
+		logrus.SetLevel(currentLevel)
 
 		// iterate through all logs for the build from the database
 		for _, log := range logs {
@@ -97,7 +117,7 @@ func (d *db) Exec() error {
 			}
 		}
 
-		logrus.Infof("all logs updated for build %d", build.GetID())
+		logrus.Debugf("all logs updated for build %d", build.GetID())
 	}
 
 	return nil
