@@ -66,57 +66,15 @@ func (d *db) New(c *cli.Context) error {
 }
 
 // Exec takes the provided configuration and attempts to
-// capture all logs from the database. After capturing all
-// logs from the database, we'll update the log entry with
-// a compressed data field.
+// run a series of different functions that will
+// manipulate indexes, tables and columns.
 func (d *db) Exec() error {
 	logrus.Debug("executing workload from provided configuration")
 
-	logrus.Info("capturing all builds from the database")
-	// capture all builds from the database
-	builds, err := d.Client.GetBuildList()
+	// compress all log entries in the database
+	err := d.Compress()
 	if err != nil {
 		return err
-	}
-
-	// iterate through all builds from the database
-	for _, build := range builds {
-		logrus.Infof("capturing all logs for build %d", build.GetID())
-
-		// TODO: remove this hack
-		//
-		// this allows us to "ignore" the error messages
-		// returned from GetBuildLogs()
-		//
-		// capture current log level
-		currentLevel := logrus.GetLevel()
-		// only output panic level logs
-		logrus.SetLevel(logrus.PanicLevel)
-
-		// capture all logs for the build from the database
-		logs, err := d.Client.GetBuildLogs(build.GetID())
-		if err != nil {
-			return err
-		}
-
-		// TODO: remove this hack
-		//
-		// this allows us to "ignore" the error messages
-		// returned from GetBuildLogs()
-		//
-		// output intended level of logs
-		logrus.SetLevel(currentLevel)
-
-		// iterate through all logs for the build from the database
-		for _, log := range logs {
-			// update log entry with compression in the database
-			err = d.Client.UpdateLog(log)
-			if err != nil {
-				return err
-			}
-		}
-
-		logrus.Debugf("all logs updated for build %d", build.GetID())
 	}
 
 	return nil
