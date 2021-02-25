@@ -60,11 +60,5 @@ func run(c *cli.Context) error {
 		return err
 	}
 
-	// create database configuration
-	err = d.New(c)
-	if err != nil {
-		return err
-	}
-
-	return d.Exec()
+	return d.Exec(c)
 }
