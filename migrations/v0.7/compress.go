@@ -5,14 +5,7 @@
 package main
 
 import (
-	"fmt"
-	"time"
-
-	"github.com/go-vela/server/database"
-	"github.com/go-vela/types/constants"
-
 	"github.com/sirupsen/logrus"
-	"github.com/urfave/cli/v2"
 )
 
 // Compress attempts to capture all builds from the database.

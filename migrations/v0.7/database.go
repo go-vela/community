@@ -68,11 +68,23 @@ func (d *db) New(c *cli.Context) error {
 // Exec takes the provided configuration and attempts to
 // run a series of different functions that will
 // manipulate indexes, tables and columns.
-func (d *db) Exec() error {
+func (d *db) Exec(c *cli.Context) error {
 	logrus.Debug("executing workload from provided configuration")
 
+	// alter all tables in the database
+	err := d.Alter()
+	if err != nil {
+		return err
+	}
+
+	// create new database service
+	err = d.New(c)
+	if err != nil {
+		return err
+	}
+
 	// compress all log entries in the database
-	err := d.Compress()
+	err = d.Compress()
 	if err != nil {
 		return err
 	}
