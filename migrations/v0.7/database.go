@@ -71,8 +71,14 @@ func (d *db) New(c *cli.Context) error {
 func (d *db) Exec(c *cli.Context) error {
 	logrus.Debug("executing workload from provided configuration")
 
-	// alter all tables in the database
+	// alter required tables in the database
 	err := d.Alter()
+	if err != nil {
+		return err
+	}
+
+	// drop unused indexes in the database
+	err = d.Drop()
 	if err != nil {
 		return err
 	}
