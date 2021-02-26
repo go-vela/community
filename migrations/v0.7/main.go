@@ -8,6 +8,8 @@ import (
 	"os"
 	"time"
 
+	"github.com/go-vela/types/constants"
+
 	"github.com/sirupsen/logrus"
 	"github.com/urfave/cli/v2"
 
@@ -71,6 +73,12 @@ func main() {
 			Name:    "database.connection.life",
 			Usage:   "sets the amount of time a connection may be reused for the database",
 			Value:   30 * time.Minute,
+		},
+		&cli.IntFlag{
+			EnvVars: []string{"VELA_DATABASE_COMPRESSION_LEVEL", "DATABASE_COMPRESSION_LEVEL"},
+			Name:    "database.compression.level",
+			Usage:   "sets the level of compression for logs stored in the database",
+			Value:   constants.CompressionThree,
 		},
 
 		// Logger Flags

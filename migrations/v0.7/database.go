@@ -28,9 +28,10 @@ type connection struct {
 // information used to communicate
 // with the database.
 type db struct {
-	Driver     string
-	Config     string
-	Connection *connection
+	Driver           string
+	Config           string
+	Connection       *connection
+	CompressionLevel int
 
 	Client database.Service
 }
@@ -104,6 +105,34 @@ func (d *db) Validate() error {
 	// check if the database configuration is set
 	if len(d.Config) == 0 {
 		return fmt.Errorf("VELA_DATABASE_CONFIG is not properly configured")
+	}
+
+	// check if the compression level is valid
+	switch d.CompressionLevel {
+	case constants.CompressionNegOne:
+		fallthrough
+	case constants.CompressionZero:
+		fallthrough
+	case constants.CompressionOne:
+		fallthrough
+	case constants.CompressionTwo:
+		fallthrough
+	case constants.CompressionThree:
+		fallthrough
+	case constants.CompressionFour:
+		fallthrough
+	case constants.CompressionFive:
+		fallthrough
+	case constants.CompressionSix:
+		fallthrough
+	case constants.CompressionSeven:
+		fallthrough
+	case constants.CompressionEight:
+		fallthrough
+	case constants.CompressionNine:
+		break
+	default:
+		return fmt.Errorf("database compression level of '%d' is unsupported", d.CompressionLevel)
 	}
 
 	return nil

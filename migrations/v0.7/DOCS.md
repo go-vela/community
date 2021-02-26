@@ -4,10 +4,13 @@ This document intends to provide information on how to get the Vela migration ut
 
 ## Prerequisites
 
+* [Docker](https://docs.docker.com/install/) - building block for local development
 * [Golang](https://golang.org/dl/) - for source code and [dependency management](https://github.com/golang/go/wiki/Modules)
 * [Make](https://www.gnu.org/software/make/) - start up local development
 
 ## Setup
+
+> NOTE: Please review the [prerequisites section](#prerequisites) before moving forward.
 
 * Clone this repository to your workstation:
 
@@ -33,7 +36,7 @@ export VELA_DATABASE_DRIVER=<database driver from Vela server>
 export VELA_DATABASE_CONFIG=<database config from Vela server>
 ```
 
-* (OPTIONAL) Set the environment variables for the database connections in your local terminal:
+* (OPTIONAL) Set the environment variables for the other database configuration in your local terminal:
 
 ```sh
 # set the total number of open connections for the database
@@ -44,6 +47,9 @@ export VELA_DATABASE_CONNECTION_IDLE=<database connection idle from Vela server>
 
 # set the duration for the life of the database connections
 export VELA_DATABASE_CONNECTION_LIFE=<database connection life from Vela server>
+
+# set the level of compression for the log entries
+export VELA_DATABASE_COMPRESSION_LEVEL=<database compression level from Vela server>
 ```
 
 ## Start
@@ -126,5 +132,6 @@ make run
 #   -e VELA_DATABASE_CONNECTION_OPEN \
 #   -e VELA_DATABASE_CONNECTION_IDLE \
 #   -e VELA_DATABASE_CONNECTION_LIFE \
+#   -e VELA_DATABASE_COMPRESSION_LEVEL \
 #   target/vela-migration:local
 ```

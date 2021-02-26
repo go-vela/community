@@ -45,8 +45,9 @@ func run(c *cli.Context) error {
 
 	// create database object
 	d := &db{
-		Driver: c.String("database.driver"),
-		Config: c.String("database.config"),
+		Driver:           c.String("database.driver"),
+		Config:           c.String("database.config"),
+		CompressionLevel: c.Int("database.compression.level"),
 		Connection: &connection{
 			Idle: c.Int("database.connection.open"),
 			Life: c.Duration("database.connection.idle"),
