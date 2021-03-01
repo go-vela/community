@@ -40,6 +40,13 @@ func main() {
 
 	app.Flags = []cli.Flag{
 
+		&cli.IntFlag{
+			EnvVars: []string{"VELA_CONCURRENCY_LIMIT", "CONCURRENCY_LIMIT"},
+			Name:    "concurrency.limit",
+			Usage:   "sets the number of concurrent processes running",
+			Value:   4,
+		},
+
 		// Database Flags
 
 		&cli.StringFlag{
