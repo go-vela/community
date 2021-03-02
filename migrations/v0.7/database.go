@@ -28,9 +28,11 @@ type connection struct {
 // information used to communicate
 // with the database.
 type db struct {
-	Driver           string
-	Config           string
-	Connection       *connection
+	Driver     string
+	Config     string
+	Connection *connection
+
+	BuildLimit       int
 	ConcurrencyLimit int
 
 	Client database.Service
@@ -111,6 +113,16 @@ func (d *db) Validate() error {
 	// check if the database configuration is set
 	if len(d.Config) == 0 {
 		return fmt.Errorf("VELA_DATABASE_CONFIG is not properly configured")
+	}
+
+	// check if the database build limit is set
+	if d.BuildLimit < 0 {
+		return fmt.Errorf("VELA_BUILD_LIMIT is not properly configured")
+	}
+
+	// check if the database concurrency limit is set
+	if d.ConcurrencyLimit < 1 {
+		return fmt.Errorf("VELA_CONCURRENCY_LIMIT is not properly configured")
 	}
 
 	return nil
