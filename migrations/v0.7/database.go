@@ -28,9 +28,10 @@ type connection struct {
 // information used to communicate
 // with the database.
 type db struct {
-	Driver     string
-	Config     string
-	Connection *connection
+	Driver           string
+	Config           string
+	Connection       *connection
+	ConcurrencyLimit int
 
 	Client database.Service
 }
