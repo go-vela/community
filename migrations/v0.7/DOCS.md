@@ -36,14 +36,20 @@ export VELA_DATABASE_CONFIG=<database config from Vela server>
 * (OPTIONAL) Set the environment variables for the database connections in your local terminal:
 
 ```sh
-# set the total number of open connections for the database
+# set the total number of open connections for the database (default: 0 - no limit)
 export VELA_DATABASE_CONNECTION_OPEN=<database connection open from Vela server>
 
-# set the total number of idle connections for the database
+# set the total number of idle connections for the database (default: 2)
 export VELA_DATABASE_CONNECTION_IDLE=<database connection idle from Vela server>
 
-# set the duration for the life of the database connections
+# set the duration for the life of the database connections (default: 30m)
 export VELA_DATABASE_CONNECTION_LIFE=<database connection life from Vela server>
+
+# sets the limit of build records to compress in the database (default: 0 - no limit)
+export VELA_BUILD_LIMIT=<maximum build id to attempt to compress logs>
+
+# sets the limit of concurrent processes used to operate on the database (default: 4)
+export VELA_CONCURRENCY_LIMIT=<range of 1 - runtime.GOMAXPROCS>
 ```
 
 ## Start
@@ -121,6 +127,8 @@ make run
 # This command is functionally equivalent to:
 #
 # docker run --rm \
+#   -e VELA_BUILD_LIMIT \
+#   -e VELA_CONCURRENCY_LIMIT \
 #   -e VELA_DATABASE_DRIVER \
 #   -e VELA_DATABASE_CONFIG \
 #   -e VELA_DATABASE_CONNECTION_OPEN \

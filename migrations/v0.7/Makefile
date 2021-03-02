@@ -203,6 +203,8 @@ docker-run:
 	@echo
 	@echo "### Executing target/vela-migration:local image"
 	@docker run --rm \
+		-e VELA_BUILD_LIMIT \
+		-e VELA_CONCURRENCY_LIMIT \
 		-e VELA_DATABASE_DRIVER \
 		-e VELA_DATABASE_CONFIG \
 		-e VELA_DATABASE_CONNECTION_OPEN \

@@ -5,6 +5,7 @@
 package main
 
 import (
+	"github.com/go-vela/types/constants"
 	"github.com/go-vela/types/library"
 
 	"github.com/sirupsen/logrus"
@@ -47,6 +48,25 @@ func (d *db) Compress() error {
 
 	// iterate through all builds from the database
 	for _, build := range builds {
+		// handle the build based off the id provided
+		if d.BuildLimit > 0 && build.GetID() > int64(d.BuildLimit) {
+			logrus.Tracef("build %d is greater than threshold %d - skipping", build.GetID(), d.BuildLimit)
+
+			continue
+		}
+
+		// handle the build based off the status provided
+		switch build.GetStatus() {
+		// build is in a pending state
+		case constants.StatusPending:
+			fallthrough
+		// build is in a running state
+		case constants.StatusRunning:
+			logrus.Tracef("build %d has a status of %s - skipping", build.GetID(), build.GetStatus())
+
+			continue
+		}
+
 		logrus.Infof("publishing build %d to channel", build.GetID())
 
 		// publish the build to the channel
