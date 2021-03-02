@@ -28,10 +28,13 @@ type connection struct {
 // information used to communicate
 // with the database.
 type db struct {
-	Driver           string
-	Config           string
-	Connection       *connection
+	Driver     string
+	Config     string
+	Connection *connection
+
+	BuildLimit       int
 	CompressionLevel int
+	ConcurrencyLimit int
 
 	Client database.Service
 }
@@ -72,8 +75,14 @@ func (d *db) New(c *cli.Context) error {
 func (d *db) Exec(c *cli.Context) error {
 	logrus.Debug("executing workload from provided configuration")
 
-	// alter all tables in the database
+	// alter required tables in the database
 	err := d.Alter()
+	if err != nil {
+		return err
+	}
+
+	// drop unused indexes in the database
+	err = d.Drop()
 	if err != nil {
 		return err
 	}
@@ -105,6 +114,16 @@ func (d *db) Validate() error {
 	// check if the database configuration is set
 	if len(d.Config) == 0 {
 		return fmt.Errorf("VELA_DATABASE_CONFIG is not properly configured")
+	}
+
+	// check if the database build limit is set
+	if d.BuildLimit < 0 {
+		return fmt.Errorf("VELA_BUILD_LIMIT is not properly configured")
+	}
+
+	// check if the database concurrency limit is set
+	if d.ConcurrencyLimit < 1 {
+		return fmt.Errorf("VELA_CONCURRENCY_LIMIT is not properly configured")
 	}
 
 	// check if the compression level is valid
