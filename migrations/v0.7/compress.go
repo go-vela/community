@@ -28,7 +28,7 @@ func (d *db) Compress() error {
 		return err
 	}
 
-	// create new wait group to compress build logs concurrently
+	// create new error group to compress build logs concurrently
 	group := new(errgroup.Group)
 	// create new channel to process build logs concurrently
 	buildChannel := make(chan *library.Build)
@@ -50,7 +50,7 @@ func (d *db) Compress() error {
 	for _, build := range builds {
 		// handle the build based off the id provided
 		if d.BuildLimit > 0 && build.GetID() > int64(d.BuildLimit) {
-			logrus.Tracef("build %d is greater than threshold %d - skipping", build.GetID(), d.BuildLimit)
+			logrus.Tracef("build %d is greater than limit %d - skipping", build.GetID(), d.BuildLimit)
 
 			continue
 		}
@@ -112,7 +112,7 @@ func (d *db) CompressBuildLogs(index int, buildChannel chan *library.Build) erro
 		logrus.Debugf("thread %d: all logs compressed for build %d", index, b.GetID())
 	}
 
-	logrus.Infof("thread %d: shutting down", index)
+	logrus.Infof("thread %d: shutting down on build channel", index)
 
 	return nil
 }
