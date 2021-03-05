@@ -14,13 +14,13 @@ Copyright (c) 2020 Target Brands, Inc.
 
 A collection of potential new features or modifications to be made to the product.
 
-Please see our [proposals documentation](proposals/README.md) documentation for more information.
+Please see our [proposals documentation](../proposals/README.md) documentation for more information.
 
 ## Releases
 
 A collection of records (a.k.a. release notes) detailing the new features or modifications made to the product.
 
-Please see our [releases documentation](releases/README.md) documentation for more information.
+Please see our [releases documentation](../releases/README.md) documentation for more information.
 
 ## License
 
