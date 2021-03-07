@@ -41,6 +41,8 @@ func (d *db) Compress() error {
 		// https://golang.org/doc/faq#closures_and_goroutines
 		tmp := i
 
+		logrus.Infof("spawning go routine %d to listen on build channel", tmp)
+
 		// spawn a goroutine to begin compressing build
 		// logs that are published to the channel
 		group.Go(func() error {
@@ -82,7 +84,7 @@ func (d *db) Compress() error {
 	// close channel to signal goroutines to stop processing
 	close(channel)
 
-	logrus.Debug("waiting for goroutines to complete")
+	logrus.Debug("waiting for build go routines to complete")
 
 	return group.Wait()
 }
@@ -93,11 +95,11 @@ func (d *db) Compress() error {
 // Then, the function will iterate through each log entry and
 // update the log entry with compressed data.
 func (d *db) CompressBuildLogs(index int, channel chan *library.Build) error {
-	logrus.Infof("thread %d: listening on build channel", index)
+	logrus.Infof("go routine %d: listening on build channel", index)
 
 	// iterate through all builds published to the channel
 	for b := range channel {
-		logrus.Infof("thread %d: capturing all logs for build %d", index, b.GetID())
+		logrus.Infof("go routine %d: capturing all logs for build %d", index, b.GetID())
 
 		// capture all logs for the build from the database
 		logs, err := d.Client.GetBuildLogs(b.GetID())
@@ -105,7 +107,7 @@ func (d *db) CompressBuildLogs(index int, channel chan *library.Build) error {
 			return err
 		}
 
-		logrus.Infof("thread %d: compressing all logs for build %d", index, b.GetID())
+		logrus.Infof("go routine %d: compressing all logs for build %d", index, b.GetID())
 
 		// iterate through all logs for the build from the database
 		for _, log := range logs {
@@ -116,10 +118,10 @@ func (d *db) CompressBuildLogs(index int, channel chan *library.Build) error {
 			}
 		}
 
-		logrus.Debugf("thread %d: all logs compressed for build %d", index, b.GetID())
+		logrus.Tracef("go routine %d: all logs compressed for build %d", index, b.GetID())
 	}
 
-	logrus.Infof("thread %d: shutting down on build channel", index)
+	logrus.Infof("go routine %d: shutting down on build channel", index)
 
 	return nil
 }

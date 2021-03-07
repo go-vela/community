@@ -38,6 +38,8 @@ func (d *db) Encrypt() error {
 		// https://golang.org/doc/faq#closures_and_goroutines
 		tmp := i
 
+		logrus.Infof("spawning go routine %d to listen on secret channel", tmp)
+
 		// spawn a goroutine to begin encrypting secret
 		// values that are published to the channel
 		group.Go(func() error {
@@ -67,7 +69,7 @@ func (d *db) Encrypt() error {
 	// close channel to signal goroutines to stop processing
 	close(channel)
 
-	logrus.Debug("waiting for goroutines to complete")
+	logrus.Debug("waiting for secret go routines to complete")
 
 	return group.Wait()
 }
@@ -77,11 +79,11 @@ func (d *db) Encrypt() error {
 // to the channel the function will update the secret with an
 // encrypted value.
 func (d *db) EncryptSecrets(index int, channel chan *library.Secret) error {
-	logrus.Infof("thread %d: listening on secret channel", index)
+	logrus.Infof("go routine %d: listening on secret channel", index)
 
 	// iterate through all secrets published to the channel
 	for s := range channel {
-		logrus.Infof("thread %d: encrypting the value for secret %d", index, s.GetID())
+		logrus.Infof("go routine %d: encrypting the value for secret %d", index, s.GetID())
 
 		// update secret with encryption in the database
 		err := d.Client.UpdateSecret(s)
@@ -89,10 +91,10 @@ func (d *db) EncryptSecrets(index int, channel chan *library.Secret) error {
 			return err
 		}
 
-		logrus.Debugf("thread %d: value encrypted for secret %d", index, s.GetID())
+		logrus.Tracef("go routine %d: value encrypted for secret %d", index, s.GetID())
 	}
 
-	logrus.Infof("thread %d: shutting down on secret channel", index)
+	logrus.Infof("go routine %d: shutting down on secret channel", index)
 
 	return nil
 }
