@@ -12,7 +12,11 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-// Encrypt does stuff...
+// Encrypt attempts to capture all secrets from the database. The
+// function will then spawn the configured number of go routines
+// to begin processing the list of secrets concurrently. For each
+// secret, the function will publish it to a channel all routines
+// are listening on to encrypt the secret value.
 func (d *db) Encrypt() error {
 	logrus.Debug("executing encrypt from provided configuration")
 
@@ -26,7 +30,7 @@ func (d *db) Encrypt() error {
 	// create new error group to encrypt secret values concurrently
 	group := new(errgroup.Group)
 	// create new channel to process secrets concurrently
-	secretChannel := make(chan *library.Secret)
+	channel := make(chan *library.Secret)
 
 	// add set limit of routines to errgroup
 	// and begin processing secrets
@@ -37,7 +41,7 @@ func (d *db) Encrypt() error {
 		// spawn a goroutine to begin encrypting secret
 		// values that are published to the channel
 		group.Go(func() error {
-			return d.EncryptSecrets(tmp, secretChannel)
+			return d.EncryptSecrets(tmp, channel)
 		})
 	}
 
@@ -53,7 +57,7 @@ func (d *db) Encrypt() error {
 		logrus.Infof("publishing secret %d to channel", secret.GetID())
 
 		// publish the secret to the channel
-		secretChannel <- secret
+		channel <- secret
 
 		logrus.Debugf("secret %d published to channel", secret.GetID())
 	}
@@ -61,18 +65,22 @@ func (d *db) Encrypt() error {
 	logrus.Debug("closing channel for publishing secrets")
 
 	// close channel to signal goroutines to stop processing
-	close(secretChannel)
+	close(channel)
 
 	logrus.Debug("waiting for goroutines to complete")
 
 	return group.Wait()
 }
 
-func (d *db) EncryptSecrets(index int, secretChannel chan *library.Secret) error {
+// EncryptSecrets will iterate over all secrets published to the
+// channel until the channel is closed. For each secret published
+// to the channel the function will update the secret with an
+// encrypted value.
+func (d *db) EncryptSecrets(index int, channel chan *library.Secret) error {
 	logrus.Infof("thread %d: listening on secret channel", index)
 
 	// iterate through all secrets published to the channel
-	for s := range secretChannel {
+	for s := range channel {
 		logrus.Infof("thread %d: encrypting the value for secret %d", index, s.GetID())
 
 		// update secret with encryption in the database
