@@ -153,6 +153,8 @@ This utility supports invoking the following actions when migrating to `v0.7.x`:
 
 #### CLI
 
+This method of running the application uses the Golang binary built from the source code.
+
 * Run the Golang binary for the specific operating system and architecture:
 
 ```sh
@@ -173,6 +175,8 @@ release/windows/amd64/vela-migration --alter.tables
 ```
 
 #### Docker
+
+This method of running the application uses a Docker container built from the `Dockerfile`.
 
 * Run the Docker image
 
@@ -209,6 +213,8 @@ export VELA_DATABASE_COMPRESSION_LEVEL=<database compression level from Vela ser
 
 #### CLI
 
+This method of running the application uses the Golang binary built from the source code.
+
 * Run the Golang binary for the specific operating system and architecture:
 
 ```sh
@@ -229,6 +235,8 @@ release/windows/amd64/vela-migration --compress.logs
 ```
 
 #### Docker
+
+This method of running the application uses a Docker container built from the `Dockerfile`.
 
 * Run the Docker image
 
@@ -255,6 +263,8 @@ make run-compress
 
 #### CLI
 
+This method of running the application uses the Golang binary built from the source code.
+
 * Run the Golang binary for the specific operating system and architecture:
 
 ```sh
@@ -275,6 +285,8 @@ release/windows/amd64/vela-migration --drop.indexes
 ```
 
 #### Docker
+
+This method of running the application uses a Docker container built from the `Dockerfile`.
 
 * Run the Docker image
 
@@ -311,6 +323,8 @@ export VELA_SECRET_LIMIT=<maximum secret id to attempt to encrypt value>
 
 #### CLI
 
+This method of running the application uses the Golang binary built from the source code.
+
 * Run the Golang binary for the specific operating system and architecture:
 
 ```sh
@@ -331,6 +345,8 @@ release/windows/amd64/vela-migration --encrypt.secrets
 ```
 
 #### Docker
+
+This method of running the application uses a Docker container built from the `Dockerfile`.
 
 * Run the Docker image
 
