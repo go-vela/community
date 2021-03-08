@@ -47,21 +47,6 @@ export VELA_DATABASE_CONNECTION_IDLE=<database connection idle from Vela server>
 
 # set the duration for the life of the database connections (default: 30m)
 export VELA_DATABASE_CONNECTION_LIFE=<database connection life from Vela server>
-
-# set the level of compression for the log entries (default: 3)
-export VELA_DATABASE_COMPRESSION_LEVEL=<database compression level from Vela server>
-
-# set the key to encrypt secret values with AES-256
-export VELA_DATABASE_ENCRYPTION_KEY=<database encryption key from Vela server>
-
-# sets the limit of build records to compress logs for in the database (default: 0 - no limit)
-export VELA_BUILD_LIMIT=<maximum build id to attempt to compress logs>
-
-# sets the limit of concurrent processes used to operate on the database (default: 4)
-export VELA_CONCURRENCY_LIMIT=<range of 1 - runtime.GOMAXPROCS>
-
-# sets the limit of secret records to encrypt values for in the database (default: 0 - no limit)
-export VELA_SECRET_LIMIT=<maximum secret id to attempt to encrypt value>
 ```
 
 ## Start
@@ -148,6 +133,222 @@ make run
 #   -e VELA_DATABASE_CONNECTION_IDLE \
 #   -e VELA_DATABASE_CONNECTION_LIFE \
 #   -e VELA_DATABASE_COMPRESSION_LEVEL \
+#   -e VELA_DATABASE_ENCRYPTION_KEY \
+#   target/vela-migration:local
+```
+
+## Usage
+
+> NOTE: Please review the [start section](#start) before moving forward.
+
+This utility supports invoking the following actions when migrating to `v0.7.x`:
+
+* `all` - run all supported actions configured in the migration utility
+* `alter.tables` - runs the action responsible for altering database tables
+* `compress.logs` - runs the action responsible for compressing all logs
+* `drop.indexes` - runs the action responsible for dropping unused indexes
+* `encrypt.secrets` - runs the action responsible for encrypting secret values
+
+### Alter Tables
+
+#### CLI
+
+* Run the Golang binary for the specific operating system and architecture:
+
+```sh
+# run the Go binary for a Darwin (MacOS) operating system with amd64 architecture
+release/darwin/amd64/vela-migration --alter.tables
+
+# run the Go binary for a Linux operating system with amd64 architecture
+release/linux/amd64/vela-migration --alter.tables
+
+# run the Go binary for a Linux operating system with arm64 architecture
+release/linux/arm64/vela-migration --alter.tables
+
+# run the Go binary for a Linux operating system with arm architecture
+release/linux/arm/vela-migration --alter.tables
+
+# run the Go binary for a Windows operating system with amd64 architecture
+release/windows/amd64/vela-migration --alter.tables
+```
+
+#### Docker
+
+* Run the Docker image
+
+```sh
+# execute the `run-alter` target with `make`
+make run-alter
+
+# This command is functionally equivalent to:
+#
+# docker run --rm \
+#   -e VELA_ALTER_TABLES=true \
+#   -e VELA_DATABASE_DRIVER \
+#   -e VELA_DATABASE_CONFIG \
+#   -e VELA_DATABASE_CONNECTION_OPEN \
+#   -e VELA_DATABASE_CONNECTION_IDLE \
+#   -e VELA_DATABASE_CONNECTION_LIFE \
+#   target/vela-migration:local
+```
+
+### Compress Logs
+
+* Set the environment variables for the database configuration in your local terminal:
+
+```sh
+# (optional) sets the limit of build records to compress logs for in the database (default: 0)
+export VELA_BUILD_LIMIT=<maximum build id to attempt to compress logs>
+
+# sets the limit of concurrent processes used to operate on the database (default: 4)
+export VELA_CONCURRENCY_LIMIT=<range of 1 - runtime.GOMAXPROCS>
+
+# set the level of compression for the log entries (default: 3)
+export VELA_DATABASE_COMPRESSION_LEVEL=<database compression level from Vela server>
+```
+
+#### CLI
+
+* Run the Golang binary for the specific operating system and architecture:
+
+```sh
+# run the Go binary for a Darwin (MacOS) operating system with amd64 architecture
+release/darwin/amd64/vela-migration --compress.logs
+
+# run the Go binary for a Linux operating system with amd64 architecture
+release/linux/amd64/vela-migration --compress.logs
+
+# run the Go binary for a Linux operating system with arm64 architecture
+release/linux/arm64/vela-migration --compress.logs
+
+# run the Go binary for a Linux operating system with arm architecture
+release/linux/arm/vela-migration --compress.logs
+
+# run the Go binary for a Windows operating system with amd64 architecture
+release/windows/amd64/vela-migration --compress.logs
+```
+
+#### Docker
+
+* Run the Docker image
+
+```sh
+# execute the `run-compress` target with `make`
+make run-compress
+
+# This command is functionally equivalent to:
+#
+# docker run --rm \
+#   -e VELA_COMPRESS_LOGS=true \
+#   -e VELA_BUILD_LIMIT \
+#   -e VELA_CONCURRENCY_LIMIT \
+#   -e VELA_DATABASE_DRIVER \
+#   -e VELA_DATABASE_CONFIG \
+#   -e VELA_DATABASE_CONNECTION_OPEN \
+#   -e VELA_DATABASE_CONNECTION_IDLE \
+#   -e VELA_DATABASE_CONNECTION_LIFE \
+#   -e VELA_DATABASE_COMPRESSION_LEVEL \
+#   target/vela-migration:local
+```
+
+### Drop Indexes
+
+#### CLI
+
+* Run the Golang binary for the specific operating system and architecture:
+
+```sh
+# run the Go binary for a Darwin (MacOS) operating system with amd64 architecture
+release/darwin/amd64/vela-migration --drop.indexes
+
+# run the Go binary for a Linux operating system with amd64 architecture
+release/linux/amd64/vela-migration --drop.indexes
+
+# run the Go binary for a Linux operating system with arm64 architecture
+release/linux/arm64/vela-migration --drop.indexes
+
+# run the Go binary for a Linux operating system with arm architecture
+release/linux/arm/vela-migration --drop.indexes
+
+# run the Go binary for a Windows operating system with amd64 architecture
+release/windows/amd64/vela-migration --drop.indexes
+```
+
+#### Docker
+
+* Run the Docker image
+
+```sh
+# execute the `run-drop` target with `make`
+make run-drop
+
+# This command is functionally equivalent to:
+#
+# docker run --rm \
+#   -e VELA_DROP_INDEXES=true \
+#   -e VELA_DATABASE_DRIVER \
+#   -e VELA_DATABASE_CONFIG \
+#   -e VELA_DATABASE_CONNECTION_OPEN \
+#   -e VELA_DATABASE_CONNECTION_IDLE \
+#   -e VELA_DATABASE_CONNECTION_LIFE \
+#   target/vela-migration:local
+```
+
+### Encrypt Secrets
+
+* Set the environment variables for the other database configuration in your local terminal:
+
+```sh
+# sets the limit of concurrent processes used to operate on the database (default: 4)
+export VELA_CONCURRENCY_LIMIT=<range of 1 - runtime.GOMAXPROCS>
+
+# set the key to encrypt secret values with AES-256
+export VELA_DATABASE_ENCRYPTION_KEY=<database encryption key from Vela server>
+
+# (optional) sets the limit of secret records to encrypt values for in the database (default: 0)
+export VELA_SECRET_LIMIT=<maximum secret id to attempt to encrypt value>
+```
+
+#### CLI
+
+* Run the Golang binary for the specific operating system and architecture:
+
+```sh
+# run the Go binary for a Darwin (MacOS) operating system with amd64 architecture
+release/darwin/amd64/vela-migration --encrypt.secrets
+
+# run the Go binary for a Linux operating system with amd64 architecture
+release/linux/amd64/vela-migration --encrypt.secrets
+
+# run the Go binary for a Linux operating system with arm64 architecture
+release/linux/arm64/vela-migration --encrypt.secrets
+
+# run the Go binary for a Linux operating system with arm architecture
+release/linux/arm/vela-migration --encrypt.secrets
+
+# run the Go binary for a Windows operating system with amd64 architecture
+release/windows/amd64/vela-migration --encrypt.secrets
+```
+
+#### Docker
+
+* Run the Docker image
+
+```sh
+# execute the `run-encrypt` target with `make`
+make run-encrypt
+
+# This command is functionally equivalent to:
+#
+# docker run --rm \
+#   -e VELA_ENCRYPT_SECRETS=true \
+#   -e VELA_SECRETS_LIMIT \
+#   -e VELA_CONCURRENCY_LIMIT \
+#   -e VELA_DATABASE_DRIVER \
+#   -e VELA_DATABASE_CONFIG \
+#   -e VELA_DATABASE_CONNECTION_OPEN \
+#   -e VELA_DATABASE_CONNECTION_IDLE \
+#   -e VELA_DATABASE_CONNECTION_LIFE \
 #   -e VELA_DATABASE_ENCRYPTION_KEY \
 #   target/vela-migration:local
 ```
