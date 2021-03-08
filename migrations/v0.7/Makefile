@@ -23,6 +23,41 @@ build: build-darwin build-linux build-windows
 .PHONY: build-static
 build-static: build-darwin-static build-linux-static build-windows-static
 
+# The `run` target is intended to build and
+# execute the Docker image for the utility.
+#
+# Usage: `make run`
+.PHONY: run
+run: docker-run
+
+# The `run-alter` target is intended to build and
+# execute the Docker image for the utility.
+#
+# Usage: `make run-alter`
+.PHONY: run-alter
+run-alter: docker-run-alter
+
+# The `run-compress` target is intended to build and
+# execute the Docker image for the utility.
+#
+# Usage: `make run-compress`
+.PHONY: run-compress
+run-compress: docker-run-compress
+
+# The `run-drop` target is intended to build and
+# execute the Docker image for the utility.
+#
+# Usage: `make run-drop`
+.PHONY: run-drop
+run-drop: docker-run-drop
+
+# The `run-encrypt` target is intended to build and
+# execute the Docker image for the utility.
+#
+# Usage: `make run-encrypt`
+.PHONY: run-encrypt
+run-encrypt: docker-run-encrypt
+
 # The `tidy` target is intended to clean up
 # the Go module files (go.mod & go.sum).
 #
@@ -203,6 +238,7 @@ docker-run:
 	@echo
 	@echo "### Executing target/vela-migration:local image"
 	@docker run --rm \
+		-e VELA_ALL=true \
 		-e VELA_BUILD_LIMIT \
 		-e VELA_CONCURRENCY_LIMIT \
 		-e VELA_SECRET_LIMIT \
@@ -212,5 +248,79 @@ docker-run:
 		-e VELA_DATABASE_CONNECTION_IDLE \
 		-e VELA_DATABASE_CONNECTION_LIFE \
 		-e VELA_DATABASE_COMPRESSION_LEVEL \
+		-e VELA_DATABASE_ENCRYPTION_KEY \
+		target/vela-migration:local
+
+# The `docker-run-alter` target is intended to execute
+# the Docker image for the utility.
+#
+# Usage: `make docker-run-alter`
+.PHONY: docker-run-alter
+docker-run-alter:
+	@echo
+	@echo "### Executing target/vela-migration:local image"
+	@docker run --rm \
+		-e VELA_ALTER_TABLES=true \
+		-e VELA_DATABASE_DRIVER \
+		-e VELA_DATABASE_CONFIG \
+		-e VELA_DATABASE_CONNECTION_OPEN \
+		-e VELA_DATABASE_CONNECTION_IDLE \
+		-e VELA_DATABASE_CONNECTION_LIFE \
+		target/vela-migration:local
+
+# The `docker-run-compress` target is intended to execute
+# the Docker image for the utility.
+#
+# Usage: `make docker-run-compress`
+.PHONY: docker-run-compress
+docker-run-compress:
+	@echo
+	@echo "### Executing target/vela-migration:local image"
+	@docker run --rm \
+		-e VELA_COMPRESS_LOGS=true \
+		-e VELA_BUILD_LIMIT \
+		-e VELA_CONCURRENCY_LIMIT \
+		-e VELA_DATABASE_DRIVER \
+		-e VELA_DATABASE_CONFIG \
+		-e VELA_DATABASE_CONNECTION_OPEN \
+		-e VELA_DATABASE_CONNECTION_IDLE \
+		-e VELA_DATABASE_CONNECTION_LIFE \
+		-e VELA_DATABASE_COMPRESSION_LEVEL \
+		target/vela-migration:local
+
+# The `docker-run-drop` target is intended to execute
+# the Docker image for the utility.
+#
+# Usage: `make docker-run-drop`
+.PHONY: docker-run-drop
+docker-run-drop:
+	@echo
+	@echo "### Executing target/vela-migration:local image"
+	@docker run --rm \
+		-e VELA_DROP_INDEXES=true \
+		-e VELA_DATABASE_DRIVER \
+		-e VELA_DATABASE_CONFIG \
+		-e VELA_DATABASE_CONNECTION_OPEN \
+		-e VELA_DATABASE_CONNECTION_IDLE \
+		-e VELA_DATABASE_CONNECTION_LIFE \
+		target/vela-migration:local
+
+# The `docker-run-encrypt` target is intended to execute
+# the Docker image for the utility.
+#
+# Usage: `make docker-run-encrypt`
+.PHONY: docker-run-encrypt
+docker-run-encrypt:
+	@echo
+	@echo "### Executing target/vela-migration:local image"
+	@docker run --rm \
+		-e VELA_ENCRYPT_SECRETS=true \
+		-e VELA_SECRETS_LIMIT \
+		-e VELA_CONCURRENCY_LIMIT \
+		-e VELA_DATABASE_DRIVER \
+		-e VELA_DATABASE_CONFIG \
+		-e VELA_DATABASE_CONNECTION_OPEN \
+		-e VELA_DATABASE_CONNECTION_IDLE \
+		-e VELA_DATABASE_CONNECTION_LIFE \
 		-e VELA_DATABASE_ENCRYPTION_KEY \
 		target/vela-migration:local

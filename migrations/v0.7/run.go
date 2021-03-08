@@ -52,6 +52,13 @@ func run(c *cli.Context) error {
 		CompressionLevel: c.Int("database.compression.level"),
 		ConcurrencyLimit: c.Int("concurrency.limit"),
 		SecretLimit:      c.Int("secret.limit"),
+		Actions: &actions{
+			All:            c.Bool("all"),
+			AlterTables:    c.Bool("alter.tables"),
+			CompressLogs:   c.Bool("compress.logs"),
+			DropIndexes:    c.Bool("drop.indexes"),
+			EncryptSecrets: c.Bool("encrypt.secrets"),
+		},
 		Connection: &connection{
 			Idle: c.Int("database.connection.open"),
 			Life: c.Duration("database.connection.idle"),
