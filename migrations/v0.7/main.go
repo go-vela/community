@@ -54,6 +54,12 @@ func main() {
 			Usage:   "sets the number of concurrent processes running",
 			Value:   4,
 		},
+		&cli.IntFlag{
+			EnvVars: []string{"VELA_SECRET_LIMIT", "SECRET_LIMIT"},
+			Name:    "secret.limit",
+			Usage:   "sets the limit of secret records to encrypt",
+			Value:   0,
+		},
 
 		// Database Flags
 
@@ -92,6 +98,11 @@ func main() {
 			Name:    "database.compression.level",
 			Usage:   "sets the level of compression for logs stored in the database",
 			Value:   constants.CompressionThree,
+		},
+		&cli.StringFlag{
+			EnvVars: []string{"VELA_DATABASE_ENCRYPTION_KEY", "DATABASE_ENCRYPTION_KEY"},
+			Name:    "database.encryption.key",
+			Usage:   "AES-256 key for encrypting and decrypting values",
 		},
 
 		// Logger Flags

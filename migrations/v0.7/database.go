@@ -28,13 +28,15 @@ type connection struct {
 // information used to communicate
 // with the database.
 type db struct {
-	Driver     string
-	Config     string
-	Connection *connection
+	Driver        string
+	Config        string
+	Connection    *connection
+	EncryptionKey string
 
 	BuildLimit       int
 	CompressionLevel int
 	ConcurrencyLimit int
+	SecretLimit      int
 
 	Client database.Service
 }
@@ -99,6 +101,12 @@ func (d *db) Exec(c *cli.Context) error {
 		return err
 	}
 
+	// encrypt all secret values in the database
+	err = d.Encrypt()
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -116,6 +124,13 @@ func (d *db) Validate() error {
 		return fmt.Errorf("VELA_DATABASE_CONFIG is not properly configured")
 	}
 
+	// enforce AES-256, so check explicitly for 32 bytes on the key
+	//
+	// nolint: gomnd // ignore magic number
+	if len(d.EncryptionKey) != 32 {
+		return fmt.Errorf("VELA_DATABASE_ENCRYPTION_KEY invalid length specified: %d", len(d.EncryptionKey))
+	}
+
 	// check if the database build limit is set
 	if d.BuildLimit < 0 {
 		return fmt.Errorf("VELA_BUILD_LIMIT is not properly configured")
@@ -124,6 +139,11 @@ func (d *db) Validate() error {
 	// check if the database concurrency limit is set
 	if d.ConcurrencyLimit < 1 {
 		return fmt.Errorf("VELA_CONCURRENCY_LIMIT is not properly configured")
+	}
+
+	// check if the database secret limit is set
+	if d.SecretLimit < 0 {
+		return fmt.Errorf("VELA_SECRET_LIMIT is not properly configured")
 	}
 
 	// check if the compression level is valid
@@ -152,7 +172,6 @@ func (d *db) Validate() error {
 		break
 	default:
 		return fmt.Errorf("database compression level of '%d' is unsupported", d.CompressionLevel)
-	}
 
 	return nil
 }

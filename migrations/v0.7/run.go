@@ -47,9 +47,11 @@ func run(c *cli.Context) error {
 	d := &db{
 		Driver:           c.String("database.driver"),
 		Config:           c.String("database.config"),
+		EncryptionKey:    c.String("database.encryption.key"),
 		BuildLimit:       c.Int("build.limit"),
 		CompressionLevel: c.Int("database.compression.level"),
 		ConcurrencyLimit: c.Int("concurrency.limit"),
+		SecretLimit:      c.Int("secret.limit"),
 		Connection: &connection{
 			Idle: c.Int("database.connection.open"),
 			Life: c.Duration("database.connection.idle"),
