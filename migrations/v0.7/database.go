@@ -15,6 +15,16 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
+// actions represents all potential actions
+// this utility can invoke with the database.
+type actions struct {
+	All            bool
+	AlterTables    bool
+	CompressLogs   bool
+	DropIndexes    bool
+	EncryptSecrets bool
+}
+
 // connection represents all connection related
 // information used to communicate with the
 // provided database.
@@ -32,7 +42,9 @@ type db struct {
 	Config           string
 	CompressionLevel int
 	EncryptionKey    string
-	Connection       *connection
+
+	Actions    *actions
+	Connection *connection
 
 	BuildLimit       int
 	ConcurrencyLimit int
@@ -66,112 +78,6 @@ func (d *db) New(c *cli.Context) error {
 		d.Client = _database
 	default:
 		return fmt.Errorf("invalid database driver: %s", d.Driver)
-	}
-
-	return nil
-}
-
-// Exec takes the provided configuration and attempts to
-// run a series of different functions that will
-// manipulate indexes, tables and columns.
-func (d *db) Exec(c *cli.Context) error {
-	logrus.Debug("executing workload from provided configuration")
-
-	// alter required tables in the database
-	err := d.Alter()
-	if err != nil {
-		return err
-	}
-
-	// drop unused indexes in the database
-	err = d.Drop()
-	if err != nil {
-		return err
-	}
-
-	// create new database service
-	err = d.New(c)
-	if err != nil {
-		return err
-	}
-
-	// compress all log entries in the database
-	err = d.Compress()
-	if err != nil {
-		return err
-	}
-
-	// encrypt all secret values in the database
-	err = d.Encrypt()
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-// Validate verifies the provided database is configured properly.
-func (d *db) Validate() error {
-	logrus.Debug("validating provided database configuration")
-
-	// check if the database driver is set
-	if len(d.Driver) == 0 {
-		return fmt.Errorf("VELA_DATABASE_DRIVER is not properly configured")
-	}
-
-	// check if the database configuration is set
-	if len(d.Config) == 0 {
-		return fmt.Errorf("VELA_DATABASE_CONFIG is not properly configured")
-	}
-
-	// enforce AES-256, so check explicitly for 32 bytes on the key
-	//
-	// nolint: gomnd // ignore magic number
-	if len(d.EncryptionKey) != 32 {
-		return fmt.Errorf("VELA_DATABASE_ENCRYPTION_KEY invalid length specified: %d", len(d.EncryptionKey))
-	}
-
-	// check if the database build limit is set
-	if d.BuildLimit < 0 {
-		return fmt.Errorf("VELA_BUILD_LIMIT is not properly configured")
-	}
-
-	// check if the database concurrency limit is set
-	if d.ConcurrencyLimit < 1 {
-		return fmt.Errorf("VELA_CONCURRENCY_LIMIT is not properly configured")
-	}
-
-	// check if the database secret limit is set
-	if d.SecretLimit < 0 {
-		return fmt.Errorf("VELA_SECRET_LIMIT is not properly configured")
-	}
-
-	// check if the compression level is valid
-	switch d.CompressionLevel {
-	case constants.CompressionNegOne:
-		fallthrough
-	case constants.CompressionZero:
-		fallthrough
-	case constants.CompressionOne:
-		fallthrough
-	case constants.CompressionTwo:
-		fallthrough
-	case constants.CompressionThree:
-		fallthrough
-	case constants.CompressionFour:
-		fallthrough
-	case constants.CompressionFive:
-		fallthrough
-	case constants.CompressionSix:
-		fallthrough
-	case constants.CompressionSeven:
-		fallthrough
-	case constants.CompressionEight:
-		fallthrough
-	case constants.CompressionNine:
-		break
-	default:
-		return fmt.Errorf("database compression level of '%d' is unsupported", d.CompressionLevel)
 	}
 
 	return nil

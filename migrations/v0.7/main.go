@@ -42,23 +42,32 @@ func main() {
 
 	app.Flags = []cli.Flag{
 
-		&cli.IntFlag{
-			EnvVars: []string{"VELA_BUILD_LIMIT", "BUILD_LIMIT"},
-			Name:    "build.limit",
-			Usage:   "sets the limit of build records to compress",
-			Value:   0,
+		// Action Flags
+
+		&cli.BoolFlag{
+			EnvVars: []string{"VELA_ALL"},
+			Name:    "all",
+			Usage:   "enables running all actions for v0.7.x",
 		},
-		&cli.IntFlag{
-			EnvVars: []string{"VELA_CONCURRENCY_LIMIT", "CONCURRENCY_LIMIT"},
-			Name:    "concurrency.limit",
-			Usage:   "sets the number of concurrent processes running",
-			Value:   4,
+		&cli.BoolFlag{
+			EnvVars: []string{"VELA_ALTER_TABLES", "ALTER_TABLES"},
+			Name:    "alter.tables",
+			Usage:   "enables altering the table configuration for v0.7.x",
 		},
-		&cli.IntFlag{
-			EnvVars: []string{"VELA_SECRET_LIMIT", "SECRET_LIMIT"},
-			Name:    "secret.limit",
-			Usage:   "sets the limit of secret records to encrypt",
-			Value:   0,
+		&cli.BoolFlag{
+			EnvVars: []string{"VELA_COMPRESS_LOGS", "COMPRESS_LOGS"},
+			Name:    "compress.logs",
+			Usage:   "enables compressing all logs for v0.7.x",
+		},
+		&cli.BoolFlag{
+			EnvVars: []string{"VELA_DROP_INDEXES", "DROP_INDEXES"},
+			Name:    "drop.indexes",
+			Usage:   "enables dropping unused indexes for v0.7.x",
+		},
+		&cli.BoolFlag{
+			EnvVars: []string{"VELA_ENCRYPT_SECRETS", "ENCRYPT_SECRETS"},
+			Name:    "encrypt.secrets",
+			Usage:   "enables encrypting secret values for v0.7.x",
 		},
 
 		// Database Flags
@@ -103,6 +112,27 @@ func main() {
 			EnvVars: []string{"VELA_DATABASE_ENCRYPTION_KEY", "DATABASE_ENCRYPTION_KEY"},
 			Name:    "database.encryption.key",
 			Usage:   "AES-256 key for encrypting and decrypting values",
+		},
+
+		// Limit Flags
+
+		&cli.IntFlag{
+			EnvVars: []string{"VELA_BUILD_LIMIT", "BUILD_LIMIT"},
+			Name:    "build.limit",
+			Usage:   "sets the limit of build records to compress",
+			Value:   0,
+		},
+		&cli.IntFlag{
+			EnvVars: []string{"VELA_CONCURRENCY_LIMIT", "CONCURRENCY_LIMIT"},
+			Name:    "concurrency.limit",
+			Usage:   "sets the number of concurrent processes running",
+			Value:   4,
+		},
+		&cli.IntFlag{
+			EnvVars: []string{"VELA_SECRET_LIMIT", "SECRET_LIMIT"},
+			Name:    "secret.limit",
+			Usage:   "sets the limit of secret records to encrypt",
+			Value:   0,
 		},
 
 		// Logger Flags
