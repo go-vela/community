@@ -76,13 +76,11 @@ func main() {
 			EnvVars: []string{"VELA_DATABASE_DRIVER", "DATABASE_DRIVER"},
 			Name:    "database.driver",
 			Usage:   "sets the driver to be used for the database",
-			Value:   "sqlite3",
 		},
 		&cli.StringFlag{
 			EnvVars: []string{"VELA_DATABASE_CONFIG", "DATABASE_CONFIG"},
 			Name:    "database.config",
 			Usage:   "sets the configuration string to be used for the database",
-			Value:   "vela.sqlite",
 		},
 		&cli.IntFlag{
 			EnvVars: []string{"VELA_DATABASE_CONNECTION_OPEN", "DATABASE_CONNECTION_OPEN"},
