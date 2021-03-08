@@ -28,10 +28,11 @@ type connection struct {
 // information used to communicate
 // with the database.
 type db struct {
-	Driver        string
-	Config        string
-	Connection    *connection
-	EncryptionKey string
+	Driver           string
+	Config           string
+	CompressionLevel int
+	EncryptionKey    string
+	Connection       *connection
 
 	BuildLimit       int
 	ConcurrencyLimit int
@@ -143,6 +144,34 @@ func (d *db) Validate() error {
 	// check if the database secret limit is set
 	if d.SecretLimit < 0 {
 		return fmt.Errorf("VELA_SECRET_LIMIT is not properly configured")
+	}
+
+	// check if the compression level is valid
+	switch d.CompressionLevel {
+	case constants.CompressionNegOne:
+		fallthrough
+	case constants.CompressionZero:
+		fallthrough
+	case constants.CompressionOne:
+		fallthrough
+	case constants.CompressionTwo:
+		fallthrough
+	case constants.CompressionThree:
+		fallthrough
+	case constants.CompressionFour:
+		fallthrough
+	case constants.CompressionFive:
+		fallthrough
+	case constants.CompressionSix:
+		fallthrough
+	case constants.CompressionSeven:
+		fallthrough
+	case constants.CompressionEight:
+		fallthrough
+	case constants.CompressionNine:
+		break
+	default:
+		return fmt.Errorf("database compression level of '%d' is unsupported", d.CompressionLevel)
 	}
 
 	return nil
