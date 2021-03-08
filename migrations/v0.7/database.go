@@ -28,13 +28,13 @@ type connection struct {
 // information used to communicate
 // with the database.
 type db struct {
-	Driver        string
-	Config        string
-	Connection    *connection
-	EncryptionKey string
+	Driver           string
+	Config           string
+	CompressionLevel int
+	EncryptionKey    string
+	Connection       *connection
 
 	BuildLimit       int
-	CompressionLevel int
 	ConcurrencyLimit int
 	SecretLimit      int
 
@@ -172,6 +172,7 @@ func (d *db) Validate() error {
 		break
 	default:
 		return fmt.Errorf("database compression level of '%d' is unsupported", d.CompressionLevel)
+	}
 
 	return nil
 }

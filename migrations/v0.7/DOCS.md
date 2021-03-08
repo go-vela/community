@@ -51,11 +51,17 @@ export VELA_DATABASE_CONNECTION_LIFE=<database connection life from Vela server>
 # set the level of compression for the log entries (default: 3)
 export VELA_DATABASE_COMPRESSION_LEVEL=<database compression level from Vela server>
 
+# set the key to encrypt secret values with AES-256
+export VELA_DATABASE_ENCRYPTION_KEY=<database encryption key from Vela server>
+
 # sets the limit of build records to compress logs for in the database (default: 0 - no limit)
 export VELA_BUILD_LIMIT=<maximum build id to attempt to compress logs>
 
 # sets the limit of concurrent processes used to operate on the database (default: 4)
 export VELA_CONCURRENCY_LIMIT=<range of 1 - runtime.GOMAXPROCS>
+
+# sets the limit of secret records to encrypt values for in the database (default: 0 - no limit)
+export VELA_SECRET_LIMIT=<maximum secret id to attempt to encrypt value>
 ```
 
 ## Start
@@ -135,11 +141,13 @@ make run
 # docker run --rm \
 #   -e VELA_BUILD_LIMIT \
 #   -e VELA_CONCURRENCY_LIMIT \
+#   -e VELA_SECRET_LIMIT \
 #   -e VELA_DATABASE_DRIVER \
 #   -e VELA_DATABASE_CONFIG \
 #   -e VELA_DATABASE_CONNECTION_OPEN \
 #   -e VELA_DATABASE_CONNECTION_IDLE \
 #   -e VELA_DATABASE_CONNECTION_LIFE \
 #   -e VELA_DATABASE_COMPRESSION_LEVEL \
+#   -e VELA_DATABASE_ENCRYPTION_KEY \
 #   target/vela-migration:local
 ```
