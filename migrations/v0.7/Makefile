@@ -23,6 +23,41 @@ build: build-darwin build-linux build-windows
 .PHONY: build-static
 build-static: build-darwin-static build-linux-static build-windows-static
 
+# The `run` target is intended to build and
+# execute the Docker image for the utility.
+#
+# Usage: `make run`
+.PHONY: run
+run: docker-run
+
+# The `run-alter` target is intended to build and
+# execute the Docker image for the utility.
+#
+# Usage: `make run-alter`
+.PHONY: run-alter
+run-alter: docker-run-alter
+
+# The `run-compress` target is intended to build and
+# execute the Docker image for the utility.
+#
+# Usage: `make run-compress`
+.PHONY: run-compress
+run-compress: docker-run-compress
+
+# The `run-drop` target is intended to build and
+# execute the Docker image for the utility.
+#
+# Usage: `make run-drop`
+.PHONY: run-drop
+run-drop: docker-run-drop
+
+# The `run-encrypt` target is intended to build and
+# execute the Docker image for the utility.
+#
+# Usage: `make run-encrypt`
+.PHONY: run-encrypt
+run-encrypt: docker-run-encrypt
+
 # The `tidy` target is intended to clean up
 # the Go module files (go.mod & go.sum).
 #
