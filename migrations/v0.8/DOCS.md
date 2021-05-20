@@ -139,6 +139,110 @@ make run
 
 > NOTE: Please review the [start section](#start) before moving forward.
 
-This utility supports invoking the following actions when migrating to `v0.8.x`:
+This utility supports invoking the following actions when migrating to `v0.7.x`:
 
-* `action.all` - run all supported actions configured in the migration utility
+* `all` - run all supported actions configured in the migration utility
+* `alter.tables` - runs the action responsible for altering database tables
+* `sync.counter` - runs the action responsible for syncing repo counter values
+
+### Alter Tables
+
+#### CLI
+
+This method of running the application uses the Golang binary built from the source code.
+
+* Run the Golang binary for the specific operating system and architecture:
+
+```sh
+# run the Go binary for a Darwin (MacOS) operating system with amd64 architecture
+release/darwin/amd64/vela-migration --alter.tables
+
+# run the Go binary for a Linux operating system with amd64 architecture
+release/linux/amd64/vela-migration --alter.tables
+
+# run the Go binary for a Linux operating system with arm64 architecture
+release/linux/arm64/vela-migration --alter.tables
+
+# run the Go binary for a Linux operating system with arm architecture
+release/linux/arm/vela-migration --alter.tables
+
+# run the Go binary for a Windows operating system with amd64 architecture
+release/windows/amd64/vela-migration --alter.tables
+```
+
+#### Docker
+
+This method of running the application uses a Docker container built from the `Dockerfile`.
+
+* Run the Docker image
+
+```sh
+# execute the `run-alter` target with `make`
+make run-alter
+
+# This command is functionally equivalent to:
+#
+# docker run --rm \
+#   -e VELA_ALTER_TABLES=true \
+#   -e VELA_DATABASE_DRIVER \
+#   -e VELA_DATABASE_CONFIG \
+#   -e VELA_DATABASE_CONNECTION_OPEN \
+#   -e VELA_DATABASE_CONNECTION_IDLE \
+#   -e VELA_DATABASE_CONNECTION_LIFE \
+#   target/vela-migration:local
+```
+
+### Sync Counter
+
+* Set the environment variables for the other database configuration in your local terminal:
+
+```sh
+# sets the limit of concurrent processes used to operate on the database (default: 4)
+export VELA_CONCURRENCY_LIMIT=<range of 1 - runtime.GOMAXPROCS>
+```
+
+#### CLI
+
+This method of running the application uses the Golang binary built from the source code.
+
+* Run the Golang binary for the specific operating system and architecture:
+
+```sh
+# run the Go binary for a Darwin (MacOS) operating system with amd64 architecture
+release/darwin/amd64/vela-migration --sync.counter
+
+# run the Go binary for a Linux operating system with amd64 architecture
+release/linux/amd64/vela-migration --sync.counter
+
+# run the Go binary for a Linux operating system with arm64 architecture
+release/linux/arm64/vela-migration --sync.counter
+
+# run the Go binary for a Linux operating system with arm architecture
+release/linux/arm/vela-migration --sync.counter
+
+# run the Go binary for a Windows operating system with amd64 architecture
+release/windows/amd64/vela-migration --sync.counter
+```
+
+#### Docker
+
+This method of running the application uses a Docker container built from the `Dockerfile`.
+
+* Run the Docker image
+
+```sh
+# execute the `run-sync` target with `make`
+make run-sync
+
+# This command is functionally equivalent to:
+#
+# docker run --rm \
+#   -e VELA_SYNC_COUNTER=true \
+#   -e VELA_CONCURRENCY_LIMIT \
+#   -e VELA_DATABASE_DRIVER \
+#   -e VELA_DATABASE_CONFIG \
+#   -e VELA_DATABASE_CONNECTION_OPEN \
+#   -e VELA_DATABASE_CONNECTION_IDLE \
+#   -e VELA_DATABASE_CONNECTION_LIFE \
+#   target/vela-migration:local
+```

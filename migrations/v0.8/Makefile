@@ -37,26 +37,12 @@ run: docker-run
 .PHONY: run-alter
 run-alter: docker-run-alter
 
-# The `run-compress` target is intended to build and
+# The `run-sync` target is intended to build and
 # execute the Docker image for the utility.
 #
-# Usage: `make run-compress`
-.PHONY: run-compress
-run-compress: docker-run-compress
-
-# The `run-drop` target is intended to build and
-# execute the Docker image for the utility.
-#
-# Usage: `make run-drop`
-.PHONY: run-drop
-run-drop: docker-run-drop
-
-# The `run-encrypt` target is intended to build and
-# execute the Docker image for the utility.
-#
-# Usage: `make run-encrypt`
-.PHONY: run-encrypt
-run-encrypt: docker-run-encrypt
+# Usage: `make run-sync`
+.PHONY: run-sync
+run-sync: docker-run-sync
 
 # The `tidy` target is intended to clean up
 # the Go module files (go.mod & go.sum).
@@ -245,5 +231,39 @@ docker-run:
 		-e VELA_DATABASE_CONNECTION_OPEN \
 		-e VELA_DATABASE_CONNECTION_IDLE \
 		-e VELA_DATABASE_CONNECTION_LIFE \
-		-e VELA_DATABASE_ENCRYPTION_KEY \
+		target/vela-migration:local
+
+# The `docker-run-alter` target is intended to execute
+# the Docker image for the utility.
+#
+# Usage: `make docker-run-alter`
+.PHONY: docker-run-alter
+docker-run-alter:
+	@echo
+	@echo "### Executing target/vela-migration:local image"
+	@docker run --rm \
+		-e VELA_ALTER_TABLES=true \
+		-e VELA_DATABASE_DRIVER \
+		-e VELA_DATABASE_CONFIG \
+		-e VELA_DATABASE_CONNECTION_OPEN \
+		-e VELA_DATABASE_CONNECTION_IDLE \
+		-e VELA_DATABASE_CONNECTION_LIFE \
+		target/vela-migration:local
+
+# The `docker-run-sync` target is intended to execute
+# the Docker image for the utility.
+#
+# Usage: `make docker-run-sync`
+.PHONY: docker-run-sync
+docker-run-sync:
+	@echo
+	@echo "### Executing target/vela-migration:local image"
+	@docker run --rm \
+		-e VELA_SYNC_COUNTER=true \
+		-e VELA_CONCURRENCY_LIMIT \
+		-e VELA_DATABASE_DRIVER \
+		-e VELA_DATABASE_CONFIG \
+		-e VELA_DATABASE_CONNECTION_OPEN \
+		-e VELA_DATABASE_CONNECTION_IDLE \
+		-e VELA_DATABASE_CONNECTION_LIFE \
 		target/vela-migration:local

@@ -43,5 +43,36 @@ func run(c *cli.Context) error {
 		logrus.SetLevel(logrus.InfoLevel)
 	}
 
-	return nil
+	// create database object
+	d := &db{
+		Driver:           c.String("database.driver"),
+		Config:           c.String("database.config"),
+		BuildLimit:       c.Int("build.limit"),
+		CompressionLevel: c.Int("database.compression.level"),
+		ConcurrencyLimit: c.Int("concurrency.limit"),
+		Actions: &actions{
+			All:         c.Bool("all"),
+			AlterTables: c.Bool("alter.tables"),
+			SyncCounter: c.Bool("sync.counter"),
+		},
+		Connection: &connection{
+			Idle: c.Int("database.connection.open"),
+			Life: c.Duration("database.connection.idle"),
+			Open: c.Int("database.connection.life"),
+		},
+	}
+
+	// validate database configuration
+	err := d.Validate()
+	if err != nil {
+		return err
+	}
+
+	// create new database service
+	err = d.New(c)
+	if err != nil {
+		return err
+	}
+
+	return d.Exec(c)
 }
