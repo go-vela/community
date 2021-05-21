@@ -51,7 +51,7 @@ func run(c *cli.Context) error {
 		CompressionLevel: c.Int("database.compression.level"),
 		ConcurrencyLimit: c.Int("concurrency.limit"),
 		Actions: &actions{
-			All:         c.Bool("all"),
+			All:         c.Bool("action.all"),
 			AlterTables: c.Bool("alter.tables"),
 			SyncCounter: c.Bool("sync.counter"),
 		},

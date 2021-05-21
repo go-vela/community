@@ -37,8 +37,8 @@ func (d *db) Alter() error {
 	}
 	defer _database.Close()
 
-	logrus.Infof("altering %s table to add deploy_payload column", constants.TableRepo)
-	// alter the builds table to add the deploy_payload column
+	logrus.Infof("altering %s table to add counter column", constants.TableRepo)
+	// alter the builds table to add the counter column
 	_, err = _database.DB().Exec(AlterReposCounter)
 	if err != nil {
 		return fmt.Errorf("unable to alter %s table: %v", constants.TableRepo, err)
