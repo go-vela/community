@@ -5,7 +5,7 @@ go 1.15
 require (
 	github.com/go-playground/validator/v10 v10.4.1 // indirect
 	github.com/go-vela/server v0.5.0
-	github.com/go-vela/types v0.5.0
+	github.com/go-vela/types v0.7.5-0.20210521155017-06ba0f90957f
 	github.com/golang/protobuf v1.5.1 // indirect
 	github.com/jinzhu/gorm v1.9.16
 	github.com/joho/godotenv v1.3.0
