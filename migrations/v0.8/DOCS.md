@@ -139,7 +139,7 @@ make run
 
 > NOTE: Please review the [start section](#start) before moving forward.
 
-This utility supports invoking the following actions when migrating to `v0.7.x`:
+This utility supports invoking the following actions when migrating to `v0.8.x`:
 
 * `all` - run all supported actions configured in the migration utility
 * `alter.tables` - runs the action responsible for altering database tables
