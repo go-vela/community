@@ -53,6 +53,11 @@ func main() {
 			Usage:   "enables altering the table configuration for v0.8.x",
 		},
 		&cli.BoolFlag{
+			EnvVars: []string{"VELA_ENCRYPT_USERS", "ENCRYPT_USERS"},
+			Name:    "encrypt.users",
+			Usage:   "enables encrypting user fields for v0.8.x",
+		},
+		&cli.BoolFlag{
 			EnvVars: []string{"VELA_SYNC_COUNTER", "SYNC_COUNTER"},
 			Name:    "sync.counter",
 			Usage:   "enables encrypting secret values for v0.8.x",
@@ -87,6 +92,11 @@ func main() {
 			Name:    "database.connection.life",
 			Usage:   "sets the amount of time a connection may be reused for the database",
 			Value:   30 * time.Minute,
+		},
+		&cli.StringFlag{
+			EnvVars: []string{"VELA_DATABASE_ENCRYPTION_KEY", "DATABASE_ENCRYPTION_KEY"},
+			Name:    "database.encryption.key",
+			Usage:   "AES-256 key for encrypting and decrypting values",
 		},
 
 		// Limit Flags

@@ -37,6 +37,13 @@ run: docker-run
 .PHONY: run-alter
 run-alter: docker-run-alter
 
+# The `run-encrypt` target is intended to build and
+# execute the Docker image for the utility.
+#
+# Usage: `make run-encrypt`
+.PHONY: run-encrypt
+run-encrypt: docker-run-encrypt
+
 # The `run-sync` target is intended to build and
 # execute the Docker image for the utility.
 #
@@ -231,6 +238,7 @@ docker-run:
 		-e VELA_DATABASE_CONNECTION_OPEN \
 		-e VELA_DATABASE_CONNECTION_IDLE \
 		-e VELA_DATABASE_CONNECTION_LIFE \
+		-e VELA_DATABASE_ENCRYPTION_KEY \
 		target/vela-migration:local
 
 # The `docker-run-alter` target is intended to execute
@@ -250,6 +258,25 @@ docker-run-alter:
 		-e VELA_DATABASE_CONNECTION_LIFE \
 		target/vela-migration:local
 
+# The `docker-run-encrypt` target is intended to execute
+# the Docker image for the utility.
+#
+# Usage: `make docker-run-encrypt`
+.PHONY: docker-run-encrypt
+docker-run-encrypt:
+	@echo
+	@echo "### Executing target/vela-migration:local image"
+	@docker run --rm \
+		-e VELA_ENCRYPT_USERS=true \
+		-e VELA_CONCURRENCY_LIMIT \
+		-e VELA_DATABASE_DRIVER \
+		-e VELA_DATABASE_CONFIG \
+		-e VELA_DATABASE_CONNECTION_OPEN \
+		-e VELA_DATABASE_CONNECTION_IDLE \
+		-e VELA_DATABASE_CONNECTION_LIFE \
+		-e VELA_DATABASE_ENCRYPTION_KEY \
+		target/vela-migration:local
+
 # The `docker-run-sync` target is intended to execute
 # the Docker image for the utility.
 #
@@ -266,4 +293,5 @@ docker-run-sync:
 		-e VELA_DATABASE_CONNECTION_OPEN \
 		-e VELA_DATABASE_CONNECTION_IDLE \
 		-e VELA_DATABASE_CONNECTION_LIFE \
+		-e VELA_DATABASE_ENCRYPTION_KEY \
 		target/vela-migration:local

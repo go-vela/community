@@ -62,6 +62,16 @@ This section covers the commands required to get the Vela application running lo
 cd $HOME/go-vela/community/migrations/v0.8
 ```
 
+* Set the environment variables for the other database configuration in your local terminal:
+
+```sh
+# sets the limit of concurrent processes used to operate on the database (default: 4)
+export VELA_CONCURRENCY_LIMIT=<range of 1 - runtime.GOMAXPROCS>
+
+# set the key to encrypt user fields with AES-256
+export VELA_DATABASE_ENCRYPTION_KEY=<database encryption key from Vela server>
+```
+
 ### CLI
 
 This method of running the application uses the Golang binary built from the source code.
@@ -143,6 +153,7 @@ This utility supports invoking the following actions when migrating to `v0.8.x`:
 
 * `all` - run all supported actions configured in the migration utility
 * `alter.tables` - runs the action responsible for altering database tables
+* `encrypt.users` - runs the action responsible for encrypting user fields
 * `sync.counter` - runs the action responsible for syncing repo counter values
 
 ### Alter Tables
@@ -189,6 +200,65 @@ make run-alter
 #   -e VELA_DATABASE_CONNECTION_OPEN \
 #   -e VELA_DATABASE_CONNECTION_IDLE \
 #   -e VELA_DATABASE_CONNECTION_LIFE \
+#   target/vela-migration:local
+```
+
+### Encrypt Users
+
+* Set the environment variables for the other database configuration in your local terminal:
+
+```sh
+# sets the limit of concurrent processes used to operate on the database (default: 4)
+export VELA_CONCURRENCY_LIMIT=<range of 1 - runtime.GOMAXPROCS>
+
+# set the key to encrypt user fields with AES-256
+export VELA_DATABASE_ENCRYPTION_KEY=<database encryption key from Vela server>
+```
+
+#### CLI
+
+This method of running the application uses the Golang binary built from the source code.
+
+* Run the Golang binary for the specific operating system and architecture:
+
+```sh
+# run the Go binary for a Darwin (MacOS) operating system with amd64 architecture
+release/darwin/amd64/vela-migration --encrypt.users
+
+# run the Go binary for a Linux operating system with amd64 architecture
+release/linux/amd64/vela-migration --encrypt.users
+
+# run the Go binary for a Linux operating system with arm64 architecture
+release/linux/arm64/vela-migration --encrypt.users
+
+# run the Go binary for a Linux operating system with arm architecture
+release/linux/arm/vela-migration --encrypt.users
+
+# run the Go binary for a Windows operating system with amd64 architecture
+release/windows/amd64/vela-migration --encrypt.users
+```
+
+#### Docker
+
+This method of running the application uses a Docker container built from the `Dockerfile`.
+
+* Run the Docker image
+
+```sh
+# execute the `run-encrypt` target with `make`
+make run-encrypt
+
+# This command is functionally equivalent to:
+#
+# docker run --rm \
+#   -e VELA_ENCRYPT_USERS=true \
+#   -e VELA_CONCURRENCY_LIMIT \
+#   -e VELA_DATABASE_DRIVER \
+#   -e VELA_DATABASE_CONFIG \
+#   -e VELA_DATABASE_CONNECTION_OPEN \
+#   -e VELA_DATABASE_CONNECTION_IDLE \
+#   -e VELA_DATABASE_CONNECTION_LIFE \
+#   -e VELA_DATABASE_ENCRYPTION_KEY \
 #   target/vela-migration:local
 ```
 
@@ -244,5 +314,6 @@ make run-sync
 #   -e VELA_DATABASE_CONNECTION_OPEN \
 #   -e VELA_DATABASE_CONNECTION_IDLE \
 #   -e VELA_DATABASE_CONNECTION_LIFE \
+#   -e VELA_DATABASE_ENCRYPTION_KEY \
 #   target/vela-migration:local
 ```

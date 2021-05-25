@@ -20,6 +20,8 @@ func (d *db) Validate() error {
 	switch {
 	case d.Actions.AlterTables:
 		fallthrough
+	case d.Actions.EncryptUsers:
+		fallthrough
 	case d.Actions.SyncCounter:
 		fallthrough
 	case d.Actions.All:
@@ -50,6 +52,16 @@ func (d *db) Validate() error {
 	// check if the database concurrency limit is set
 	if d.ConcurrencyLimit < 1 {
 		return fmt.Errorf("VELA_CONCURRENCY_LIMIT is not properly configured")
+	}
+
+	// check if either the all or encrypt users action was provided
+	if d.Actions.All || d.Actions.EncryptUsers {
+		// enforce AES-256, so check explicitly for 32 bytes on the key
+		//
+		// nolint: gomnd // ignore magic number
+		if len(d.EncryptionKey) != 32 {
+			return fmt.Errorf("invalid length for VELA_DATABASE_ENCRYPTION_KEY provided: %d", len(d.EncryptionKey))
+		}
 	}
 
 	return nil

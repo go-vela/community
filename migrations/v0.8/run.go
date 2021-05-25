@@ -47,13 +47,13 @@ func run(c *cli.Context) error {
 	d := &db{
 		Driver:           c.String("database.driver"),
 		Config:           c.String("database.config"),
-		BuildLimit:       c.Int("build.limit"),
-		CompressionLevel: c.Int("database.compression.level"),
 		ConcurrencyLimit: c.Int("concurrency.limit"),
+		EncryptionKey:    c.String("database.encryption.key"),
 		Actions: &actions{
-			All:         c.Bool("action.all"),
-			AlterTables: c.Bool("alter.tables"),
-			SyncCounter: c.Bool("sync.counter"),
+			All:          c.Bool("action.all"),
+			AlterTables:  c.Bool("alter.tables"),
+			EncryptUsers: c.Bool("encrypt.users"),
+			SyncCounter:  c.Bool("sync.counter"),
 		},
 		Connection: &connection{
 			Idle: c.Int("database.connection.open"),

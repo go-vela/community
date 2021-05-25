@@ -24,6 +24,15 @@ func (d *db) Exec(c *cli.Context) error {
 		}
 	}
 
+	// check if either the all or encrypt users action was provided
+	if d.Actions.All || d.Actions.EncryptUsers {
+		// encrypt user fields in the database
+		err := d.Encrypt()
+		if err != nil {
+			return err
+		}
+	}
+
 	// check if either the all or sync repo counter action was provided
 	if d.Actions.All || d.Actions.SyncCounter {
 		// sync all repo counter values in the database
