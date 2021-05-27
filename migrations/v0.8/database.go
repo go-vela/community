@@ -18,9 +18,10 @@ import (
 // actions represents all potential actions
 // this utility can invoke with the database.
 type actions struct {
-	All         bool
-	AlterTables bool
-	SyncCounter bool
+	All          bool
+	AlterTables  bool
+	EncryptUsers bool
+	SyncCounter  bool
 }
 
 // connection represents all connection related
@@ -36,14 +37,13 @@ type connection struct {
 // information used to communicate
 // with the database.
 type db struct {
-	Driver           string
-	Config           string
-	CompressionLevel int
+	Driver        string
+	Config        string
+	EncryptionKey string
 
 	Actions    *actions
 	Connection *connection
 
-	BuildLimit       int
 	ConcurrencyLimit int
 
 	Client database.Service
