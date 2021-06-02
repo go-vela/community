@@ -9,6 +9,8 @@ import (
 	"time"
 
 	"github.com/go-vela/server/database"
+	"github.com/go-vela/server/database/postgres"
+	"github.com/go-vela/server/database/sqlite"
 	"github.com/go-vela/types/constants"
 
 	"github.com/sirupsen/logrus"
@@ -55,22 +57,40 @@ func (d *db) New(c *cli.Context) error {
 
 	switch d.Driver {
 	case constants.DriverPostgres:
-		// creating database from provided configuration
-		_database, err := database.New(c)
+		// create new Postgres database service
+		//
+		// https://pkg.go.dev/github.com/go-vela/server/database/postgres?tab=doc#New
+		_database, err := postgres.New(
+			postgres.WithAddress(c.String("database.config")),
+			postgres.WithCompressionLevel(c.Int("database.compression.level")),
+			postgres.WithConnectionLife(c.Duration("database.connection.life")),
+			postgres.WithConnectionIdle(c.Int("database.connection.idle")),
+			postgres.WithConnectionOpen(c.Int("database.connection.open")),
+			postgres.WithEncryptionKey(c.String("database.encryption.key")),
+		)
 		if err != nil {
 			return err
 		}
 
-		// update client with database service
+		// update client with postgres database service
 		d.Client = _database
 	case constants.DriverSqlite:
-		// creating database from provided configuration
-		_database, err := database.New(c)
+		// create new Sqlite database service
+		//
+		// https://pkg.go.dev/github.com/go-vela/server/database/sqlite?tab=doc#New
+		_database, err := sqlite.New(
+			sqlite.WithAddress(c.String("database.config")),
+			sqlite.WithCompressionLevel(c.Int("database.compression.level")),
+			sqlite.WithConnectionLife(c.Duration("database.connection.life")),
+			sqlite.WithConnectionIdle(c.Int("database.connection.idle")),
+			sqlite.WithConnectionOpen(c.Int("database.connection.open")),
+			sqlite.WithEncryptionKey(c.String("database.encryption.key")),
+		)
 		if err != nil {
 			return err
 		}
 
-		// update client with database service
+		// update client with sqlite database service
 		d.Client = _database
 	default:
 		return fmt.Errorf("invalid database driver: %s", d.Driver)
