@@ -46,7 +46,7 @@ func run(c *cli.Context) error {
 	// create database object
 	d := &db{
 		Driver:           c.String("database.driver"),
-		Config:           c.String("database.config"),
+		Address:          c.String("database.addr"),
 		ConcurrencyLimit: c.Int("concurrency.limit"),
 		EncryptionKey:    c.String("database.encryption.key"),
 		Actions: &actions{

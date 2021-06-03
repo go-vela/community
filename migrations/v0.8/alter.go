@@ -31,7 +31,7 @@ func (d *db) Alter() error {
 	//
 	// This will allow us to manually run SQL statements
 	// against the database.
-	_database, err := gorm.Open(d.Driver, d.Config)
+	_database, err := gorm.Open(d.Driver, d.Address)
 	if err != nil {
 		return err
 	}

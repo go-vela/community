@@ -33,7 +33,7 @@ cd $HOME/go-vela/community/migrations/v0.8
 export VELA_DATABASE_DRIVER=<database driver from Vela server>
 
 # set the configuration string for the Vela database
-export VELA_DATABASE_CONFIG=<database config from Vela server>
+export VELA_DATABASE_ADDR=<database address from Vela server>
 ```
 
 * (OPTIONAL) Set the environment variables for the other database configuration in your local terminal:
@@ -137,7 +137,7 @@ make run
 #   -e VELA_ACTION_ALL=true \
 #   -e VELA_CONCURRENCY_LIMIT \
 #   -e VELA_DATABASE_DRIVER \
-#   -e VELA_DATABASE_CONFIG \
+#   -e VELA_DATABASE_ADDR \
 #   -e VELA_DATABASE_CONNECTION_OPEN \
 #   -e VELA_DATABASE_CONNECTION_IDLE \
 #   -e VELA_DATABASE_CONNECTION_LIFE \
@@ -196,7 +196,7 @@ make run-alter
 # docker run --rm \
 #   -e VELA_ALTER_TABLES=true \
 #   -e VELA_DATABASE_DRIVER \
-#   -e VELA_DATABASE_CONFIG \
+#   -e VELA_DATABASE_ADDR \
 #   -e VELA_DATABASE_CONNECTION_OPEN \
 #   -e VELA_DATABASE_CONNECTION_IDLE \
 #   -e VELA_DATABASE_CONNECTION_LIFE \
@@ -254,7 +254,7 @@ make run-encrypt
 #   -e VELA_ENCRYPT_USERS=true \
 #   -e VELA_CONCURRENCY_LIMIT \
 #   -e VELA_DATABASE_DRIVER \
-#   -e VELA_DATABASE_CONFIG \
+#   -e VELA_DATABASE_ADDR \
 #   -e VELA_DATABASE_CONNECTION_OPEN \
 #   -e VELA_DATABASE_CONNECTION_IDLE \
 #   -e VELA_DATABASE_CONNECTION_LIFE \
@@ -310,7 +310,7 @@ make run-sync
 #   -e VELA_SYNC_COUNTER=true \
 #   -e VELA_CONCURRENCY_LIMIT \
 #   -e VELA_DATABASE_DRIVER \
-#   -e VELA_DATABASE_CONFIG \
+#   -e VELA_DATABASE_ADDR \
 #   -e VELA_DATABASE_CONNECTION_OPEN \
 #   -e VELA_DATABASE_CONNECTION_IDLE \
 #   -e VELA_DATABASE_CONNECTION_LIFE \
