@@ -25,6 +25,10 @@ When migrating from Vela version [v0.7.4](../../releases/v0.7.4.md) to [v0.8.0](
    * use `queue.pop.timeout` to set via the CLI flag
    * use `QUEUE_POP_TIMEOUT` or `VELA_QUEUE_POP_TIMEOUT` to set via environment variable
 
+1. If needed, update the [go-vela/server](https://github.com/go-vela/server) configuration for the database address:
+   * use `database.addr` to set via CLI flag
+   * use `DATABASE_ADDR` or `VELA_DATABASE_ADDR` to set via environment variable
+
 1. If needed, update the [go-vela/server](https://github.com/go-vela/server) configuration for the secret Vault driver:
    * use `secret.vault.driver` to set via CLI flag
    * use `SECRET_VAULT` or `VELA_SECRET_VAULT` to set via environment variable
