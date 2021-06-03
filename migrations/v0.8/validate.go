@@ -44,9 +44,9 @@ func (d *db) Validate() error {
 		return fmt.Errorf("invalid VELA_DATABASE_DRIVER provided: %s", d.Driver)
 	}
 
-	// check if the database configuration is set
-	if len(d.Config) == 0 {
-		return fmt.Errorf("VELA_DATABASE_CONFIG is not properly configured")
+	// check if the database address is set
+	if len(d.Address) == 0 {
+		return fmt.Errorf("VELA_DATABASE_ADDR is not properly configured")
 	}
 
 	// check if the database concurrency limit is set

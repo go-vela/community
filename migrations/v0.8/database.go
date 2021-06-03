@@ -5,13 +5,9 @@
 package main
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/go-vela/server/database"
-	"github.com/go-vela/server/database/postgres"
-	"github.com/go-vela/server/database/sqlite"
-	"github.com/go-vela/types/constants"
 
 	"github.com/sirupsen/logrus"
 	"github.com/urfave/cli/v2"
@@ -40,7 +36,7 @@ type connection struct {
 // with the database.
 type db struct {
 	Driver        string
-	Config        string
+	Address       string
 	EncryptionKey string
 
 	Actions    *actions
@@ -55,46 +51,29 @@ type db struct {
 func (d *db) New(c *cli.Context) error {
 	logrus.Debug("creating database from provided configuration")
 
-	switch d.Driver {
-	case constants.DriverPostgres:
-		// create new Postgres database service
-		//
-		// https://pkg.go.dev/github.com/go-vela/server/database/postgres?tab=doc#New
-		_database, err := postgres.New(
-			postgres.WithAddress(c.String("database.config")),
-			postgres.WithCompressionLevel(c.Int("database.compression.level")),
-			postgres.WithConnectionLife(c.Duration("database.connection.life")),
-			postgres.WithConnectionIdle(c.Int("database.connection.idle")),
-			postgres.WithConnectionOpen(c.Int("database.connection.open")),
-			postgres.WithEncryptionKey(c.String("database.encryption.key")),
-		)
-		if err != nil {
-			return err
-		}
-
-		// update client with postgres database service
-		d.Client = _database
-	case constants.DriverSqlite:
-		// create new Sqlite database service
-		//
-		// https://pkg.go.dev/github.com/go-vela/server/database/sqlite?tab=doc#New
-		_database, err := sqlite.New(
-			sqlite.WithAddress(c.String("database.config")),
-			sqlite.WithCompressionLevel(c.Int("database.compression.level")),
-			sqlite.WithConnectionLife(c.Duration("database.connection.life")),
-			sqlite.WithConnectionIdle(c.Int("database.connection.idle")),
-			sqlite.WithConnectionOpen(c.Int("database.connection.open")),
-			sqlite.WithEncryptionKey(c.String("database.encryption.key")),
-		)
-		if err != nil {
-			return err
-		}
-
-		// update client with sqlite database service
-		d.Client = _database
-	default:
-		return fmt.Errorf("invalid database driver: %s", d.Driver)
+	// database configuration
+	//
+	// https://pkg.go.dev/github.com/go-vela/server/database?tab=doc#Setup
+	_setup := &database.Setup{
+		Driver:           c.String("database.driver"),
+		Address:          c.String("database.addr"),
+		CompressionLevel: c.Int("database.compression.level"),
+		ConnectionLife:   c.Duration("database.connection.life"),
+		ConnectionIdle:   c.Int("database.connection.idle"),
+		ConnectionOpen:   c.Int("database.connection.open"),
+		EncryptionKey:    c.String("database.encryption.key"),
 	}
+
+	// setup the database
+	//
+	// https://pkg.go.dev/github.com/go-vela/server/database?tab=doc#New
+	_database, err := database.New(_setup)
+	if err != nil {
+		return err
+	}
+
+	// update client with database service
+	d.Client = _database
 
 	return nil
 }
