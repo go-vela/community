@@ -10,6 +10,12 @@ All source code and documentation is governed by Target's copyright infringement
 Copyright (c) 2021 Target Brands, Inc.
 ```
 
+## Migrations
+
+A collection of documentation and utilities to ease the transition between releases for Vela.
+
+Please see our [migrations documentation](../migrations/README.md) documentation for more information.
+
 ## Proposals
 
 A collection of potential new features or modifications to be made to the product.
