@@ -1,6 +1,6 @@
 # Migrations
 
-This directory is meant to house a historical record migration changes between versions.
+This directory is meant to house a historical record of migration documentation and utilities between versions.
 
 **Migrations:**
 
