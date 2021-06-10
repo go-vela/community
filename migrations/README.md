@@ -2,7 +2,7 @@
 
 This directory is meant to house a historical record of migration documentation and utilities between versions.
 
-**Migrations:**
+## Index
 
 * [v0.7](https://github.com/go-vela/community/blob/master/migrations/v0.7): contains information for migrating `v0.6.x` -> `v0.7.x`
 * [v0.8](https://github.com/go-vela/community/blob/master/migrations/v0.8): contains information for migrating `v0.7.x` -> `v0.8.x`
