@@ -2,7 +2,7 @@
 
 > NOTE: This applies when upgrading to the latest `v0.7.x` release.
 
-When migrating from Vela version [v0.6.0](../../releases/v0.6.0.md) to [v0.7](../../releases/v0.7.md) the Vela administrator will want to ensure the following actions are being performed:
+When migrating from Vela version [v0.6](../../releases/v0.6.md) to [v0.7](../../releases/v0.7.md) the Vela administrator will want to ensure the following actions are being performed:
 
 1. Updating tables in the database:
    * `ALTER TABLE builds ADD COLUMN IF NOT EXISTS deploy_payload VARCHAR(2000);`
