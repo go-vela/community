@@ -166,7 +166,7 @@ secrets:
 +     secrets: [ vault_username, vault_password ]
 # Alternatives to "parameters" could be: "spec", "detail"
 +     parameters:
-+      addr: http://vault.company.com
++      addr: http://vault.example.com
 +      auth_method: ldap
 +      path: path/to/nuid_username
 ```
