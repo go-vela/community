@@ -5,4 +5,5 @@ This directory is meant to house a historical record of all potential features a
 ## Index
 
 * [04/16/2020 Deployments](2020-04-16_deployments.md): contains proposal information for `deployments`
+* [05/22/2020 External Secrets](2020-05-22_external-secrets.md): contains proposal information for external `secrets`
 * [12/16/2020 Build Rate Limiting](2020-12-16_rate-limiting.md): contains proposal information for rate limiting `builds`
