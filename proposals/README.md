@@ -6,4 +6,5 @@ This directory is meant to house a historical record of all potential features a
 
 * [04/16/2020 Deployments](2020-04-16_deployments.md): contains proposal information for `deployments`
 * [05/22/2020 External Secrets](2020-05-22_external-secrets.md): contains proposal information for external `secrets`
+* [06/01/2020 Pull Policies](2020-06-01_pull-policy.md): contains proposal information for `pull` policies
 * [12/16/2020 Build Rate Limiting](2020-12-16_rate-limiting.md): contains proposal information for rate limiting `builds`
