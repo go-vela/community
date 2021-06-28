@@ -6,7 +6,7 @@ The name of this markdown file should:
 
 1. Short and contain no more then 30 characters
 
-2. Contain the date of submission in YYYY-MM-DD format
+2. Contain the date of submission in MM-DD format
 
 3. Clearly state what the proposal is being submitted for
 -->

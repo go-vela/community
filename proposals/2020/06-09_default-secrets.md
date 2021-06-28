@@ -5,7 +5,7 @@ The name of this markdown file should:
 
 1. Short and contain no more then 30 characters
 
-2. Contain the date of submission in YYYY-MM-DD format
+2. Contain the date of submission in MM-DD format
 
 3. Clearly state what the proposal is being submitted for
 -->
@@ -55,7 +55,7 @@ There is a desire to have a more elaborate secret store that can handle secret p
 
 Today, we only allow the database secrets to be the default secret store within Vela. Additionally, we give administrators the option to add additional Vault stores.
 
-The [external secrets](2020-05-22_external-secrets.md) proposal solved the problem of integrating with many different types of secret stores when the user is the owner of that store.
+The [external secrets](05-22_external-secrets.md) proposal solved the problem of integrating with many different types of secret stores when the user is the owner of that store.
 
 Now we still have a problem with the default store not handling all the required uses-cases for modern secrets. I am proposing:
 
@@ -99,7 +99,7 @@ This change could be thought of as baby steps in the direction of Zero Trust Pol
 
 <!-- Answer here -->
 
-No workarounds, the introduction of [external secrets](2020-05-22_external-secrets.md) will help mitigate the need for supporting a larger list of secret engines embedded within Vela.
+No workarounds, the introduction of [external secrets](05-22_external-secrets.md) will help mitigate the need for supporting a larger list of secret engines embedded within Vela.
 
 4. Are there any related issues? Please provide them below if any exist.
 
