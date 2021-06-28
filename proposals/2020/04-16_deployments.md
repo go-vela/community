@@ -5,7 +5,7 @@ The name of this markdown file should:
 
 1. Short and contain no more then 30 characters
 
-2. Contain the date of submission in YYYY-MM-DD format
+2. Contain the date of submission in MM-DD format
 
 3. Clearly state what the proposal is being submitted for
 -->
@@ -115,7 +115,7 @@ At a minimum, we'd need the following information:
 * `commit`
 * `event`
 * `ref`
-* [Variable for Deployment Environment](2020-04-16_deployments.md#questions)
+* [Variable for Deployment Environment](04-16_deployments.md#questions)
 
 ```sh
 $ vela add build --help
@@ -175,7 +175,7 @@ At a minimum, we'd need the following information:
 * `org`
 * `repo`
 * `build`
-* [Variable for Deployment Environment](2020-04-16_deployments.md#questions)
+* [Variable for Deployment Environment](04-16_deployments.md#questions)
 
 ```sh
 $ vela deploy --help
@@ -223,7 +223,7 @@ This is very powerful because customers could trigger a deployment from any kind
 
 > **NOTE:**
 >
-> This method reduces the risk from [Option 1](2020-04-16_deployments.md#option-1) of customers forgetting to provide some of the input or providing invalid input.
+> This method reduces the risk from [Option 1](04-16_deployments.md#option-1) of customers forgetting to provide some of the input or providing invalid input.
 
 ### Option 3
 
@@ -243,7 +243,7 @@ At a minimum, we'd need the following information:
 * `repo`
 * `commit`
 * `ref`
-* [Variable for Deployment Environment](2020-04-16_deployments.md#questions)
+* [Variable for Deployment Environment](04-16_deployments.md#questions)
 
 ```sh
 $ vela add deployment --help
