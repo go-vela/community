@@ -4,6 +4,10 @@ This directory is meant to house a historical record of all potential features a
 
 ## Index
 
+### 2019
+
+* [07/01 Templates](2019/07-01_templates.md): contains proposal information for `templates`
+
 ### 2020
 
 * [04/16 Deployments](2020/04-16_deployments.md): contains proposal information for `deployments`
