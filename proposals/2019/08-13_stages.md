@@ -1,4 +1,4 @@
-# Concurrency (Parallel Tasks)
+# Stages (Concurrency)
 
 <!--
 The name of this markdown file should:
@@ -51,11 +51,11 @@ This section is intended to describe the new feature, redesign or refactor.
 Provide your description here.
 -->
 
-This feature will enable the ability to execute multiple tasks, in parallel, for customers.
+This feature will enable the ability to execute multiple tasks, concurrently, for users.
 
-By having some type of YAML attribute that can be provided in a pipeline, this will enable customers to utilize functionality that already exists in other CI solutions.
+By having some type of YAML attribute that can be provided in a pipeline, this will enable users to utilize functionality that already exists in other CI solutions.
 
-It will also give customers the flexibility to improve their build performance and throughput by running any and all tasks in parallel that can support it.
+It will also give users the flexibility to improve their build performance and throughput by running any and all tasks concurrently that can support it.
 
 **Please briefly answer the following questions:**
 
@@ -64,7 +64,7 @@ It will also give customers the flexibility to improve their build performance a
 <!-- Answer here -->
 
 * provide compatible functionality with other CI solutions
-* enable customers to optimize performance and throughput of builds
+* enable users to optimize performance and throughput of builds
 * provide a fan-in, fan-out mechanism in Vela
 
 2. If this is a redesign or refactor, what issues exist in the current implementation?
