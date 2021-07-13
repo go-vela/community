@@ -7,6 +7,7 @@ This directory is meant to house a historical record of all potential features a
 ### 2019
 
 * [07/01 Templates](2019/07-01_templates.md): contains proposal information for `templates`
+* [07/16 Secrets](2019/07-16_secrets.md): contains proposal information for `secrets`
 
 ### 2020
 
