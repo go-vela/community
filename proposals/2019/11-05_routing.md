@@ -109,11 +109,15 @@ NOTE: If there are no current plans for a solution, please leave this section bl
 
 The Server will connect to a set of queues. Those queues will be labeled with one to many types( i.e. PCI, linux).
 
-If a build needs a specific worker, the user can specify one or many keys in their Yaml that allows for that build to get routed to a specific worker.
+If a build needs a specific worker, the user can specify one or many keys in their YAML that allows for that build to get routed to a specific worker.
 
-Queues will always be dynamic. The admin of the Vela server can input whatever number of required queues via an environment flag (`VELA_QUEUE_KEYS=PCI,linux`) on the server.
+Queues will always be dynamic.
 
-This will allow the admin to specify which keys their deployed instance supports. Workers will support the same environment flag and only execute builds that are pushed into its queue.
+The admin of the Vela server can input whatever number of required queues via an environment flag (`VELA_QUEUE_KEYS=PCI,linux`) on the server.
+
+This will allow the admin to specify which keys their deployed instance supports.
+
+Workers will support the same environment flag and only execute builds that are pushed into its queue.
 
 ### Keys
 
