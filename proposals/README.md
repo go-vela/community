@@ -18,3 +18,7 @@ This directory is meant to house a historical record of all potential features a
 * [06/01 Pull Policies](2020/06-01_pull-policy.md): contains proposal information for `pull` policies
 * [06/09 Default Secrets](2020/06-01_default-secrets.md): contains proposal information for the default secret `engine`
 * [12/16 Build Rate Limiting](2020/12-16_rate-limiting.md): contains proposal information for rate limiting `builds`
+
+### 2021
+
+* [07/22 Log Streaming](2021/07-22_log-streaming.md): contains proposal information for streaming `logs` for `builds`
