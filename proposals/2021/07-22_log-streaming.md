@@ -15,7 +15,7 @@ The name of this markdown file should:
 | **Author(s)** | Jordan.Brockopp                                                                      |
 | **Reviewers** | Neal.Coleman, David.May, Emmanuel.Meinen, Kelly.Merrick, David.Vader, Matthew.Fevold |
 | **Date**      | July 22nd, 2021                                                                      |
-| **Status**    | In Progress                                                                          |
+| **Status**    | Reviewed                                                                             |
 
 <!--
 If you're already working with someone, please add them to the proper author/reviewer category.
@@ -59,7 +59,7 @@ Instead, we use a buffer mechanism for controlling how logs are published:
 
 1. service/step starts running on a worker producing logs
 2. logs that are produced from the service/step are pushed to a buffer
-3. if the buffer exceeds 1000 bytes
+3. if the buffer exceeds `1000` bytes
    * publish the logs from the buffer via API call to the server
    * flush the buffer so we can push more logs to it
 4. circle back to number 2 until the service/step is complete
