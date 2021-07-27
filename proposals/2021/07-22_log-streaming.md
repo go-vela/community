@@ -119,7 +119,62 @@ NOTE: If there are no current plans for a solution, please leave this section bl
 
 <!-- Answer here -->
 
-TODO: provide options
+### Pipeline
+
+To resolve the undesired behavior, we need to create options that can fix it.
+
+However, to craft those options, we need a pipeline that can show the behavior.
+
+We'll use the below pipeline to demonstrate this behavior:
+
+```yaml
+version: "1"
+
+steps:
+  - name: logs
+    image: alpine:latest
+    pull: not_present
+    commands:
+      - sleep 1
+      - echo "hello one"
+      - sleep 2
+      - echo "hello two"
+      - sleep 3
+      - echo "hello three"
+      - sleep 4
+      - echo "hello four"
+      - sleep 5
+      - echo "hello five"
+```
+
+### Option 1
+
+This option involves updating the [go-vela/pkg-executor](https://github.com/go-vela/pkg-executor) codebase to upload logs on a regular time interval.
+
+A brief explanation of how the code works:
+
+1. service/step starts running on a worker producing logs
+2. create a channel to signal to stop processing logs
+3. logs that are produced from the service/step are pushed to a buffer
+4. spawn a go routine to start polling the buffer
+   * spawn an "infinte" `for` loop that will upload logs
+     * sleep for `1s`
+     * if the channel is closed, terminate the go routine
+     * if the channel is not closed
+       * publish the logs from the buffer via API call to the server
+       * flush the buffer so we can push more logs to it
+5. once the service/step is complete, close the channel to terminate the go routine
+
+The code changes can be found below:
+
+* [go-vela/pkg-executor](https://github.com/go-vela/pkg-executor/compare/feature/log_streaming/opt_one?expand=1)
+* [go-vela/worker](https://github.com/go-vela/worker/compare/feature/log_streaming/opt_one?expand=1)
+
+The time interval I chose to use in the above code is `1s`.
+
+However, we could choose any time interval we deem fit for this use-case.
+
+Also, we'd likely make this time interval configurable to provide more flexibility.
 
 ## Implementation
 
