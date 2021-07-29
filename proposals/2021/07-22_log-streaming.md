@@ -176,6 +176,40 @@ However, we could choose any time interval we deem fit for this use-case.
 
 Also, we'd likely make this time interval configurable to provide more flexibility.
 
+### Option 2
+
+This option involves updating the [go-vela/pkg-executor](https://github.com/go-vela/pkg-executor) codebase to stream logs directly to the [go-vela/server](https://github.com/go-vela/server).
+
+To accomplish this, new endpoints were added to the server that can accept streaming connections and upload logs to the database on a regular time interval.
+
+A brief explanation of how the code works:
+
+1. service/step starts running on a worker producing logs
+2. worker begins streaming logs via API call to the server
+3. server accepts the streaming logs from the worker
+4. create a channel to signal to stop processing the streaming logs
+5. streamed logs that are are pushed to a buffer
+6. spawn a go routine to start polling the buffer
+   * spawn an "infinte" `for` loop that will upload logs
+     * sleep for `1s`
+     * if the channel is closed, terminate the go routine
+     * if the channel is not closed
+       * publish the streamed logs from the buffer to the database
+       * flush the buffer so we can push more logs to it
+7. once the streaming is complete, close the channel to terminate the go routine
+
+The code changes can be found below:
+
+* [go-vela/pkg-executor](https://github.com/go-vela/pkg-executor/compare/feature/log_streaming/opt_two?expand=1)
+* [go-vela/worker](https://github.com/go-vela/worker/compare/feature/log_streaming/opt_two?expand=1)
+* [go-vela/server](https://github.com/go-vela/server/compare/feature/log_streaming/opt_two?expand=1)
+
+The time interval I chose to use in the above code is `1s`.
+
+However, we could choose any time interval we deem fit for this use-case.
+
+Also, we'd likely make this time interval configurable to provide more flexibility.
+
 ## Implementation
 
 <!--
