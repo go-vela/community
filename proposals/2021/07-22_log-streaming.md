@@ -151,7 +151,7 @@ steps:
 
 This option involves updating the [go-vela/pkg-executor](https://github.com/go-vela/pkg-executor) codebase to upload logs on a regular time interval to simulate a streaming effect.
 
-A brief explanation of how the code works:
+**A brief explanation of how the code works:**
 
 1. service/step starts running on a worker producing logs
 2. worker creates a channel to signal to stop processing logs
@@ -170,22 +170,26 @@ The code changes can be found below:
 * [go-vela/pkg-executor](https://github.com/go-vela/pkg-executor/compare/feature/log_streaming/opt_one?expand=1)
 * [go-vela/worker](https://github.com/go-vela/worker/compare/feature/log_streaming/opt_one?expand=1)
 
-The time interval I chose to use in the above code is `1s`.
-
-However, we could choose any time interval we deem fit for this use-case.
-
-Also, we'd likely make this time interval configurable to provide more flexibility.
+> NOTE:
+>
+> The time interval I chose to use in the above code is `1s`.
+>
+> However, we could choose any time interval we deem fit for this use-case.
+>
+> Also, we'd likely make this time interval configurable to provide more flexibility.
 
 ### Option 2
 
 This option involves updating the [go-vela/pkg-executor](https://github.com/go-vela/pkg-executor) codebase to stream logs to the [go-vela/server](https://github.com/go-vela/server) via HTTP.
 
-To accomplish this, new endpoints were added to the server that can accept streaming connections and upload logs to the database on a regular time interval.
+To accomplish this, new endpoints were added to the server that can accept streaming connections.
 
-A brief explanation of how the code works:
+Once a streaming connection is open, the server will capture and upload logs to the database on a regular time interval.
+
+**A brief explanation of how the code works:**
 
 1. service/step starts running on a worker producing logs
-2. worker begins streaming logs via API call to the server
+2. worker begins streaming logs via HTTP call to the server
 3. server accepts the streaming logs from the worker
 4. server creates a channel to signal to stop processing the streaming logs
 5. streamed logs are pushed to a buffer
@@ -204,19 +208,23 @@ The code changes can be found below:
 * [go-vela/worker](https://github.com/go-vela/worker/compare/feature/log_streaming/opt_two?expand=1)
 * [go-vela/server](https://github.com/go-vela/server/compare/feature/log_streaming/opt_two?expand=1)
 
-The time interval I chose to use in the above code is `1s`.
-
-However, we could choose any time interval we deem fit for this use-case.
-
-Also, we'd likely make this time interval configurable to provide more flexibility.
+> NOTE:
+>
+> The time interval I chose to use in the above code is `1s`.
+>
+> However, we could choose any time interval we deem fit for this use-case.
+>
+> Also, we'd likely make this time interval configurable to provide more flexibility.
 
 ### Option 3
 
 This option involves updating the [go-vela/pkg-executor](https://github.com/go-vela/pkg-executor) codebase to stream logs to the [go-vela/server](https://github.com/go-vela/server) via WebSocket.
 
-To accomplish this, new endpoints were added to the server that can accept websocket connections and upload logs to the database on a regular time interval.
+To accomplish this, new endpoints were added to the server that can accept websocket connections.
 
-A brief explanation of how the code works:
+Once a websocket connection is open, the server will capture and upload logs to the database on a regular time interval.
+
+**A brief explanation of how the code works:**
 
 1. service/step starts running on a worker producing logs
 2. worker opens a websocket connection to the server
@@ -231,7 +239,8 @@ A brief explanation of how the code works:
      * if the channel is not closed
        * publish the streamed logs from the buffer to the database
        * flush the buffer so we can push more logs to it
-7. once the streaming is complete, close the channel and websocket to terminate the go routine
+8. once the streaming is complete, worker closes the websocket connection
+9. server closes the channel to terminate the go routine
 
 The code changes can be found below:
 
@@ -239,11 +248,13 @@ The code changes can be found below:
 * [go-vela/worker](https://github.com/go-vela/worker/compare/feature/log_streaming/opt_three?expand=1)
 * [go-vela/server](https://github.com/go-vela/server/compare/feature/log_streaming/opt_three?expand=1)
 
-The time interval I chose to use in the above code is `1s`.
-
-However, we could choose any time interval we deem fit for this use-case.
-
-Also, we'd likely make this time interval configurable to provide more flexibility.
+> NOTE:
+>
+> The time interval I chose to use in the above code is `1s`.
+>
+> However, we could choose any time interval we deem fit for this use-case.
+>
+> Also, we'd likely make this time interval configurable to provide more flexibility.
 
 ## Implementation
 
