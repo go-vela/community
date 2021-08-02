@@ -147,6 +147,20 @@ steps:
       - echo "hello five"
 ```
 
+> DISCLAIMER:
+>
+> The options below **only** cover updating code for the **backend** components for log streaming.
+>
+> This means the proposal **does not** cover any updates to the [go-vela/ui](https://github.com/go-vela/ui) codebase.
+>
+> The reason for this is no UI changes are required to produce a streaming effect for logs.
+>
+> This is due to the UI already polling ~ every `5s` in its current state.
+>
+> However, this also means we leave room for improvement in regards to the user experience.
+>
+> This experience could be augmented by making changes to the UI (and server?) along with the below options.
+
 ### Option 1
 
 This option involves updating the [go-vela/pkg-executor](https://github.com/go-vela/pkg-executor) codebase to upload logs on a regular time interval to simulate a streaming effect.
