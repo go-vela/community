@@ -61,9 +61,9 @@ Instead, we use a buffer mechanism for controlling how logs are published:
 2. logs that are produced from the service/step are pushed to a buffer
 3. if the buffer exceeds `1000` bytes
    * publish the logs from the buffer via API call to the server
-   * flush the buffer so we can push more logs to it
+   * flush the buffer so we can push more logs to it from the service/step
 4. circle back to number 2 until the service/step is complete
-5. if the service/step is complete publish logs from the buffer and flush it
+5. once the service/step is complete, publish remaining logs from the buffer
 
 The end-behavior produced by this method is the logs appear in delayed chunks.
 
@@ -154,16 +154,16 @@ This option involves updating the [go-vela/pkg-executor](https://github.com/go-v
 **A brief explanation of how the code works:**
 
 1. service/step starts running on a worker producing logs
-2. worker creates a channel to signal to stop processing logs
+2. worker creates a channel to signal when to stop processing logs
 3. logs that are produced from the service/step are pushed to a buffer
-4. worker spawns a go routine to start polling the buffer
-   * (inside the go routine) spawn an "infinite" `for` loop that will upload logs to the server
-     * sleep for `1s`
-     * if the channel is closed, terminate the go routine
+4. worker spawns a `go` routine to start polling the buffer
+   * (inside the `go` routine) spawn an "infinite" `for` loop
+     * (inside the `for` loop) sleep for `1s`
+     * if the channel is closed, terminate the `go` routine
      * if the channel is not closed
        * publish the logs from the buffer via API call to the server
-       * flush the buffer so we can push more logs to it
-5. once the service/step is complete, close the channel to terminate the go routine
+       * flush the buffer so we can push more logs to it from the service/step
+5. once the service/step is complete, worker closes the channel to terminate the `go` routine
 
 The code changes can be found below:
 
@@ -191,16 +191,17 @@ Once a streaming connection is open, the server will capture and upload logs to 
 1. service/step starts running on a worker producing logs
 2. worker begins streaming logs via HTTP call to the server
 3. server accepts the streaming logs from the worker
-4. server creates a channel to signal to stop processing the streaming logs
-5. streamed logs are pushed to a buffer
-6. server spawns a go routine to start polling the buffer
-   * (inside the go routine) spawn an "infinite" `for` loop that will upload logs to the database
-     * sleep for `1s`
-     * if the channel is closed, terminate the go routine
+4. server creates a channel to signal when to stop processing streamed logs
+5. streamed logs are pushed to a buffer by server
+6. server spawns a `go` routine to start polling the buffer
+   * (inside the `go` routine) spawn an "infinite" `for` loop
+     * (inside the `for` loop) sleep for `1s`
+     * if the channel is closed, terminate the `go` routine
      * if the channel is not closed
        * publish the streamed logs from the buffer to the database
-       * flush the buffer so we can push more logs to it
-7. once the streaming is complete, close the channel to terminate the go routine
+       * flush the buffer so we can push more logs to it from the service/step
+7. once the service/step is complete, worker terminates the HTTP call
+8. once the streaming is complete, server closes the channel to terminate the `go` routine
 
 The code changes can be found below:
 
@@ -231,16 +232,16 @@ Once a websocket connection is open, the server will capture and upload logs to 
 3. server accepts the websocket connection for streaming logs from the worker
 4. worker begins streaming logs via websocket to the server
 5. server creates a channel to signal to stop processing the streaming logs
-6. streamed logs from the websocket are pushed to a buffer
-7. server spawns a go routine to start polling the buffer
-   * (inside the go routine) spawn an "infinite" `for` loop that will upload logs to the database
-     * sleep for `1s`
-     * if the channel is closed, terminate the go routine
+6. streamed logs from the websocket connection are pushed to a buffer by server
+7. server spawns a `go` routine to start polling the buffer
+   * (inside the `go` routine) spawn an "infinite" `for` loop
+     * (inside the `for` loop) sleep for `1s`
+     * if the channel is closed, terminate the `go` routine
      * if the channel is not closed
        * publish the streamed logs from the buffer to the database
-       * flush the buffer so we can push more logs to it
-8. once the streaming is complete, worker closes the websocket connection
-9. server closes the channel to terminate the go routine
+       * flush the buffer so we can push more logs to it from the service/step
+8. once the service/step is complete, worker closes the websocket connection
+9. once the streaming is complete, server closes the channel to terminate the `go` routine
 
 The code changes can be found below:
 
