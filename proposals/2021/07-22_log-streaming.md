@@ -93,7 +93,11 @@ This can make it almost impossible to determine if something is running or how l
 
 <!-- Answer here -->
 
-N/A
+We could explore decreasing the limit we impose on the log buffer we use.
+
+Currently, we're using `1000` bytes as that limit but we could set that to something smaller (`100`, `500`, etc.).
+
+This would mean that the worker uploads logs to the server more frequently which could improve the experience.
 
 4. Are there any related issues? Please provide them below if any exist.
 
