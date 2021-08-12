@@ -3,8 +3,8 @@ module github.com/go-vela/community/migrations/v0.9
 go 1.16
 
 require (
-	github.com/go-vela/server v0.8.4
-	github.com/go-vela/types v0.8.2
+	github.com/go-vela/server v0.9.0-rc2
+	github.com/go-vela/types v0.9.0-rc2
 	github.com/jinzhu/gorm v1.9.16
 	github.com/joho/godotenv v1.3.0
 	github.com/sirupsen/logrus v1.8.1
