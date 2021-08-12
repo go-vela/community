@@ -47,7 +47,11 @@ func main() {
 			Name:    "action.all",
 			Usage:   "enables running all actions for v0.9.x",
 		},
-
+		&cli.BoolFlag{
+			EnvVars: []string{"VELA_ALTER_TABLES", "ALTER_TABLES"},
+			Name:    "alter.tables",
+			Usage:   "enables altering the table configuration for v0.9.x",
+		},
 		// Database Flags
 
 		&cli.StringFlag{
@@ -77,11 +81,6 @@ func main() {
 			Name:    "database.connection.life",
 			Usage:   "sets the amount of time a connection may be reused for the database",
 			Value:   30 * time.Minute,
-		},
-		&cli.StringFlag{
-			EnvVars: []string{"VELA_DATABASE_ENCRYPTION_KEY", "DATABASE_ENCRYPTION_KEY"},
-			Name:    "database.encryption.key",
-			Usage:   "AES-256 key for encrypting and decrypting values",
 		},
 
 		// Limit Flags
