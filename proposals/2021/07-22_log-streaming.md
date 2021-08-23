@@ -301,6 +301,22 @@ Yes
 
 <!-- Answer here -->
 
+After some discussion amongst the team, we've decided to progress forward with Option 2.
+
+This decision was driven via a vote that was done and results provided [here](https://github.com/go-vela/community/pull/339#issuecomment-903837207).
+
+A concern that was brought up among those discussions was how much resources (CPU/RAM) were required for each option.
+
+As we look to actually implement the functionality for Option 2, we should evaluate what changed in resource consumption (if any).
+
+This will likely involve looking at how much CPU/RAM is consumed by both the [server](https://github.com/go-vela/server) and [worker](https://github.com/go-vela/worker) when streaming logs with Option 2.
+
+* https://github.com/go-vela/community/issues/366
+* https://github.com/go-vela/community/issues/367
+* https://github.com/go-vela/community/issues/368
+* https://github.com/go-vela/community/issues/369
+* https://github.com/go-vela/community/issues/370
+
 ## Questions
 
 **Please list any questions you may have:**
