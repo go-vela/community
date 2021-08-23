@@ -232,7 +232,6 @@ docker-run:
 	@echo "### Executing target/vela-migration:local image"
 	@docker run --rm \
 		-e VELA_ACTION_ALL=true \
-		-e VELA_CONCURRENCY_LIMIT \
 		-e VELA_DATABASE_DRIVER \
 		-e VELA_DATABASE_CONFIG \
 		-e VELA_DATABASE_CONNECTION_OPEN \

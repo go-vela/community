@@ -43,5 +43,26 @@ func run(c *cli.Context) error {
 		logrus.SetLevel(logrus.InfoLevel)
 	}
 
-	return nil
+	// create database object
+	d := &db{
+		Driver:  c.String("database.driver"),
+		Address: c.String("database.addr"),
+		Actions: &actions{
+			All:         c.Bool("action.all"),
+			AlterTables: c.Bool("alter.tables"),
+		},
+		Connection: &connection{
+			Idle: c.Int("database.connection.open"),
+			Life: c.Duration("database.connection.idle"),
+			Open: c.Int("database.connection.life"),
+		},
+	}
+
+	// validate database configuration
+	err := d.Validate()
+	if err != nil {
+		return err
+	}
+
+	return d.Exec(c)
 }

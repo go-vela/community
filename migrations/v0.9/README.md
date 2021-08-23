@@ -3,7 +3,8 @@
 > NOTE: This applies when upgrading to the latest `v0.9.x` release.
 When migrating from Vela version [v0.8.4](../../releases/v0.8.md) to [v0.9.0](../../releases/v0.9.0.md) the Vela administrator will want to ensure the following actions are being performed:
 
-1. TODO
+1. Updating tables in the database:
+   * `ALTER TABLE repos ADD COLUMN IF NOT EXISTS pipeline_type TEXT DEFAULT 'yaml';`
 
 ## Utility
 

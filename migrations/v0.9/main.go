@@ -8,6 +8,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/go-vela/server/database"
 	"github.com/sirupsen/logrus"
 	"github.com/urfave/cli/v2"
 
@@ -52,45 +53,6 @@ func main() {
 			Name:    "alter.tables",
 			Usage:   "enables altering the table configuration for v0.9.x",
 		},
-		// Database Flags
-
-		&cli.StringFlag{
-			EnvVars: []string{"VELA_DATABASE_DRIVER", "DATABASE_DRIVER"},
-			Name:    "database.driver",
-			Usage:   "sets the driver to be used for the database",
-		},
-		&cli.StringFlag{
-			EnvVars: []string{"VELA_DATABASE_CONFIG", "DATABASE_CONFIG"},
-			Name:    "database.config",
-			Usage:   "sets the configuration string to be used for the database",
-		},
-		&cli.IntFlag{
-			EnvVars: []string{"VELA_DATABASE_CONNECTION_OPEN", "DATABASE_CONNECTION_OPEN"},
-			Name:    "database.connection.open",
-			Usage:   "sets the number of open connections to the database",
-			Value:   0,
-		},
-		&cli.IntFlag{
-			EnvVars: []string{"VELA_DATABASE_CONNECTION_IDLE", "DATABASE_CONNECTION_IDLE"},
-			Name:    "database.connection.idle",
-			Usage:   "sets the number of idle connections to the database",
-			Value:   2,
-		},
-		&cli.DurationFlag{
-			EnvVars: []string{"VELA_DATABASE_CONNECTION_LIFE", "DATABASE_CONNECTION_LIFE"},
-			Name:    "database.connection.life",
-			Usage:   "sets the amount of time a connection may be reused for the database",
-			Value:   30 * time.Minute,
-		},
-
-		// Limit Flags
-
-		&cli.IntFlag{
-			EnvVars: []string{"VELA_CONCURRENCY_LIMIT", "CONCURRENCY_LIMIT"},
-			Name:    "concurrency.limit",
-			Usage:   "sets the number of concurrent processes running",
-			Value:   4,
-		},
 
 		// Logger Flags
 
@@ -107,6 +69,10 @@ func main() {
 			Value:   "info",
 		},
 	}
+
+	// Database Flags
+
+	app.Flags = append(app.Flags, database.Flags...)
 
 	// Utility Start
 
