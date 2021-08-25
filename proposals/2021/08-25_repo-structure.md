@@ -172,7 +172,7 @@ This pattern repeats, for each group, until you get to the last group which has 
 
 With this structure, we simply have to create more releases (one per repo) than we would if we were to condense the repos.
 
-It also adds more complexity when releasing because you have to remember the order as well as ensure each repo has the latest dependencies.
+It also adds more complexity when releasing because you have to remember the order and ensure each repo has the latest dependencies.
 
 3. Are there any other workarounds, and if so, what are the drawbacks?
 
