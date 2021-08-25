@@ -51,13 +51,6 @@ run-compress: docker-run-compress
 .PHONY: run-drop
 run-drop: docker-run-drop
 
-# The `run-encrypt` target is intended to build and
-# execute the Docker image for the utility.
-#
-# Usage: `make run-encrypt`
-.PHONY: run-encrypt
-run-encrypt: docker-run-encrypt
-
 # The `tidy` target is intended to clean up
 # the Go module files (go.mod & go.sum).
 #
@@ -239,11 +232,9 @@ docker-run:
 	@echo "### Executing target/vela-migration:local image"
 	@docker run --rm \
 		-e VELA_ACTION_ALL=true \
-		-e VELA_CONCURRENCY_LIMIT \
 		-e VELA_DATABASE_DRIVER \
 		-e VELA_DATABASE_CONFIG \
 		-e VELA_DATABASE_CONNECTION_OPEN \
 		-e VELA_DATABASE_CONNECTION_IDLE \
 		-e VELA_DATABASE_CONNECTION_LIFE \
-		-e VELA_DATABASE_ENCRYPTION_KEY \
 		target/vela-migration:local 
