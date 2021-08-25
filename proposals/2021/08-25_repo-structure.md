@@ -106,7 +106,7 @@ The intention or goal of this proposal is to accomplish the following:
 
 * condense and simplify the repo structure
 * improve consistency among the repos
-* ease the burden necessary to contribute bug fixes, new features and enhancements
+* ease the burden necessary to contribute functionality to the product
 * reduce the level of overhead when attempting to publish new releases
 
 2. If this is a redesign or refactor, what issues exist in the current implementation?
@@ -123,19 +123,19 @@ Also, some "core" repos have the packages for different capabilities in the repo
 
 If we plan to keep the `pkg-<capability>` structure, those should be pulled out into unique repos following that structure:
 
-* [pkg-database](https://github.com/go-vela/server/tree/master/database)
-* [pkg-secret](https://github.com/go-vela/server/tree/master/secret)
-* [pkg-source](https://github.com/go-vela/server/tree/master/source)
+* [server/database](https://github.com/go-vela/server/tree/master/database) -> `pkg-database`
+* [server/secret](https://github.com/go-vela/server/tree/master/secret) -> `pkg-secret`
+* [server/source](https://github.com/go-vela/server/tree/master/source) -> `pkg-source`
 
 ## Problem 2
 
-The second problem with this structure is the increased burden, especially for new users, trying to contribute bug fixes, new features or enhancements.
+The second problem with this structure is the increased burden, especially for new users, trying to contribute functionality.
 
 Some, or most, of the "core" repos have dependencies on one or more repos.
 
 This means that in order to make certain changes to the product, you have to introduce code changes to multiple repos.
 
-To provide an example with the current structure, we'll reference a newly added feature that allows you to customize the type of pipeline for a repo.
+To provide an example with the current structure, we'll reference a recent feature that allows you to customize the pipeline type for a repo.
 
 This functionality was added as a part of [go-vela/community#326](https://github.com/go-vela/community/issues/326).
 
@@ -146,11 +146,11 @@ To achieve this, a new `pipeline_type` field was added to the database which req
 * [server](https://github.com/go-vela/server/pull/444)
 * [ui](https://github.com/go-vela/ui/pull/421)
 
-This also increases the complexity when attempting to functionally test code changes.
+This also increases the complexity when attempting to functionally test code changes for new logic.
 
 This is due to needing to modify each repo locally with the code changes for the functionality.
 
-Once that is complete, you then must build the application from the local code changes for each repo.
+Once that is complete, the application must be rebuilt from the local code changes for each repo.
 
 ## Problem 3
 
@@ -168,11 +168,11 @@ The way the repos must be released is in groups that use the following order:
 
 After a release is completed for the first group, you must update the code dependencies for the second group before proceeding.
 
-This pattern repeats itself, for each group, until you get to the last group which has dependencies on most, if not all, of the preceding groups.
+This pattern repeats, for each group, until you get to the last group which has dependencies on most of the preceding groups.
 
 With this structure, we simply have to create more releases (one per repo) than we would if we were to condense the repos.
 
-It also adds more complexity when releasing because you have to remember the order to release in as well as ensure each repo has the latest dependencies.
+It also adds more complexity when releasing because you have to remember the order as well as ensure each repo has the latest dependencies.
 
 3. Are there any other workarounds, and if so, what are the drawbacks?
 
