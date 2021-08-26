@@ -14,7 +14,7 @@ The name of this markdown file should:
 | :-----------: | :--------------------------------------------------------------------: |
 | **Author(s)** | Jordan.Brockopp                                                        |
 | **Reviewers** | David.May, Emmanuel.Meinen, Kelly.Merrick, David.Vader, Matthew.Fevold |
-| **Date**      | July 22nd, 2021                                                        |
+| **Date**      | August 25th, 2021                                                      |
 | **Status**    | Reviewed                                                               |
 
 <!--
@@ -104,8 +104,8 @@ This is not required so there is a lot of room for discussion on this.
 
 The intention or goal of this proposal is to accomplish the following:
 
-* condense and simplify the repo structure
-* improve consistency among the repos
+* condense and simplify the "core" repo structure
+* improve consistency among the "core" repos
 * ease the burden necessary to contribute functionality to the product
 * reduce the level of overhead when attempting to publish new releases
 
@@ -204,6 +204,79 @@ NOTE: If there are no current plans for a solution, please leave this section bl
 
 <!-- Answer here -->
 
+The purpose of this proposal is to accomplish the following:
+
+* condense and simplify the "core" repo structure
+* improve consistency among the "core" repos
+* ease the burden necessary to contribute functionality to the product
+* reduce the level of overhead when attempting to publish new releases
+
+To accomplish this, the following changes are proposed:
+
+1. Move the [compiler](https://github.com/go-vela/compiler) repo into the [server](https://github.com/go-vela/server) repo as a nested package
+   * Accompanying this, would be the deprecation and archiving of the existing [compiler](https://github.com/go-vela/compiler) repo
+2. Move the [mock](https://github.com/go-vela/mock) repo into the [server](https://github.com/go-vela/server) repo as a nested package
+   * Accompanying this, would be the deprecation and archiving of the existing [mock](https://github.com/go-vela/mock) repo
+3. Move the [pkg-queue](https://github.com/go-vela/pkg-queue) repo into the [server](https://github.com/go-vela/server) repo as a nested package
+   * Accompanying this, would be the deprecation and archiving of the existing [pkg-queue](https://github.com/go-vela/pkg-queue) repo
+4. Move the [mock](https://github.com/go-vela/mock) repo into the [worker](https://github.com/go-vela/worker) repo as a nested package
+   * Accompanying this, would be the deprecation and archiving of the existing [mock](https://github.com/go-vela/mock) repo
+5. Move the [pkg-executor](https://github.com/go-vela/pkg-executor) repo into the [worker](https://github.com/go-vela/worker) repo as a nested package
+   * Accompanying this, would be the deprecation and archiving of the existing [pkg-executor](https://github.com/go-vela/pkg-executor) repo
+6. Move the [pkg-queue](https://github.com/go-vela/pkg-queue) repo into the [worker](https://github.com/go-vela/worker) repo as a nested package
+   * Accompanying this, would be the deprecation and archiving of the existing [pkg-queue](https://github.com/go-vela/pkg-queue) repo
+7. Move the [pkg-runtime](https://github.com/go-vela/pkg-runtime) repo into the [worker](https://github.com/go-vela/worker) repo as a nested package
+   * Accompanying this, would be the deprecation and archiving of the existing [pkg-runtime](https://github.com/go-vela/pkg-runtime) repo
+
+In the end, the new "core" repo structure for the [go-vela](https://github.com/go-vela) org would look like:
+
+```diff
+cli
+- compiler: moved -> server
+- mock: moved -> server/worker
+- pkg-executor: moved -> worker
+- pkg-queue: moved -> server/worker
+- pkg-runtime: moved -> worker
+sdk-go
+server
+types
+ui
+worker
+```
+
+The final directory structure for the [server](https://github.com/go-vela/server) would look like:
+
+```diff
+server
+ ├── api
+ ├── cmd
+ ├── compiler
+ ├── database
++├── mock
++├── queue
+ ├── random
+ ├── router
+ ├── secret
+ ├── source
+ ├── util
+ └── version
+```
+
+The final directory structure for the [worker](https://github.com/go-vela/worker) would look like:
+
+```diff
+worker
+ ├── api
+ ├── api-spec
+ ├── cmd
++├── executor
++├── mock
++├── queue
+ ├── router
++├── runtime
+ └── version
+```
+
 ## Implementation
 
 <!--
@@ -218,9 +291,13 @@ NOTE: If there are no current plans for implementation, please leave this sectio
 
 <!-- Answer here -->
 
+Yes
+
 2. What's the estimated time to completion?
 
 <!-- Answer here -->
+
+1 week
 
 **Please provide all tasks (gists, issues, pull requests, etc.) completed to implement the design:**
 
@@ -231,3 +308,5 @@ NOTE: If there are no current plans for implementation, please leave this sectio
 **Please list any questions you may have:**
 
 <!-- Answer here -->
+
+N/A
