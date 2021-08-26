@@ -55,7 +55,7 @@ Currently, Vela has an inconsistent structure of how the "core" repos are setup 
 
 In this context, a "core" repo includes any repos that require code or dependency changes in order to release the Vela product.
 
-Today, we have the following "core" repos:
+Today, we have the following "core" repos (`11` total):
 
 * [cli](https://github.com/go-vela/cli)
 * [compiler](https://github.com/go-vela/compiler)
@@ -228,7 +228,7 @@ To accomplish this, the following changes are proposed:
 7. Move the [pkg-runtime](https://github.com/go-vela/pkg-runtime) repo into the [worker](https://github.com/go-vela/worker) repo as a nested package
    * Accompanying this, would be the deprecation and archiving of the existing [pkg-runtime](https://github.com/go-vela/pkg-runtime) repo
 
-In the end, the new "core" repo structure for the [go-vela](https://github.com/go-vela) org would look like:
+In the end, the new "core" repo structure for the [go-vela](https://github.com/go-vela) org would look like (`6` total):
 
 ```diff
 cli
