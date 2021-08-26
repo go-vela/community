@@ -215,18 +215,26 @@ To accomplish this, the following changes are proposed:
 
 1. Move the [compiler](https://github.com/go-vela/compiler) repo into the [server](https://github.com/go-vela/server) repo as a nested package
    * Accompanying this, would be the deprecation and archiving of the existing [compiler](https://github.com/go-vela/compiler) repo
-2. Move the [mock](https://github.com/go-vela/mock) repo into the [server](https://github.com/go-vela/server) repo as a nested package
+2. Move part of the [mock](https://github.com/go-vela/mock) repo into the [server](https://github.com/go-vela/server) repo as a nested package
    * Accompanying this, would be the deprecation and archiving of the existing [mock](https://github.com/go-vela/mock) repo
-3. Move the [pkg-queue](https://github.com/go-vela/pkg-queue) repo into the [server](https://github.com/go-vela/server) repo as a nested package
+3. Move part of the [pkg-queue](https://github.com/go-vela/pkg-queue) repo into the [server](https://github.com/go-vela/server) repo as a nested package
    * Accompanying this, would be the deprecation and archiving of the existing [pkg-queue](https://github.com/go-vela/pkg-queue) repo
-4. Move the [mock](https://github.com/go-vela/mock) repo into the [worker](https://github.com/go-vela/worker) repo as a nested package
+4. Move part of the [mock](https://github.com/go-vela/mock) repo into the [worker](https://github.com/go-vela/worker) repo as a nested package
    * Accompanying this, would be the deprecation and archiving of the existing [mock](https://github.com/go-vela/mock) repo
 5. Move the [pkg-executor](https://github.com/go-vela/pkg-executor) repo into the [worker](https://github.com/go-vela/worker) repo as a nested package
    * Accompanying this, would be the deprecation and archiving of the existing [pkg-executor](https://github.com/go-vela/pkg-executor) repo
-6. Move the [pkg-queue](https://github.com/go-vela/pkg-queue) repo into the [worker](https://github.com/go-vela/worker) repo as a nested package
+6. Move part of the [pkg-queue](https://github.com/go-vela/pkg-queue) repo into the [worker](https://github.com/go-vela/worker) repo as a nested package
    * Accompanying this, would be the deprecation and archiving of the existing [pkg-queue](https://github.com/go-vela/pkg-queue) repo
 7. Move the [pkg-runtime](https://github.com/go-vela/pkg-runtime) repo into the [worker](https://github.com/go-vela/worker) repo as a nested package
    * Accompanying this, would be the deprecation and archiving of the existing [pkg-runtime](https://github.com/go-vela/pkg-runtime) repo
+
+> DISCLAIMER:
+>
+> Consideration was given to moving the [types](https://github.com/go-vela/types) repo into the [server](https://github.com/go-vela/server) and/or [worker](https://github.com/go-vela/worker).
+>
+> However, it was determined that may involve too much overhead and complicate things.
+>
+> The core concern for moving [types](https://github.com/go-vela/types) is the chance for causing circular dependencies.
 
 In the end, the new "core" repo structure for the [go-vela](https://github.com/go-vela) org would look like (`6` total):
 
