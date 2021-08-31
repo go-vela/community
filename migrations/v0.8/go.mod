@@ -4,9 +4,8 @@ go 1.15
 
 require (
 	github.com/denisenkom/go-mssqldb v0.0.0-20191128021309-1d7a30a10f73 // indirect
-	github.com/go-vela/server v0.8.4
-	github.com/go-vela/types v0.8.2
-	github.com/golang/protobuf v1.5.1 // indirect
+	github.com/go-vela/server v0.9.2
+	github.com/go-vela/types v0.9.0
 	github.com/jinzhu/gorm v1.9.16
 	github.com/joho/godotenv v1.3.0
 	github.com/leodido/go-urn v1.2.1 // indirect
