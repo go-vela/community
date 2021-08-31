@@ -212,8 +212,8 @@ github.com/go-vela/compiler v0.9.0/go.mod h1:FbYLiz+psgcqpQaeKpVP00YNuvc/tMLrYCd
 github.com/go-vela/mock v0.9.0/go.mod h1:PMfa8HcsLCOfr1bVQ2+I6udUCuEnB5BXir4r+uVysXE=
 github.com/go-vela/pkg-queue v0.9.0/go.mod h1:S3X9BK7l0+vBY1xMvbiSfNSEWCOuHxkRswRxnUj0u1I=
 github.com/go-vela/sdk-go v0.9.0/go.mod h1:YWqJ9+JaALHzCxr8rtBOGE/VUpNnYQlBkVGBuvq4j6E=
-github.com/go-vela/server v0.9.0 h1:wPTYeW47zGVbnw4HykUj3HgNT4QomaBsjwyj8vuzzfU=
-github.com/go-vela/server v0.9.0/go.mod h1:+o2G3QvHbb/F4w9gdx+8boFdooSCiQ0SZQpEZICRlvI=
+github.com/go-vela/server v0.9.2 h1:8q+K86C3/emzcnu0phICw/yIhl5xTjokj/RcAo1z3XQ=
+github.com/go-vela/server v0.9.2/go.mod h1:+o2G3QvHbb/F4w9gdx+8boFdooSCiQ0SZQpEZICRlvI=
 github.com/go-vela/types v0.9.0 h1:vAwxYzG8KSDtvpSALOoHzac4wrMM+NFW1QxoXrjXWSc=
 github.com/go-vela/types v0.9.0/go.mod h1:uiQ8TITRIemGwgnfACIHaTdcTVJaZTo7eO1HZeFgnHc=
 github.com/godbus/dbus v0.0.0-20190422162347-ade71ed3457e/go.mod h1:bBOAhwG1umN6/6ZUMtDFBMQR8jRg9O75tm9K00oMsK4=
