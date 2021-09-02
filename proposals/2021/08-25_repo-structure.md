@@ -239,17 +239,17 @@ To accomplish this, the following changes are proposed:
 In the end, the new "core" repo structure for the [go-vela](https://github.com/go-vela) org would look like (`6` total):
 
 ```diff
-cli
+1. cli
 - compiler: moved -> server
 - mock: moved -> server/worker
 - pkg-executor: moved -> worker
 - pkg-queue: moved -> server/worker
 - pkg-runtime: moved -> worker
-sdk-go
-server
-types
-ui
-worker
+2. sdk-go
+3. server
+4. types
+5. ui
+6. worker
 ```
 
 The final directory structure for the [server](https://github.com/go-vela/server) would look like:
@@ -258,7 +258,7 @@ The final directory structure for the [server](https://github.com/go-vela/server
 server
  ├── api
  ├── cmd
- ├── compiler
++├── compiler
  ├── database
 +├── mock
 +├── queue
