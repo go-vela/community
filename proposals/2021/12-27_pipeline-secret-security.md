@@ -1,4 +1,4 @@
-# Signature for Vela Pipeline
+# Security Measures for Pipeline Secret Protection
 
 <!--
 The name of this markdown file should:
@@ -51,9 +51,9 @@ This section is intended to describe the new feature, redesign or refactor.
 Provide your description here.
 -->
 
-  This new feature would allow users of Vela to implement an encrypted signature to their pipeline. By doing this, any edits to the `.vela.yml` would be verified against a generated signature before executing. 
+  This new feature would allow users of Vela to implement a protective system to their pipeline. By doing one of the two designs proposed below, any edits to the `.vela.yml` would be verified before executing. 
   
-  The signature would only be able to be generated and updated by admins of the repository. By doing this, any pipeline that has been edited would fail to run unless an admin re-signs the signature.
+  The verification process would be executable only by admins of the repository. By doing this, any pipeline that has been edited would fail to run unless an admin approves.
 
 **Please briefly answer the following questions:**
 
@@ -61,7 +61,7 @@ Provide your description here.
 
 <!-- Answer here -->
 
-* This addresses a very key security issue: pipelines that execute on pull requests can be manipulated to expose secrets -- even on forked repositories. By adding a signature, malicious edits to `.vela.yml` would never get the chance to run.
+* This addresses a very key security issue: pipelines that execute on pull requests can be manipulated to expose secrets -- even on forked repositories. By adding verification, malicious edits to `.vela.yml` would never get the chance to run.
 * The added level of security to our pipelines will be more attractive to users with highly sensitive information. As Vela expands, the likelihood that it will be utilized in an organization that practices the repo fork workflow will greatly increase.  
 
 2. If this is a redesign or refactor, what issues exist in the current implementation?
@@ -82,7 +82,7 @@ One workaround, which is currently being worked on, is masking any secret expose
 
 https://github.com/go-vela/community/issues/62
 
-## Design
+## Design Option 1 - Pipeline Signature
 
 <!--
 This section is intended to explain the solution design for the proposal.
@@ -160,6 +160,67 @@ When thinking of how to represent these contents, the idea of using a checksum c
 The obvious plus to implementing a checksum is the fact that we would not be sending gigantic pipeline files across the web and generating hash based on that. 
 
 As a note, when Drone implemented signatures, they used checksums for generation.
+
+## Design Option 2 -  Pulling Secrets Validation
+
+<!--
+This section is intended to explain the solution design for the proposal.
+
+NOTE: If there are no current plans for a solution, please leave this section blank.
+-->
+
+**Please describe your solution to the proposal. This includes, but is not limited to:**
+
+* new/updated endpoints or url paths
+* new/updated configuration variables (environment, flags, files, etc.)
+* performance and user experience tradeoffs
+* security concerns or assumptions
+* examples or (pseudo) code snippets
+
+<!-- Answer here -->
+
+### Ideal User Workflow 
+
+Ideally, this solution would be the default behavior of Vela. Perhaps we could provide the option to opt out of the validation if a user really wants to, but I don't see why this would be asked for. Therefore, no initial set up would be required for the user like there is for the pipeline solution.
+
+**Case 1**
+- A contributor with write access to a repository makes changes to the `.vela.yml` pipeline. Perhaps they are adding Slack plugin functionality.
+- Upon submitting a pull request, Vela works just as it currently does.
+- The pipeline executes, and the PR is able to be reviewed.
+
+**Case 2**
+- A contributor without write access wants to make changes to the `.vela.yml` file. They are not malicious.
+- They fork the repository in order to submit a PR
+- Upon submitting a pull request, their code does not execute. Instead, an error that looks something like this appears:
+```
+Error: cannot pull <organization, repository> secrets without write access
+```
+- An admin (or anyone with write access) assesses the changes to the `.vela.yml` file and comments something that would cause the build to run, or something of that nature.
+- The pipeline executes, and the PR is able to be reviewed.
+
+**Case 3**
+- A hacker notices that you can trigger a build to run on Pull Requests within Vela. They decide to fork a repository and make a PR that includes changes to the `.vela.yml` file. These changes include a curl request using the Vela native database secret associated with the repository.
+- The hacker realizes that his pipeline will not run because they are attempting to pull secrets that belong to an org or a repository of which they do not have write access.
+- Hacker proceeds to attempt to exploit Jenkins pipelines instead
+
+### How It Works On Our End
+
+**Changes to Server**
+- Upon receiving webhook from SCM, capture user permissions
+- After compiling the pipeline, check for the presence of secrets in the `pipeline.Build` type generated by compiler.
+- Cross reference user permissions and presence of secrets to determine whether to execute the build. This could be limited to only PR events as well.
+
+### Decision 1 - Opt In, Opt Out, or just be part of Vela
+
+Should we give the users the option to customize this security feature, or should it just be how Vela works? And if it should be customizable, should it be an opt-in feature, or an opt-out feature (default behavior)?
+
+### Decision 2 - Admin or Write Access Approval Necessary
+
+Should the ability to manually check the contents of the `.vela.yml` file and approve it for running be reserved for admins only, or anyone with write access? Should it be customizable?
+
+### Decision 3 - How to enable the build to be triggered by an admin/trusted contributor?
+
+The idea of having a prescribed PR comment event that would release the restrictions on the PR comes to mind. I'm not sure if that would be too clunky. I am open to and eager to hear any ideas on this front. 
 
 ## Implementation
 
