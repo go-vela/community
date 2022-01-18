@@ -7,7 +7,7 @@ A collection of documentation that is designed to provide information about the 
 All source code and documentation is governed by Target's copyright infringement policies.
 
 ```
-Copyright (c) 2021 Target Brands, Inc.
+Copyright (c) 2022 Target Brands, Inc.
 ```
 
 ## Migrations
