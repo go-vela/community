@@ -8,11 +8,11 @@ import (
 	"os"
 	"time"
 
+	"github.com/go-vela/server/database"
+	"github.com/sirupsen/logrus"
 	"github.com/urfave/cli/v2"
 
-	"github.com/go-vela/server/database"
 	_ "github.com/joho/godotenv/autoload"
-	"github.com/sirupsen/logrus"
 )
 
 func main() {
