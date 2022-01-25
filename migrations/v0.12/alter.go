@@ -57,42 +57,42 @@ func (d *db) Alter() error {
 
 	logrus.Infof("altering %s table to add build_limit column", constants.TableRepo)
 	// alter the repos table to add the build_limit column
-	err := d.Gorm.Exec(AlterReposBuildLimit)
+	err := d.Gorm.Exec(AlterReposBuildLimit).Error
 	if err != nil {
 		return fmt.Errorf("unable to alter %s table: %v", constants.TableRepo, err)
 	}
 
 	logrus.Infof("altering %s table to add previous_name column", constants.TableRepo)
 	// alter the repos table to add the previous_name column
-	err = d.Gorm.Exec(AlterReposPreviousName)
+	err = d.Gorm.Exec(AlterReposPreviousName).Error
 	if err != nil {
 		return fmt.Errorf("unable to alter %s table: %v", constants.TableRepo, err)
 	}
 
 	logrus.Infof("altering %s table to add created_at column", constants.TableSecret)
 	// alter the secrets table to add the created_at column
-	err = d.Gorm.Exec(AlterSecretsCreatedAt)
+	err = d.Gorm.Exec(AlterSecretsCreatedAt).Error
 	if err != nil {
 		return fmt.Errorf("unable to alter %s table: %v", constants.TableSecret, err)
 	}
 
 	logrus.Infof("altering %s table to add created_by column", constants.TableSecret)
 	// alter the secrets table to add the created_by column
-	err = d.Gorm.Exec(AlterSecretsCreatedBy)
+	err = d.Gorm.Exec(AlterSecretsCreatedBy).Error
 	if err != nil {
 		return fmt.Errorf("unable to alter %s table: %v", constants.TableSecret, err)
 	}
 
 	logrus.Infof("altering %s table to add updated_at column", constants.TableSecret)
 	// alter the secrets table to add the updated_at column
-	err = d.Gorm.Exec(AlterSecretsUpdatedAt)
+	err = d.Gorm.Exec(AlterSecretsUpdatedAt).Error
 	if err != nil {
 		return fmt.Errorf("unable to alter %s table: %v", constants.TableSecret, err)
 	}
 
 	logrus.Infof("altering %s table to add updated_by column", constants.TableSecret)
 	// alter the secrets table to add the updated_by column
-	err = d.Gorm.Exec(AlterSecretsUpdatedBy)
+	err = d.Gorm.Exec(AlterSecretsUpdatedBy).Error
 	if err != nil {
 		return fmt.Errorf("unable to alter %s table: %v", constants.TableSecret, err)
 	}

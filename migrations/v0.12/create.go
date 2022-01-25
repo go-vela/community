@@ -26,7 +26,7 @@ func (d *db) Create() error {
 
 	logrus.Infof("creating index for %s table on created column", constants.TableBuild)
 	// alter the repos table to add the build_limit column
-	err := d.Gorm.Exec(CreateIndexBuildsCreated)
+	err := d.Gorm.Exec(CreateIndexBuildsCreated).Error
 	if err != nil {
 		return fmt.Errorf("unable to create index for %s table: %v", constants.TableBuild, err)
 	}

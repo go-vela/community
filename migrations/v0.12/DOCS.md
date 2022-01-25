@@ -5,8 +5,7 @@ This document intends to provide information on how to get the Vela migration ut
 ## Prerequisites
 
 * [Docker](https://docs.docker.com/install/) - building block for local development
-* [Golang](https://golang.org/dl/) - for source code
-  and [dependency management](https://github.com/golang/go/wiki/Modules)
+* [Golang](https://golang.org/dl/) - for source code and [dependency management](https://github.com/golang/go/wiki/Modules)
 * [Make](https://www.gnu.org/software/make/) - start up local development
 
 ## Setup
@@ -33,8 +32,8 @@ cd $HOME/go-vela/community/migrations/v0.12
 # set the driver for the Vela database
 export VELA_DATABASE_DRIVER=<database driver from Vela server>
 
-# set the configuration string for the Vela database
-export VELA_DATABASE_CONFIG=<database config from Vela server>
+# set the address for the Vela database
+export VELA_DATABASE_ADDR=<database address from Vela server>
 ```
 
 ## Start

@@ -43,6 +43,8 @@ func (d *db) Exec(c *cli.Context) error {
 		}
 	}
 
+	defer func() { _sql, _ := d.Gorm.DB(); _sql.Close() }()
+
 	// check if either the all or alter tables action was provided
 	if d.Actions.All || d.Actions.AlterTables {
 		// alter required tables in the database
