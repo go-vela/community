@@ -1,6 +1,7 @@
 # Proposals
 
 This directory is meant to house a historical record of all potential features and modifications to be made to Vela.
+To create a new proposal, make a PR into master using the [template](https://github.com/go-vela/community/blob/master/.github/PULL_REQUEST_TEMPLATE/proposal.md) provided.
 
 ## Index
 
