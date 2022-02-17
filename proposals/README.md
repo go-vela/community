@@ -24,3 +24,7 @@ To create a new proposal, make a PR into master using the [template](https://git
 
 * [07/22 Log Streaming](2021/07-22_log-streaming.md): contains proposal information for streaming `logs` for `builds`
 * [08/25 Repo Structure](2021/08-25_repo-structure.md): contains proposal information for condensing the repo structure for Vela
+
+### 2022
+
+* [02/17 Enhanced Event Support](02-17_enhanced-event-support.md): contains proposal information for enhancing `events` and `rulesets`.
