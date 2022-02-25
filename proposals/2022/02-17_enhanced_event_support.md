@@ -228,4 +228,17 @@ Yes
 
 <!-- Answer here -->
 
+After discussion with the vela admins and vela committers, it was decided that design 3 would be the
+choice for handling specific PR actions. 
+
+Further, while a version 2 was discussed, it was determined that we can utilize the scoping structure
+so long as we preserve the legacy method of simply putting `pull_request` in the events array.
+
+Labeling and PR review events will be handled separately. In the meantime, `pull_request:opened`, 
+`pull_request:edited`, and `pull_request:synchronized` will be implemented.
+
+PRs:
+
+* https://github.com/go-vela/types/pull/236 (adding action constants and handling legacy method)
+
 ## Questions
