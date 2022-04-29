@@ -10,4 +10,4 @@ This directory is meant to house a historical record of migration documentation 
 * [v0.10](migrations/v0.10): no migration needed
 * [v0.11](migrations/v0.11): no migration needed
 * [v0.12](migrations/v0.12): contains information for migrating `v0.11.x` -> `v0.12.x`
-* [v0.13](migrations/v0.13): no migration needed
+* [v0.13](migrations/v0.13): contains information for migrating `v0.12.x` -> `v0.13.x`
