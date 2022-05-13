@@ -10,6 +10,6 @@ require (
 	github.com/lib/pq v1.10.0 // indirect
 	github.com/sirupsen/logrus v1.8.1
 	github.com/urfave/cli/v2 v2.6.0
-	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
+	golang.org/x/sync v0.0.0-20220513210516-0976fa681c29
 	golang.org/x/sys v0.0.0-20210309074719-68d13333faf2 // indirect
 )
