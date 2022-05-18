@@ -1,4 +1,4 @@
-module github.com/go-vela/community/migrations/v0.12
+module github.com/go-vela/community/migrations/v0.13
 
 go 1.17
 
