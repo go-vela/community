@@ -7,28 +7,28 @@ administrator will want to ensure the following actions are being performed:
 
 1. `v0.14.x` introduces a new `pipelines` table that will be created automatically by default. However, if you are running the `server` component with the `VELA_DATABASE_SKIP_CREATION` set to `true`, you will need to manually create this table using the following:
   * Postgres: 
-  ```sql
-  CREATE TABLE
-  IF NOT EXISTS
-  pipelines (
-    id               SERIAL PRIMARY KEY,
-    repo_id          INTEGER,
-    commit           VARCHAR(500),
-    flavor           VARCHAR(100),
-    platform         VARCHAR(100),
-    ref              VARCHAR(500),
-    type             VARCHAR(100),
-    version          VARCHAR(50),
-    external_secrets BOOLEAN,
-    internal_secrets BOOLEAN,
-    services         BOOLEAN,
-    stages           BOOLEAN,
-    steps            BOOLEAN,
-    templates        BOOLEAN,
-    data             BYTEA,
-    UNIQUE(repo_id, commit)
-  );`
-  ```
+    ```sql
+    CREATE TABLE
+    IF NOT EXISTS
+    pipelines (
+      id               SERIAL PRIMARY KEY,
+      repo_id          INTEGER,
+      commit           VARCHAR(500),
+      flavor           VARCHAR(100),
+      platform         VARCHAR(100),
+      ref              VARCHAR(500),
+      type             VARCHAR(100),
+      version          VARCHAR(50),
+      external_secrets BOOLEAN,
+      internal_secrets BOOLEAN,
+      services         BOOLEAN,
+      stages           BOOLEAN,
+      steps            BOOLEAN,
+      templates        BOOLEAN,
+      data             BYTEA,
+      UNIQUE(repo_id, commit)
+    );
+    ```
   * SQLite:
     ```sql
     CREATE TABLE
