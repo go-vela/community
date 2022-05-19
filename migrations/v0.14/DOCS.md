@@ -23,7 +23,7 @@ git clone git@github.com:go-vela/community.git $HOME/go-vela/community
 
 ```sh
 # change into the project directory
-cd $HOME/go-vela/community/migrations/v0.13
+cd $HOME/go-vela/community/migrations/v0.14
 ```
 
 * Set the environment variables for the database driver and configuration string in your local terminal:
@@ -46,7 +46,7 @@ This section covers the commands required to get the Vela application running lo
 
 ```sh
 # change into the project directory
-cd $HOME/go-vela/community/migrations/v0.13
+cd $HOME/go-vela/community/migrations/v0.14
 ```
 
 ### CLI
@@ -61,11 +61,11 @@ make build
 
 # This command will output binaries to the following locations:
 #
-# * $HOME/go-vela/community/migrations/v0.13/release/darwin/amd64/vela-migration
-# * $HOME/go-vela/community/migrations/v0.13/release/linux/amd64/vela-migration
-# * $HOME/go-vela/community/migrations/v0.13/release/linux/arm64/vela-migration
-# * $HOME/go-vela/community/migrations/v0.13/release/linux/arm/vela-migration
-# * $HOME/go-vela/community/migrations/v0.13/release/windows/amd64/vela-migration
+# * $HOME/go-vela/community/migrations/v0.14/release/darwin/amd64/vela-migration
+# * $HOME/go-vela/community/migrations/v0.14/release/linux/amd64/vela-migration
+# * $HOME/go-vela/community/migrations/v0.14/release/linux/arm64/vela-migration
+# * $HOME/go-vela/community/migrations/v0.14/release/linux/arm/vela-migration
+# * $HOME/go-vela/community/migrations/v0.14/release/windows/amd64/vela-migration
 ```
 
 * Run the Golang binary for the specific operating system and architecture:
@@ -121,7 +121,7 @@ make run
 
 > NOTE: Please review the [start section](#start) before moving forward.
 
-This utility supports invoking the following actions when migrating to `v0.13.x`:
+This utility supports invoking the following actions when migrating to `v0.14.x`:
 
 * `alter.tables` - runs the action responsible for altering database tables
 
@@ -139,11 +139,11 @@ make build
 
 # This command will output binaries to the following locations:
 #
-# * $HOME/go-vela/community/migrations/v0.13/release/darwin/amd64/vela-migration
-# * $HOME/go-vela/community/migrations/v0.13/release/linux/amd64/vela-migration
-# * $HOME/go-vela/community/migrations/v0.13/release/linux/arm64/vela-migration
-# * $HOME/go-vela/community/migrations/v0.13/release/linux/arm/vela-migration
-# * $HOME/go-vela/community/migrations/v0.13/release/windows/amd64/vela-migration
+# * $HOME/go-vela/community/migrations/v0.14/release/darwin/amd64/vela-migration
+# * $HOME/go-vela/community/migrations/v0.14/release/linux/amd64/vela-migration
+# * $HOME/go-vela/community/migrations/v0.14/release/linux/arm64/vela-migration
+# * $HOME/go-vela/community/migrations/v0.14/release/linux/arm/vela-migration
+# * $HOME/go-vela/community/migrations/v0.14/release/windows/amd64/vela-migration
 ```
 
 * Run the Golang binary for the specific operating system and architecture:
