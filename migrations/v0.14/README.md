@@ -55,7 +55,10 @@ administrator will want to ensure the following actions are being performed:
 1. Updating tables in the database:
   * `ALTER TABLE builds ADD COLUMN IF NOT EXISTS event_action VARCHAR(250);`
   * `ALTER TABLE builds ADD COLUMN IF NOT EXISTS pipeline_id INTEGER;` 
+  * `ALTER TABLE hooks ADD COLUMN IF NOT EXISTS event_action VARCHAR(250);`
   * `ALTER TABLE hooks ADD COLUMN IF NOT EXISTS webhook_id INTEGER;`
+1. Although not required for the release, we recommend adding an additional index on the `source` column in the `builds table`.
+  * `CREATE INDEX CONCURRENTLY IF NOT EXISTS builds_source ON builds (source);`
 
 ## Utility
 
@@ -66,5 +69,6 @@ This utility supports invoking the following actions when migrating to `v0.14.x`
 
 * `action.all` - run all supported actions (below) configured in the migration utility
 * `alter.tables` - runs the required queries to alter the database tables
+* `create.indexees` - runs the required queries to create the database indexes
 
 More information can be found in the [`DOCS.md` for the utility](DOCS.md).

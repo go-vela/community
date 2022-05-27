@@ -54,5 +54,14 @@ func (d *db) Exec(c *cli.Context) error {
 		}
 	}
 
+	// check if either the all or create indexes action was provided
+	if d.Actions.All || d.Actions.CreateIndexes {
+		// create required indexes in the database
+		err = d.Create()
+		if err != nil {
+			return err
+		}
+	}
+
 	return nil
 }

@@ -19,6 +19,8 @@ func (d *db) Validate() error {
 	switch {
 	case d.Actions.AlterTables:
 		fallthrough
+	case d.Actions.CreateIndexes:
+		fallthrough
 	case d.Actions.All:
 		break
 	default:

@@ -23,6 +23,12 @@ ADD COLUMN IF NOT EXISTS
 pipeline_id INTEGER;
 `
 
+const AlterHooksTableAddEventAction = `
+ALTER TABLE hooks
+ADD COLUMN IF NOT EXISTS
+event_action VARCHAR(250);
+`
+
 const AlterHooksTableAddWebhookID = `
 ALTER TABLE hooks
 ADD COLUMN IF NOT EXISTS
@@ -54,5 +60,13 @@ func (d *db) Alter() error {
 	if err != nil {
 		return fmt.Errorf("unable to alter %s table: %v", constants.TableHook, err)
 	}
+
+	logrus.Infof("altering %s table to add event_action column", constants.TableHook)
+	// alter hooks table to add event_action column
+	err = d.Gorm.Exec(AlterHooksTableAddEventAction).Error
+	if err != nil {
+		return fmt.Errorf("unable to alter %s table: %v", constants.TableHook, err)
+	}
+
 	return nil
 }

@@ -194,3 +194,73 @@ make run-alter
 #   -e VELA_DATABASE_ADDR \
 #   target/vela-migration:local
 ```
+
+### Create Indexes
+
+#### CLI
+
+This method of running the application uses the Golang binary built from the source code.
+
+* Build the Golang binary targeting different operating systems and architectures:
+
+```sh
+# execute the `build` target with `make`
+make build
+
+# This command will output binaries to the following locations:
+#
+# * $HOME/go-vela/community/migrations/v0.14/release/darwin/amd64/vela-migration
+# * $HOME/go-vela/community/migrations/v0.14/release/linux/amd64/vela-migration
+# * $HOME/go-vela/community/migrations/v0.14/release/linux/arm64/vela-migration
+# * $HOME/go-vela/community/migrations/v0.14/release/linux/arm/vela-migration
+# * $HOME/go-vela/community/migrations/v0.14/release/windows/amd64/vela-migration
+```
+
+* Run the Golang binary for the specific operating system and architecture:
+
+```sh
+# run the Go binary for a Darwin (MacOS) operating system with amd64 architecture
+release/darwin/amd64/vela-migration --create.indexes
+
+# run the Go binary for a Linux operating system with amd64 architecture
+release/linux/amd64/vela-migration --create.indexes
+
+# run the Go binary for a Linux operating system with arm64 architecture
+release/linux/arm64/vela-migration --create.indexes
+
+# run the Go binary for a Linux operating system with arm architecture
+release/linux/arm/vela-migration --create.indexes
+
+# run the Go binary for a Windows operating system with amd64 architecture
+release/windows/amd64/vela-migration --create.indexes
+```
+
+#### Docker
+
+This method of running the application uses a Docker container built from the `Dockerfile`.
+
+* Build the Docker image:
+
+```sh
+# execute the `docker-build` target with `make`
+make docker-build
+
+# This command is functionally equivalent to:
+#
+# docker build --no-cache -t target/vela-migration:local .
+```
+
+* Run the Docker image
+
+```sh
+# execute the `run-create` target with `make`
+make run-create
+
+# This command is functionally equivalent to:
+#
+# docker run --rm \
+#   -e VELA_CREATE_INDEXES=true \
+#   -e VELA_DATABASE_DRIVER \
+#   -e VELA_DATABASE_ADDR \
+#   target/vela-migration:local
+```

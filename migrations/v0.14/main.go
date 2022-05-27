@@ -53,6 +53,11 @@ func main() {
 			Name:    "alter.tables",
 			Usage:   "enables altering the table configuration for v0.14.x",
 		},
+		&cli.BoolFlag{
+			EnvVars: []string{"VELA_CREATE_INDEXES", "CREATE_INDEXES"},
+			Name:    "create.indexes",
+			Usage:   "enables creating new indexes for v0.14.x",
+		},
 
 		// Logger Flags
 

@@ -9,8 +9,9 @@ import "gorm.io/gorm"
 // actions represents all potential actions
 // this utility can invoke with the database.
 type actions struct {
-	All         bool
-	AlterTables bool
+	All           bool
+	AlterTables   bool
+	CreateIndexes bool
 }
 
 // db represents all database related
