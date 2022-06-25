@@ -5,7 +5,7 @@
   ],
   "packageRules": [
     {
-      "packagePatterns": ["*"],
+      "matchPackagePatterns": ["*"],
       "excludePackagePatterns": ["^github.com/go-vela"]
     }
   ]
