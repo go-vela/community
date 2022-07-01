@@ -176,6 +176,7 @@ The below contains a concise list of pros and cons for this option:
 
 * less code than option 2 (changes existing structs & API handlers)
 * less effort than option 2 (less code translates to less effort)
+* not having to support another API collection of endpoints
 
 #### Cons:
 
@@ -199,6 +200,7 @@ The below contains a concise list of pros and cons for this option:
 
 * more code than option 1 (duplicate code i.e. structs (`library.Repo`/`library.V2Repo`), API endpoints/handlers/routes etc.)
 * more effort than option 1 (more code translates to more effort)
+* requires supporting multiple API collections of endpoints
 * likely requires another proposal for determining what the `/api/v2` collection supports
 
 ## Implementation
