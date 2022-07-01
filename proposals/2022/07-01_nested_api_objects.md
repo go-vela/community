@@ -70,6 +70,12 @@ At this time, the below table contains a list of all resources that have a ID fi
 | [library.Service](https://github.com/go-vela/types/blob/master/library/service.go#L16-L35) | `repo_id`, `build_id` |
 | [library.Step](https://github.com/go-vela/types/blob/master/library/step.go#L16-L36) | `repo_id`, `build_id` |
 
+To provide credit where it's due, this pattern is being adopted from an existing, prominent API (GitHub).
+
+To see an example of how this may look in a real world scenario, you can reference their [docs on getting a repo](https://docs.github.com/en/rest/repos/repos#get-a-repository).
+
+> NOTE: The `owner` field from the GitHub docs displays the behavior being referred to.
+
 <!--
 Provide your description here.
 -->
