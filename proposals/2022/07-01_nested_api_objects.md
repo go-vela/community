@@ -1,4 +1,4 @@
-# Title
+# Nested API Objects
 
 <!--
 The name of this markdown file should:
@@ -12,7 +12,7 @@ The name of this markdown file should:
 
 | Key           | Value |
 | :-----------: | :---: |
-| **Author(s)** |       |
+| **Author(s)** | Jordan.Brockopp, Easton.Crupper |
 | **Reviewers** |       |
 | **Date**      |       |
 | **Status**    |       |
@@ -46,6 +46,30 @@ This section is intended to describe the new feature, redesign or refactor.
 -->
 
 **Please provide a summary of the new feature, redesign or refactor:**
+
+* [library.Build](https://github.com/go-vela/types/blob/master/library/build.go#L16-L51)
+  * `repo_id`
+  * `pipeline_id`
+* [library.Deployment](https://github.com/go-vela/types/blob/master/library/deployment.go#L13-L28)
+  * `repo_id`
+* [library.Hook](https://github.com/go-vela/types/blob/master/library/hook.go#L11-L29)
+  * `repo_id`
+  * `build_id`
+* [library.Log](https://github.com/go-vela/types/blob/master/library/log.go#L14-L25)
+  * `repo_id`
+  * `build_id`
+  * `service_id`
+  * `step_id`
+* [library.Pipeline](https://github.com/go-vela/types/blob/master/library/pipeline.go#L11-L31)
+  * `repo_id`
+* [library.Repo](https://github.com/go-vela/types/blob/master/library/repo.go#L11-L38)
+  * `user_id`
+* [library.Service](https://github.com/go-vela/types/blob/master/library/service.go#L16-L35) 
+  * `repo_id`
+  * `build_id`
+* [library.Step](https://github.com/go-vela/types/blob/master/library/step.go#L16-L36)
+  * `repo_id`
+  * `build_id`
 
 <!--
 Provide your description here.
@@ -86,6 +110,10 @@ NOTE: If there are no current plans for a solution, please leave this section bl
 * examples or (pseudo) code snippets
 
 <!-- Answer here -->
+
+### Option 1 - use existing v1
+
+### Option 2 - create new v2
 
 ## Implementation
 
