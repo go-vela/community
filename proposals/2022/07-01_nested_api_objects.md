@@ -82,21 +82,35 @@ Provide your description here.
 
 **Please briefly answer the following questions:**
 
-1. Why is this required?
+**1. Why is this required?**
 
 <!-- Answer here -->
 
-2. If this is a redesign or refactor, what issues exist in the current implementation?
+This functionality should not be considered required.
+
+Instead, this proposal aims to enhance/augment the existing implementation.
+
+**2. If this is a redesign or refactor, what issues exist in the current implementation?**
 
 <!-- Answer here -->
 
-3. Are there any other workarounds, and if so, what are the drawbacks?
+Today, the API returns some pieces of information that aren't valuable without directly querying the database.
+
+This functionality would improve the experience for both administrators and end-users.
+
+i.e. an end-user is able to answer the question "Who is the owner of a repo in Vela?"
+
+**3. Are there any other workarounds, and if so, what are the drawbacks?**
 
 <!-- Answer here -->
 
-4. Are there any related issues? Please provide them below if any exist.
+N/A
+
+**4. Are there any related issues? Please provide them below if any exist.**
 
 <!-- Answer here -->
+
+https://github.com/go-vela/community/issues/69
 
 ## Design
 
