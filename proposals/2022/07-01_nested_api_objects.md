@@ -88,13 +88,13 @@ Provide your description here.
 
 This functionality should not be considered required.
 
-Instead, this proposal aims to enhance/augment the existing implementation.
+Instead, this proposal aims to enhance/augment the existing API implementation.
 
 **2. If this is a redesign or refactor, what issues exist in the current implementation?**
 
 <!-- Answer here -->
 
-Today, the API returns some pieces of information that aren't valuable without directly querying the database.
+Today, the API returns pieces of information that aren't valuable without directly querying the database.
 
 This functionality would improve the experience for both administrators and end-users.
 
