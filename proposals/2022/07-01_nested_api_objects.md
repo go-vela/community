@@ -130,9 +130,76 @@ NOTE: If there are no current plans for a solution, please leave this section bl
 
 <!-- Answer here -->
 
-### Option 1 - use existing v1
+As described, the idea is to no longer return an ID field for related objects from the API.
 
-### Option 2 - create new v2
+Using the above endpoint (`GET /api/v1/repo/:org/:repo`), the result would replace the `user_id` field with an `owner` field:
+
+```diff
+{
+  "id": 1,
+- "user_id": 1,
++ "owner": {
++   "id": 1,
++   "name": "OctoKitty",
++   "favorites": ["github/octocat"],
++   "active": true,
++   "admin": false
++ },
+  "org": "github",
+  "name": "octocat",
+  "full_name": "github/octocat",
+  "link": "https://github.com/github/octocat",
+  "clone": "https://github.com/github/octocat",
+  "branch": "master",
+  "build_limit": 10,
+  "timeout": 60,
+  "visibility": "public",
+  "private": false,
+  "trusted": true,
+  "active": true,
+  "allow_pr": false,
+  "allow_push": true,
+  "allow_deploy": false,
+  "allow_tag": false
+}
+```
+
+However, the implementation of this functionality has different options available which are described below.
+
+### Option 1
+
+This option would explore redesigning the existing endpoints under the `/api/v1` collection to return the nested objects.
+
+The below contains a concise list of pros and cons for this option:
+
+#### Pros:
+
+* less code than option 2 (changes existing structs & API handlers)
+* less effort than option 2 (less code translates to less effort)
+
+#### Cons:
+
+* breaking change for any user workflow utilizing the ID fields
+* existing code dependent on the ID fields needs to be updated
+
+### Option 2
+
+This option would explore adding a new `/api/v2` collection that would be supported in-tandem with the `/api/v1` collection.
+
+> NOTE: Looking to the future, we would eventually remove the `/api/v1` collection at an undetermined date.
+
+The below contains a concise list of pros and cons for this option:
+
+#### Pros:
+
+* backwards-compatible (not a breaking change with new `/api/v2` collection)
+* no existing code needs to be updated (new `/api/v2` collection)
+
+#### Cons:
+
+* more code than option 1 (duplicate code i.e. structs (`library.Repo`/`library.V2Repo`), API endpoints/handlers/routes etc.)
+* more effort than option 1 (more code translates to more effort)
+* likely requires another proposal for determining what the `/api/v2` collection supports
 
 ## Implementation
 
