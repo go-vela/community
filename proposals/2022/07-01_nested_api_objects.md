@@ -215,16 +215,28 @@ NOTE: If there are no current plans for implementation, please leave this sectio
 
 <!-- Answer here -->
 
+Yes
+
 2. What's the estimated time to completion?
 
 <!-- Answer here -->
 
+N/A since it depends on the option
+
 **Please provide all tasks (gists, issues, pull requests, etc.) completed to implement the design:**
 
 <!-- Answer here -->
+
+TODO since it depends on the option
 
 ## Questions
 
 **Please list any questions you may have:**
 
 <!-- Answer here -->
+
+Which option do you prefer?
+
+A. [Option 1](#option-1)
+
+B. [Option 2](#option-2)
