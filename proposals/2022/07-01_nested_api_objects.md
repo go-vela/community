@@ -47,29 +47,28 @@ This section is intended to describe the new feature, redesign or refactor.
 
 **Please provide a summary of the new feature, redesign or refactor:**
 
-* [library.Build](https://github.com/go-vela/types/blob/master/library/build.go#L16-L51)
-  * `repo_id`
-  * `pipeline_id`
-* [library.Deployment](https://github.com/go-vela/types/blob/master/library/deployment.go#L13-L28)
-  * `repo_id`
-* [library.Hook](https://github.com/go-vela/types/blob/master/library/hook.go#L11-L29)
-  * `repo_id`
-  * `build_id`
-* [library.Log](https://github.com/go-vela/types/blob/master/library/log.go#L14-L25)
-  * `repo_id`
-  * `build_id`
-  * `service_id`
-  * `step_id`
-* [library.Pipeline](https://github.com/go-vela/types/blob/master/library/pipeline.go#L11-L31)
-  * `repo_id`
-* [library.Repo](https://github.com/go-vela/types/blob/master/library/repo.go#L11-L38)
-  * `user_id`
-* [library.Service](https://github.com/go-vela/types/blob/master/library/service.go#L16-L35) 
-  * `repo_id`
-  * `build_id`
-* [library.Step](https://github.com/go-vela/types/blob/master/library/step.go#L16-L36)
-  * `repo_id`
-  * `build_id`
+This change would be considered a redesign/refactor to modify the behavior of what information is returned by the API.
+
+The idea is to no longer return the ID fields for resources that have a relationship with one another.
+
+For example, today when you query a repo (`GET /api/v1/repo/:org/:repo`), a `user_id` field is returned in the response.
+
+The `user_id` field contains the primary key for a row in the `users` table that represents the "owner" of the repo.
+
+Unfortunately, that `user_id` field isn't providing value for administrators or consumers (end-users).
+
+At this time, the below table contains a list of all resources that have a ID field nested under them:
+
+| Resource           | Fields |
+| :-----------: | :---: |
+| [library.Build](https://github.com/go-vela/types/blob/master/library/build.go#L16-L51) | `repo_id`, `pipeline_id` |
+| [library.Deployment](https://github.com/go-vela/types/blob/master/library/deployment.go#L13-L28) | `repo_id`       |
+| [library.Hook](https://github.com/go-vela/types/blob/master/library/hook.go#L11-L29) | `repo_id`, `build_id` |
+| [library.Log](https://github.com/go-vela/types/blob/master/library/log.go#L14-L25) | `repo_id`, `build_id`, `service_id`, `step_id` |
+| [library.Pipeline](https://github.com/go-vela/types/blob/master/library/pipeline.go#L11-L31) | `repo_id` |
+| [library.Repo](https://github.com/go-vela/types/blob/master/library/repo.go#L11-L38) | `user_id` |
+| [library.Service](https://github.com/go-vela/types/blob/master/library/service.go#L16-L35) | `repo_id`, `build_id` |
+| [library.Step](https://github.com/go-vela/types/blob/master/library/step.go#L16-L36) | `repo_id`, `build_id` |
 
 <!--
 Provide your description here.
