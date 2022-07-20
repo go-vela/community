@@ -7,7 +7,7 @@ require (
 	github.com/go-vela/types v0.12.0
 	github.com/joho/godotenv v1.4.0
 	github.com/sirupsen/logrus v1.8.1
-	github.com/urfave/cli/v2 v2.8.1
+	github.com/urfave/cli/v2 v2.11.1
 	gorm.io/driver/postgres v1.3.8
 	gorm.io/driver/sqlite v1.3.6
 	gorm.io/gorm v1.23.8
@@ -17,7 +17,7 @@ require (
 	github.com/DATA-DOG/go-sqlmock v1.5.0 // indirect
 	github.com/aymerick/douceur v0.2.0 // indirect
 	github.com/buildkite/yaml v0.0.0-20181016232759-0caa5f0796e3 // indirect
-	github.com/cpuguy83/go-md2man/v2 v2.0.1 // indirect
+	github.com/cpuguy83/go-md2man/v2 v2.0.2 // indirect
 	github.com/drone/envsubst v1.0.3 // indirect
 	github.com/ghodss/yaml v1.0.0 // indirect
 	github.com/gorilla/css v1.0.0 // indirect
@@ -44,5 +44,4 @@ require (
 	golang.org/x/text v0.3.7 // indirect
 	gopkg.in/check.v1 v1.0.0-20200227125254-8fa46927fb4f // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
-	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
 )
