@@ -1,6 +1,6 @@
 module github.com/go-vela/community/migrations/v0.8
 
-go 1.15
+go 1.19
 
 require (
 	github.com/denisenkom/go-mssqldb v0.0.0-20191128021309-1d7a30a10f73 // indirect

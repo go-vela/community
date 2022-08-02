@@ -1,6 +1,6 @@
 module github.com/go-vela/community/migrations/v0.7
 
-go 1.15
+go 1.19
 
 require (
 	github.com/go-vela/server v0.7.5
