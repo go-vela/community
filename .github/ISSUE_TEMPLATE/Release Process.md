@@ -1,5 +1,5 @@
 ---
-name: Release
+name: Release Process
 about: Repeatable release process
 title: ''
 labels: feature
@@ -9,7 +9,9 @@ assignees: ''
 
 for rc1:
 
-## Story 1: (external) cut v0.x.0-rc1
+## Release Story 1: cut v0.x.0-rc1
+External
+
 ## Timing
 Can be concurrent with stories 2 and 3
 
@@ -20,7 +22,9 @@ fyi, ui can be released separately, so is currently n+1 version (server 14, ui 1
 
 
 
-## Story 2: (external) prep draft pr for release notes
+## Release Story 2: prep draft pr for release notes
+External
+
 ## Timing
 Can be concurrent with stories 1 and 3
 
@@ -30,7 +34,9 @@ https://github.com/go-vela/community/pull/591
 
 
 
-## Story 3 (external) prep draft pr for migration tool
+## Release Story 3: prep draft pr for migration tool
+External
+
 ## Timing
 Can be concurrent with stories 1 and 2
 
@@ -42,8 +48,10 @@ more involved, if there is a migration tool like https://github.com/go-vela/comm
 
 
 
-## Story 4: (internal) release rc1 to dev / run dev vela-canary tests
-##Timing
+## Release Story 4: release rc1 to dev / run dev vela-canary tests
+Internal
+
+## Timing
 After Story 3 (external)
 
 ## Action
@@ -54,24 +62,30 @@ https://vela.dev.target.com/vela-canary/all-repo restart a build => results in a
 
 
 
-## Story 5: (internal) test rc1 in dev
-##Timing
+## Release Story 5: test rc1 in dev
+Internal 
+
+## Timing
 After Step 4 (internal)
 
-##Action
+## Action
 manually test any new bug fixes / enhancements / features
 look for bugs
 add vela-canary modifications/additions to story 7
 
 
 
-## Story 6: (external) rc1 bugs
+## Release Story 6: rc1 bugs
+External
+
 ## Background
 keeping 1 story for the sake of this summary exercise; could be 1 where we link all bugs external bugs, or separate stories 1 per bug
 
 
 
-## Story 7: (internal) add/modify / validate canary tests
+## Release Story 7: add/modify / validate canary tests
+Internal
+
 ## Background
 keeping 1 story for the sake of this summary exercise; could be 1 or several stories for a single release flow
 either split by add/modify vs validate, or split by canary test, or keep 1 long-running story for entire release process, or by bug/enhancement/feature (this way is gross), or…hmm
@@ -88,7 +102,9 @@ this cuts the go-vela external release https://pages.git.target.com/rapid/doc-si
 
 
 
-## Story 8: (external) cut v0.x.0
+## Release Story 8: cut v0.x.0
+External 
+
 ## Timing
 Can be concurrent with stories 9 and 10
 
@@ -100,7 +116,9 @@ update homebrew https://github.com/go-vela/homebrew-vela/blob/master/Formula/vel
 
 
 
-## Story 9: (external) approve/merge pr for release notes
+## Release Story 9: approve/merge pr for release notes
+External
+
 ## Timing
 Can be concurrent with stories 8 and 10
 
@@ -110,7 +128,9 @@ https://github.com/go-vela/community/pull/591
 
 
 
-## Story 10 (external) approve/merge pr for migration tool
+## Release Story 10 approve/merge pr for migration tool
+External 
+
 ## Timing
 Can be concurrent with stories 8 and 9
 
@@ -122,8 +142,10 @@ more involved, if there is a migration tool like https://github.com/go-vela/comm
 
 
 
-## Story 11: (internal) release to prod / run prod vela-canary tests
-##Timing
+## Release Story 11: release to prod / run prod vela-canary tests
+Internal 
+
+## Timing
 After Story 10
 
 ## Action
