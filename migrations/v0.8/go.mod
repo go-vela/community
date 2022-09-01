@@ -12,6 +12,6 @@ require (
 	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/sirupsen/logrus v1.9.0
 	github.com/ugorji/go v1.2.4 // indirect
-	github.com/urfave/cli/v2 v2.11.1
+	github.com/urfave/cli/v2 v2.11.2
 	golang.org/x/sync v0.0.0-20220819030929-7fc1605a5dde
 )
