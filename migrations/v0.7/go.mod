@@ -10,5 +10,5 @@ require (
 	github.com/lib/pq v1.10.0 // indirect
 	github.com/sirupsen/logrus v1.9.0
 	github.com/urfave/cli/v2 v2.11.1
-	golang.org/x/sync v0.0.0-20220907140024-f12130a52804
+	golang.org/x/sync v0.0.0-20220923202941-7f9b1623fab7
 )
