@@ -34,8 +34,7 @@ only be executed when the repo is `trusted`. This functionality will be enabled 
 
 ## Utility
 
-For your convenience, we've provided a `vela-migration` utility in this directory to help execute the database
-operations.
+For your convenience, we've provided a `vela-migration` utility in this directory to help execute the database operations.
 
 This utility supports invoking the following actions when migrating to `v0.16.x`:
 
