@@ -3,14 +3,14 @@ module github.com/go-vela/community/migrations/v0.16
 go 1.19
 
 require (
-	github.com/go-vela/server v0.15.1
-	github.com/go-vela/types v0.15.1
+	github.com/go-vela/server v0.16.0
+	github.com/go-vela/types v0.16.0
 	github.com/joho/godotenv v1.4.0
 	github.com/sirupsen/logrus v1.9.0
 	github.com/urfave/cli/v2 v2.17.1
 	gorm.io/driver/postgres v1.4.4
-	gorm.io/driver/sqlite v1.3.6
-	gorm.io/gorm v1.23.10
+	gorm.io/driver/sqlite v1.4.2
+	gorm.io/gorm v1.24.0
 )
 
 require (
