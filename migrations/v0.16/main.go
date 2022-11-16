@@ -22,7 +22,7 @@ func main() {
 
 	app.Name = "vela-migration"
 	app.HelpName = "vela-migration"
-	app.Usage = "Vela utility used to migrate from v0.13.x to v0.14.x"
+	app.Usage = "Vela utility used to migrate from v0.15.x to v0.16.x"
 	app.Copyright = "Copyright (c) 2022 Target Brands, Inc. All rights reserved."
 	app.Authors = []*cli.Author{
 		{
@@ -46,7 +46,7 @@ func main() {
 		&cli.BoolFlag{
 			EnvVars: []string{"VELA_ACTION_ALL", "ACTION_ALL"},
 			Name:    "action.all",
-			Usage:   "enables running all actions for v0.14.x",
+			Usage:   "enables running all actions for v0.16.x",
 		},
 		&cli.BoolFlag{
 			EnvVars: []string{"VELA_ACTION_SET_UNTRUSTED", "ACTION_SET_UNTRUSTED"},

@@ -61,11 +61,11 @@ make build
 
 # This command will output binaries to the following locations:
 #
-# * $HOME/go-vela/community/migrations/v0.14/release/darwin/amd64/vela-migration
-# * $HOME/go-vela/community/migrations/v0.14/release/linux/amd64/vela-migration
-# * $HOME/go-vela/community/migrations/v0.14/release/linux/arm64/vela-migration
-# * $HOME/go-vela/community/migrations/v0.14/release/linux/arm/vela-migration
-# * $HOME/go-vela/community/migrations/v0.14/release/windows/amd64/vela-migration
+# * $HOME/go-vela/community/migrations/v0.16/release/darwin/amd64/vela-migration
+# * $HOME/go-vela/community/migrations/v0.16/release/linux/amd64/vela-migration
+# * $HOME/go-vela/community/migrations/v0.16/release/linux/arm64/vela-migration
+# * $HOME/go-vela/community/migrations/v0.16/release/linux/arm/vela-migration
+# * $HOME/go-vela/community/migrations/v0.16/release/windows/amd64/vela-migration
 ```
 
 * Run the Golang binary for the specific operating system and architecture:

@@ -95,7 +95,7 @@ build-darwin:
 	GOOS=darwin CGO_ENABLED=0 GOARCH=amd64 \
 		go build -a \
 		-o release/darwin/amd64/vela-migration \
-		github.com/go-vela/community/migrations/v0.14
+		github.com/go-vela/community/migrations/v0.16
 
 # The `build-linux` target is intended to compile the
 # Go source code into a Linux compatible binary.
@@ -108,19 +108,19 @@ build-linux:
 	GOOS=linux CGO_ENABLED=0 GOARCH=amd64 \
 		go build -a \
 		-o release/linux/amd64/vela-migration \
-		github.com/go-vela/community/migrations/v0.14
+		github.com/go-vela/community/migrations/v0.16
 	@echo
 	@echo "### Building release/linux/arm64/vela-migration binary"
 	GOOS=linux CGO_ENABLED=0 GOARCH=arm64 \
 		go build -a \
 		-o release/linux/arm64/vela-migration \
-		github.com/go-vela/community/migrations/v0.14
+		github.com/go-vela/community/migrations/v0.16
 	@echo
 	@echo "### Building release/linux/arm/vela-migration binary"
 	GOOS=linux CGO_ENABLED=0 GOARCH=arm \
 		go build -a \
 		-o release/linux/arm/vela-migration \
-		github.com/go-vela/community/migrations/v0.14
+		github.com/go-vela/community/migrations/v0.16
 
 # The `build-windows` target is intended to compile the
 # Go source code into a Windows compatible binary.
@@ -133,7 +133,7 @@ build-windows:
 	GOOS=windows CGO_ENABLED=0 GOARCH=amd64 \
 		go build -a \
 		-o release/windows/amd64/vela-migration \
-		github.com/go-vela/community/migrations/v0.14
+		github.com/go-vela/community/migrations/v0.16
 
 # The `build-darwin-static` target is intended to compile the
 # Go source code into a statically linked, Darwin compatible (MacOS) binary.
@@ -147,7 +147,7 @@ build-darwin-static:
 		go build -a \
 		-ldflags '-s -w -extldflags "-static"' \
 		-o release/darwin/amd64/vela-migration \
-		github.com/go-vela/community/migrations/v0.14
+		github.com/go-vela/community/migrations/v0.16
 
 # The `build-linux-static` target is intended to compile the
 # Go source code into a statically linked, Linux compatible binary.
@@ -161,21 +161,21 @@ build-linux-static:
 		go build -a \
 		-ldflags '-s -w -extldflags "-static"' \
 		-o release/linux/amd64/vela-migration \
-		github.com/go-vela/community/migrations/v0.14
+		github.com/go-vela/community/migrations/v0.16
 	@echo
 	@echo "### Building release/linux/arm64/vela-migration binary"
 	GOOS=linux CGO_ENABLED=0 GOARCH=arm64 \
 		go build -a \
 		-ldflags '-s -w -extldflags "-static"' \
 		-o release/linux/arm64/vela-migration \
-		github.com/go-vela/community/migrations/v0.14
+		github.com/go-vela/community/migrations/v0.16
 	@echo
 	@echo "### Building release/linux/arm/vela-migration binary"
 	GOOS=linux CGO_ENABLED=0 GOARCH=arm \
 		go build -a \
 		-ldflags '-s -w -extldflags "-static"' \
 		-o release/linux/arm/vela-migration \
-		github.com/go-vela/community/migrations/v0.14
+		github.com/go-vela/community/migrations/v0.16
 
 # The `build-windows-static` target is intended to compile the
 # Go source code into a statically linked, Windows compatible binary.
@@ -189,7 +189,7 @@ build-windows-static:
 		go build -a \
 		-ldflags '-s -w -extldflags "-static"' \
 		-o release/windows/amd64/vela-migration \
-		github.com/go-vela/community/migrations/v0.14
+		github.com/go-vela/community/migrations/v0.16
 
 # The `build-static-ci` target is intended to compile
 # the Go source code into a statically linked binary
@@ -203,7 +203,7 @@ build-static-ci:
 	@go build -a \
 		-ldflags '-s -w -extldflags "-static"' \
 		-o release/vela-migration \
-		github.com/go-vela/community/migrations/v0.14
+		github.com/go-vela/community/migrations/v0.16
 
 # The `docker-build` target is intended to build
 # the Docker image for the utility.
