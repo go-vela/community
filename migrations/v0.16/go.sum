@@ -32,8 +32,8 @@ github.com/go-playground/validator/v10 v10.10.0 h1:I7mrTYv78z8k8VXa/qJlOlEXn/nBh
 github.com/go-stack/stack v1.8.0/go.mod h1:v0f6uXyyMGvRgIKkXu+yp6POWl0qKG85gN/melR3HDY=
 github.com/go-vela/server v0.15.1 h1:7J9QfFXNVREhX4mILCWyqZE3o29a2oThEN2WeQ/wWF4=
 github.com/go-vela/server v0.15.1/go.mod h1:k3p4ZhDKYKVO3rbkCAow3N/01f2Iel9KDR2yTaH90UI=
-github.com/go-vela/types v0.15.1 h1:nQxfxoqxavuTYtvFJW4wK9UkkADN2VG6Z4ubvJ8PT1s=
-github.com/go-vela/types v0.15.1/go.mod h1:6KoRkvXMw9DkAcLdtI7PxPqMlT2Bl0DiigQamLGGjwo=
+github.com/go-vela/types v0.16.2 h1:c2Kkj7OKv4sjPrsOBbnPSQqfsNpOFM2La7LfP+81EF0=
+github.com/go-vela/types v0.16.2/go.mod h1:6KoRkvXMw9DkAcLdtI7PxPqMlT2Bl0DiigQamLGGjwo=
 github.com/goccy/go-json v0.9.7 h1:IcB+Aqpx/iMHu5Yooh7jEzJk1JZ7Pjtmys2ukPr7EeM=
 github.com/gofrs/uuid v4.0.0+incompatible h1:1SD/1F5pU8p29ybwgQSwpQk+mwdRrXCYuPhW6m+TnJw=
 github.com/gofrs/uuid v4.0.0+incompatible/go.mod h1:b2aQJv3Z4Fp6yNu3cdSllBxTCLRxnplIgP/c0N/04lM=
