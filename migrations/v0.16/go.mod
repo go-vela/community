@@ -3,14 +3,14 @@ module github.com/go-vela/community/migrations/v0.16
 go 1.19
 
 require (
-	github.com/go-vela/server v0.15.1
-	github.com/go-vela/types v0.15.1
+	github.com/go-vela/server v0.16.2
+	github.com/go-vela/types v0.16.2
 	github.com/joho/godotenv v1.4.0
 	github.com/sirupsen/logrus v1.9.0
-	github.com/urfave/cli/v2 v2.17.1
-	gorm.io/driver/postgres v1.4.4
-	gorm.io/driver/sqlite v1.3.6
-	gorm.io/gorm v1.23.10
+	github.com/urfave/cli/v2 v2.23.5
+	gorm.io/driver/postgres v1.4.5
+	gorm.io/driver/sqlite v1.4.3
+	gorm.io/gorm v1.24.1
 )
 
 require (
@@ -39,9 +39,9 @@ require (
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/xrash/smetrics v0.0.0-20201216005158-039620a65673 // indirect
 	golang.org/x/crypto v0.0.0-20220722155217-630584e8d5aa // indirect
-	golang.org/x/net v0.0.0-20221002022538-bcab6841153b // indirect
-	golang.org/x/sys v0.0.0-20220811171246-fbc7d0a398ab // indirect
-	golang.org/x/text v0.3.7 // indirect
+	golang.org/x/net v0.1.0 // indirect
+	golang.org/x/sys v0.1.0 // indirect
+	golang.org/x/text v0.4.0 // indirect
 	gopkg.in/check.v1 v1.0.0-20200227125254-8fa46927fb4f // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
