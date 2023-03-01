@@ -2,7 +2,7 @@
 
 > NOTE: This applies when upgrading to the latest `v0.18.x` release.
 
-When migrating from Vela version [v0.17](../../releases/v0.12.md) to [v0.18](../../releases/v0.18.md) the Vela
+When migrating from Vela version [v0.17](../../releases/v0.17.md) to [v0.18](../../releases/v0.18.md) the Vela
 administrator will want to ensure the following actions are being performed:
 
 1. Updating tables in the database:
