@@ -28,3 +28,7 @@ To create a new proposal, make a PR into master using the [template](https://git
 ### 2022
 
 * [02/17 Enhanced Event Support](02-17_enhanced-event-support.md): contains proposal information for enhancing `events` and `rulesets`.
+
+### 2023
+
+* [03/02 Worker Visibility](03_02_worker_visibility.md): contains proposal information for extending the worker table with additional fields, and their uses.
