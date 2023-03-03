@@ -12,7 +12,7 @@ The name of this markdown file should:
 
 | Key           | Value                                                                                |
 | :-----------: | :----------------------------------------------------------------------------------: |
-| **Author(s)** | Easton.Crupper, David.Vader, David.May, Tim.Huyn, Kelly.Merrick                      |
+| **Author(s)** | Easton.Crupper, David.Vader, David.May, Tim.Huynh, Kelly.Merrick                      |
 | **Reviewers** |                                                                                      |
 | **Date**      | February 22nd, 2023                                                                  |
 | **Status**    | In Progress                                                                          |
