@@ -5,7 +5,7 @@ go 1.17
 require (
 	github.com/go-vela/server v0.13.1
 	github.com/go-vela/types v0.13.0
-	github.com/joho/godotenv v1.4.0
+	github.com/joho/godotenv v1.5.1
 	github.com/sirupsen/logrus v1.9.0
 	github.com/urfave/cli/v2 v2.17.1
 	gorm.io/driver/postgres v1.4.4
