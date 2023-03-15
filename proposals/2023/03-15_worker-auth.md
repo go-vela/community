@@ -115,7 +115,7 @@ With the implementation of the token manager and build tokens, the ground work i
 Some of the major changes will be:
 
 - Add the ability for the `internal/token` package to mint and validate worker auth / register tokens
-- Add a `GET` registration endpoint, which will be platform admin exclusive. It will return a worker registration token.
+- Add a `POST` registration endpoint, which will be platform admin exclusive. It will return a worker registration token.
 - Enhance the current `MustWorker` permissions check to use claims from a worker auth token with the option of also using the symmetric secret, if provided. 
 - Place the `POST` and `PUT` worker endpoints behind that improved permissions check. (note: the `PUT` endpoint will accept both registration and auth tokens in order to account for re-registration in the event the worker was offline and is still in the database. It will also accept user access token types from platform admins that want to perform an update on the worker).
 - Add a `GET` validate token endpoint. One of the drawbacks of using HMAC token signing is the fact that there is no way to check validity of any given token without it being parsed by the entity with the private key (in this case, the server). By adding a simple endpoint that validates a token came from the server the worker expected, we will be able to verify tokens from the server to the worker (e.g. canceling a build).
