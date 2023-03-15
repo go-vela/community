@@ -10,12 +10,12 @@ The name of this markdown file should:
 3. Clearly state what the proposal is being submitted for
 -->
 
-| Key           | Value       |
-| :-----------: | :---------: |
-| **Author(s)** | Jacob Floyd |
-| **Reviewers** |             |
-| **Date**      |             |
-| **Status**    | WIP         |
+| Key           | Value              |
+| :-----------: | :----------------: |
+| **Author(s)** | Jacob Floyd        |
+| **Reviewers** |                    |
+| **Date**      | March 15th, 2023   |
+| **Status**    | Waiting for Review |
 
 <!--
 If you're already working with someone, please add them to the proper author/reviewer category.
@@ -119,17 +119,173 @@ NOTE: If there are no current plans for a solution, please leave this section bl
 
 ### Types
 
+This is description is based on this draft PR: https://github.com/go-vela/types/pull/280
 
+Similar to a `Step`, where the log data is stored in a separate `Log` struct/table,
+the `InitStep` is also associated with a `Log` that stores the actual log/report.
+
+Adds structs:
+
+- `pipeline.InitStep`: a new struct meant to be used in communication between worker <=> server to report about "InitStep".
+- `library.InitStep`: represents a discrete "InitStep" report (actually, just the metadata for it - the report is stored in a `Log`)
+- `database.InitStep`: to persist the library.InitStep
+
+We explicitly do NOT want to add a `yaml.InitStep` struct, as this is only for server/worker to report on build init. It shouldn't be exposed in the user's pipeline.
+
+Also add these fields:
+
+- `pipeline.Build.InitSteps`: an `InitStepSlice` / a slice of `pipeline.InitStep` structs
+- `library.Log.InitStepID`: to associate a `library.Log` with a `library.InitStep` instead of a step or a service.
+- `database.Log.InitStepID`: to associate a `database.Log` with a `database.InitStep` instead of a step or a service.
+
+Future enhancement, also add `Mimetype` to the `Log` structs.
 
 ### Server
 
+This is description is based on this draft PR: https://github.com/go-vela/server/pull/779
+
+#### Server API
+
+Add `api/initstep` package with endpoints for `InitStep` that mirror the `Step` endpoints:
+
+```
+- UpdateInitStep:     PUT    /api/v1/admin/initstep
+- CreateInitStep:     POST   /api/v1/repos/:org/:repo/builds/:build/initsteps
+- ListInitSteps:      GET    /api/v1/repos/:org/:repo/builds/:build/initsteps
+- GetInitStep:        GET    /api/v1/repos/:org/:repo/builds/:build/initsteps/:initstep
+- UpdateInitStep:     PUT    /api/v1/repos/:org/:repo/builds/:build/initsteps/:initstep
+- DeleteInitStep:     DELETE /api/v1/repos/:org/:repo/builds/:build/initsteps/:initstep
+- CreateInitStepLog:  POST   /api/v1/repos/:org/:repo/builds/:build/initsteps/:initstep/logs
+- GetInitStepLog:     GET    /api/v1/repos/:org/:repo/builds/:build/initsteps/:initstep/logs
+- UpdateInitStepLog:  PUT    /api/v1/repos/:org/:repo/builds/:build/initsteps/:initstep/logs
+- DeleteInitStepLog:  DELETE /api/v1/repos/:org/:repo/builds/:build/initsteps/:initstep/logs
+- PostInitStepStream: POST   /api/v1/repos/:org/:repo/builds/:build/initsteps/:initstep/stream
+```
+
+Add `middleware/initstep` package to inject `InitStep` in the `*/initsteps/*` APIs.
+
+Also include the endpoints in the mock server.
+
+#### Server Database
+
+Add `database/initstep` package for storing the new `InitStep` object:
+
+- `CountInitSteps`: gets the count of all InitSteps
+- `CountInitStepsForBuild`: gets the count of InitSteps by build ID
+- `CreateInitStep`: creates a new InitStep.
+- `DeleteInitStep`: deletes an existing InitStep.
+- `GetInitStep`: gets a InitStep by ID.
+- `GetInitStepForBuildgets`: gets an InitStep by build ID and InitStep number.
+- `ListInitSteps`: gets a list of all InitSteps.
+- `ListInitStepsForBuild`: gets a list of InitSteps by build ID.
+- `UpdateInitStep`: updates an existing InitStep.
+
+And methods for the InitStep Logs:
+- GetLogForInitStep: gets a log by init step ID from the database.
+
+#### End-User visible logging in the server
+
+Today, only the worker can safely add details to the init step log. With this change,
+the server can also add end-user visible logging, especially in places like the compiler
+where it would be helpful to highlight compile errors in the UI/CLI.
+
+In the Build and Webhook API endpoints, we can create the `InitStep` and `Log` as soon as we
+have the `RepoID` and `Build.Number`. Failures before this point can't be associated
+with a particular build, so they cannot bubble up to the end-user. The endpiont will
+then pass in a `library.Log` to the compiler that it creates specifically for the compiler.
+It can also record relevant its own log messages when handling requests like:
+
+- `CreateBuild`
+- `RestartBuild`
+- `PostWebHook`
+
+In the compiler, we can fill in an `InitStep` `Log` for end-user visible logging.
+The compiler does not (and probably should not) have access to the database.
+So, add `WithLog(*library.Log) Engine` to the `compiler.Engine` interface. To use it
+the endpoint methods that create the compiler will pass in a `library.Log` type that the
+compiler can use to report any end-user visibile log messages. Once the compiler finishes,
+the API endpoint will handle saving it to the database.
+
+For things that use CompileLite, passing in a `Log` doesn't make sense because it is
+not part of a build. So, using `WithLog` should be optional.
+
 ### Worker
+
+The executor and runtime can create `InitStep` + `Log` entries wherever it makes sense
+without worrying about retrieving prior logged steps. The worker could also add more
+InitSteps not just before a Build, but also when preparing to run individual steps
+or services.
+
+Nothing in the worker should check for these magic strings any more: `"init"`, `"#init"`
 
 ### SDK
 
+Needs support for the new Server endpoints.
+
 ### CLI
 
+Add commands for InitStep similar to Step:
+
+```
+  1. Get initsteps for a repository.
+    $ vela get initsteps --org MyOrg --repo MyRepo --build 1
+  2. Get initsteps for a repository with wide view output.
+    $ vela get initsteps --org MyOrg --repo MyRepo --build 1 --output wide
+  3. Get initsteps for a repository with yaml output.
+    $ vela get initsteps --org MyOrg --repo MyRepo --build 1 --output yaml
+  4. Get initsteps for a repository with json output.
+    $ vela get initsteps --org MyOrg --repo MyRepo --build 1 --output json
+  5. Get initsteps for a build when config or environment variables are set.
+    $ vela get initsteps --build 1
+
+  1. View initstep details for a repository.
+    $ vela view initstep --org MyOrg --repo MyRepo --build 1 --initstep 1
+  2. View step details for a repository with json output.
+    $ vela view initstep --org MyOrg --repo MyRepo --build 1 --initstep 1 --output json
+  3. View step details for a repository config or environment variables are set.
+    $ vela view initstep --build 1 --initstep 1
+
+  3. View logs for an initstep.
+    $ vela view log --org MyOrg --repo MyRepo --build 1 --initstep 1
+
+```
+
+Any `vela get log` requests for a build should automatically include the
+initstep logs without change by virue of re-using the `Log` types for this.
+
 ### UI
+
+The UI needs to stream initsteps just like it does for steps and services.
+This can be added after all of the backend work for server, worker, sdk, etc.
+
+The init steps should be presented separately (somehow) from the normal steps
+because they represent something that Vela is doing, not the output of the actual
+pipeline's steps. Many other CI services do not make much of a distinction here.
+So, at first we could just include the list of initsteps in the same view as
+the other steps.
+
+Eventually, I would love to see syntax highlighting when an InitStep includes
+a known Mimetype like YAML (For example, when the Kubernetes runtime logs the Pod
+just before creating it, or perhaps when the pod gets updated). Doing that is
+beyond the scope of this proposal, but that is part of what I would like to
+facilitate eventually by separating the InitStep logs from standard Step logs now.
+
+### Deprecating the legacy "init" step as a Step
+
+The current init step should be deprecated for at least one release before removing it.
+Any logging in the worker that currently gets put on that step should continue to
+be logged there for at least one release. The worker should also create an InitStep
+and log these things there. Then, 
+
+If it takes an extra release for the UI to get these features, that's ok because the
+old init step will still be getting all of the info that was logged before. Once the
+UI work is complete, additional logs will become available from the compiler and
+anything else that uses the InitStep to send logs to the end-user.
+
+Once we're satisfied that log data in InitSteps sufficiently covers everything
+that is currently logged via the pseudo-step named "init", then we can stop injecting
+that init step (and the init stage) and all of the special-case handling of the "init"
+container/stage/step.
 
 ## Implementation
 
@@ -145,9 +301,12 @@ NOTE: If there are no current plans for implementation, please leave this sectio
 
 <!-- Answer here -->
 
-yes for server and worker. And maybe CLI.
+yes for the go code in Types, Server, Worker, and sdk-go.
+I have not used the CLI so far, but copying the step actions/commands to initstep seems
+simple enough.
 
-I need someone familiar eith elm to handle the UI.
+The UI, however, is beyond me at this point. I need someone familiar eith elm to handle the UI
+after all the other components have been merged.
 
 2. What's the estimated time to completion?
 
