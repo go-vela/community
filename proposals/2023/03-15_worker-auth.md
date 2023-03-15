@@ -14,7 +14,7 @@ The name of this markdown file should:
 | :-----------: | :----------------------------------------------------------------------------------: |
 | **Author(s)** | Easton.Crupper, David.Vader, David.May, Tim.Huynh, Kelly.Merrick                      |
 | **Reviewers** |                                                                                      |
-| **Date**      | February 22nd, 2023                                                                  |
+| **Date**      | March 15th, 2023                                                                  |
 | **Status**    | In Progress                                                                          |
 
 <!--
@@ -55,7 +55,9 @@ With the implementation of the `internal/token` package in the `v0.18.0` release
 
 This document is a proposal to utilize the recently introduced `internal/token` package to mint and validate worker auth tokens and include a registration process to introduce significant friction for potential attackers.
 
-In short, the Vela platform administrators will have the ability to register workers with a registration token, and the worker will maintain its authenticity by performing a check-in at a specified interval, where it will present its authentication token and receive a new one. The details of this will all be included below, in the [Design](02-22_worker-authentication.md#design) section.
+In short, the Vela platform administrators will have the ability to register workers with a registration token, and the worker will maintain its authenticity by performing a check-in at a specified interval, where it will present its authentication token and receive a new one. The details of this will all be included below, in the [Design](03-12_worker-auth.md#design) section.
+
+This feature is intended to be optional. If platform admins would rather continue to use the symmetric token for the check in process as well as getting build tokens, that will be available.
 
 
 **Please briefly answer the following questions:**
@@ -104,9 +106,7 @@ NOTE: If there are no current plans for a solution, please leave this section bl
 
 <!-- Answer here -->
 
-This diagram should provide a general overview of the design.
-
-![alt text](worker-auth.png)
+A diagram will be added to this proposal soon to provide a visual aid for the design.
 
 ### Server Design
 
@@ -116,30 +116,38 @@ Some of the major changes will be:
 
 - Add the ability for the `internal/token` package to mint and validate worker auth / register tokens
 - Add a `GET` registration endpoint, which will be platform admin exclusive. It will return a worker registration token.
-- Enhance the current `MustWorker` permissions check to use claims from a worker auth token rather than the symmetric secret.
-- Place the `POST` and `PUT` worker endpoints behind that improved permissions check. (note: the `PUT` endpoint will accept both registration and auth tokens in order to account for re-registration in the event the worker was offline and is still in the database).
+- Enhance the current `MustWorker` permissions check to use claims from a worker auth token with the option of also using the symmetric secret, if provided. 
+- Place the `POST` and `PUT` worker endpoints behind that improved permissions check. (note: the `PUT` endpoint will accept both registration and auth tokens in order to account for re-registration in the event the worker was offline and is still in the database. It will also accept user access token types from platform admins that want to perform an update on the worker).
+- Add a `GET` validate token endpoint. One of the drawbacks of using HMAC token signing is the fact that there is no way to check validity of any given token without it being parsed by the entity with the private key (in this case, the server). By adding a simple endpoint that validates a token came from the server the worker expected, we will be able to verify tokens from the server to the worker (e.g. canceling a build).
 
 ### Worker Design
 
 The worker design is more tricky, but will look something like this:
 
-- On start up, the worker will check to see if it has a registration token. If not, it will enter a dead loop, where it will do nothing (no pulling from queue, checking in, etc) except serve the worker API. If it does have a registration token, it will perform its check-in process and continue operations.
-- During the check in process, the worker will exchange its registration token for an auth token, which it will then refresh on the check-in interval.
-- A new endpoint to self-register will be added. This endpoint will take a registration token and use it to break the dead loop and continue with check-in and building.
-- In a scenario where a worker loses connection for a certain time period that renders the auth token expired, and admin is require to re-register the worker
+1. On start up, the worker will enter a dead loop, where it will do nothing (no pulling from queue, checking in, etc) except serve the worker API. It will then be the job of the platform administrators to "register" the worker by hitting the worker's self registration endpoint.
+2. Once the self-registration endpoint is hit, the worker will use the token gathered from the header of that incoming request and break its dead loop, thereby entering its check in loop and exec loop.
+3-a. During the check in process, the worker will exchange its registration token for an auth token, which it will then refresh on the check-in interval. The success status of the check in will be a new struct field for the worker.
+3-b. Based on the success status, the worker will proceed with its exec loop, checking before each pull whether the worker is truly verified with the server.
+4. When a build is pulled off the queue, the worker will request a build token using its auth token.
+5. In a scenario where a worker loses connection for a certain time period that renders the auth token expired, and admin is require to re-register the worker
 
 Other considerations to further improve security:
 - specification of IP address in the claims to allow restriction by IP
 - stricter expiration logic
 
+In the case where the admins would prefer to continue using the symmetric token, all the above worker design logic will use the `VELA_SERVER_SECRET` token, which will not expire and not hinder executors' ability to pull from the queue.
+
 ### CLI Design
 
 Since the registration token is so quick to expire, it is important to automate the job of onboarding workers for platform admins. This means that a new CLI command will be added that will use platform admin credentials to retrieve a registration token and hit the worker self-register endpoint. This will be vital for use in automation tools.
 
+### Other things of note
 
-## Decision: Opt-In or Required?
-
-Given that there is a significant increase in overhead for onboarding a worker, I wanted to pose the question to the community: do we want to make this opt-in? The design for opt-in would basically be to use the symmetric token if provided for worker check-in / registration. In other words, if a worker has a value for `VELA_SERVER_SECRET`, then the server will honor that so long as it also has the same value in `VELA_SECRET` for all worker check-in related routines.
+- The server secret would be dropped from the container environment altogether if platform admins opt in to this enhancement.
+- All auth tokens (check in + registration) have a strict expiration.
+- Registration tokens can only be generated by a platform administrator
+- Registration tokens should expire very quickly
+- The callback to the server to validate the token is a bit clumsy. This could be improved greatly by using private-public key pairs rather than a single HMAC private key. Future enhancement? Must-have for MVP?
 
 
 ## Implementation
@@ -149,11 +157,6 @@ This section is intended to explain how the solution will be implemented for the
 
 NOTE: If there are no current plans for implementation, please leave this section blank.
 -->
-
-- The server secret would be dropped from the container environment altogether.
-- All auth tokens (check in + registration) have a strict expiration.
-- Registration tokens can only be generated by a platform administrator
-- Registration tokens expire very quickly
 
 **Please briefly answer the following questions:**
 
@@ -172,7 +175,3 @@ Yes, with help
 **Please provide all tasks (gists, issues, pull requests, etc.) completed to implement the design:**
 
 <!-- Answer here -->
-
-## Questions
-
-ICYMI, please see my question [above](02-22_worker-authentication#decision-opt-in-or-required)
