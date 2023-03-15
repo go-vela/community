@@ -129,7 +129,7 @@ The worker design is more tricky, but will look something like this:
 3-a. During the check in process, the worker will exchange its registration token for an auth token, which it will then refresh on the check-in interval. The success status of the check in will be a new struct field for the worker.
 3-b. Based on the success status, the worker will proceed with its exec loop, checking before each pull whether the worker is truly verified with the server.
 4. When a build is pulled off the queue, the worker will request a build token using its auth token.
-5. In a scenario where a worker loses connection for a certain time period that renders the auth token expired, and admin is require to re-register the worker
+5. In a scenario where a worker loses connection for a certain time period that renders the auth token expired, and admin must re-register the worker.
 
 Other considerations to further improve security:
 - specification of IP address in the claims to allow restriction by IP
