@@ -14,3 +14,4 @@ This directory is meant to house a historical record of migration documentation 
 * [v0.14](./v0.14): contains information for migrating `v0.13.x` -> `v0.14.x`
 * [v0.15](./v0.15): contains information for migrating `v0.14.x` -> `v0.15.x`
 * [v0.16](./v0.16): contains information for migrating `v0.15.x` -> `v0.16.x`
+* [v0.17](./v0.17): contains information for migrating `v0.16.x` -> `v0.17.x`

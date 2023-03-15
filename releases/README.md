@@ -15,3 +15,7 @@ Commonly referred to as release notes, these records will attempt to provide a b
 * [v0.11](v0.11.md): contains release information for `v0.11.x`
 * [v0.12](v0.12.md): contains release information for `v0.12.x`
 * [v0.13](v0.13.md): contains release information for `v0.13.x`
+* [v0.14](v0.14.md): contains release information for `v0.14.x`
+* [v0.15](v0.15.md): contains release information for `v0.15.x`
+* [v0.16](v0.16.md): contains release information for `v0.16.x`
+* [v0.17](v0.17.md): contains release information for `v0.17.x`

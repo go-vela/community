@@ -13,5 +13,5 @@ require (
 	github.com/sirupsen/logrus v1.9.0
 	github.com/ugorji/go v1.2.4 // indirect
 	github.com/urfave/cli/v2 v2.17.1
-	golang.org/x/sync v0.0.0-20220929204114-8fcdb60fdcc0
+	golang.org/x/sync v0.1.0
 )
