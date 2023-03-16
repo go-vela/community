@@ -28,3 +28,7 @@ To create a new proposal, make a PR into master using the [template](https://git
 ### 2022
 
 * [02/17 Enhanced Event Support](02-17_enhanced-event-support.md): contains proposal information for enhancing `events` and `rulesets`.
+
+### 2023
+
+* [02/23 Enhanced Event Support](02-23_build-tokens.md): contains proposal information for using `build tokens` for worker build API interactions.
