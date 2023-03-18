@@ -61,9 +61,11 @@ An `InitStep` is a report by a "reporter" about a discrete part of the build set
 - Docker Runtime: report volume setup
 - Kubernetes Runtime: Pod YAML
 
+`InitStep`s are always part of a build. An `InitStep` may also be associated with a `Step` or a `Service`. Today, the runtime prefixes each step's log with the command (`$ command ...`). An `InitStep` linked to a `Step`--or a `Service`--will allow the worker to cleanly report what it runs separate from the output of that command. The UI, in turn will also be able to visually separate the command and output. The worker could also log other information like environment vars, or for kubernetes, the YAML container definition in the pod.
+
 Similar to a `Step`, where the log data is stored in a separate `Log` struct/table, the `InitStep` is also associated with a `Log` that stores the actual log/report.
 
-In the future, each `InitStep`'s `Log` can be given an optional `Mimetype`, which is meant for eventual consumption by the UI to do syntax highlighting. `Mimetype` will be a field on either `InitStep` or `Log` (I'm not sure which yet).
+In the future, each `InitStep`'s `Log` can be given an optional `Mimetype`, which is meant for eventual consumption by the UI to do syntax highlighting. `Mimetype` will probably be a field on `Log`, but adding the `Mimetype` field is out-of-scope for this proposal.
 
 **Please briefly answer the following questions:**
 
@@ -71,7 +73,11 @@ In the future, each `InitStep`'s `Log` can be given an optional `Mimetype`, whic
 
 <!-- Answer here -->
 
+To cleanly separate Vela's end-user visible logs from the output of commands defined by a pipeline.
+
 2. If this is a redesign or refactor, what issues exist in the current implementation?
+
+<!-- Answer here -->
 
 Currently, we're abusing the `Step` and `Container` models to allow reporting on build setup (eg when the Docker Runtime initializes the Network and Volumes). This means that we have to check for the special "init" stage/step/container in many places. 
 
@@ -79,25 +85,23 @@ We are also simulating a shell in that init step, printing simulated commands an
 
 Also, there is only one "init" step. So editing it's `Log` must be managed by one thing, the worker. That way nothing gets lost. If we want to allow different parts of the worker to report status asyncronously, or to capture user-visible logs during compile or other steps, the responsibility for managing that one log entry gets muddy.
 
-<!-- Answer here -->
-
 3. Are there any other workarounds, and if so, what are the drawbacks?
+
+<!-- Answer here -->
 
 The "init" step is one big workaround. It is an excellent MVP, but we need a way to clean it up.
 
 I looked at adding an `IsInit` bool flag to steps instead of relying on the magic `init` string, but it has to be serializable, and I don't want to add it to the pipeline where users can set it. It has to be serialized when the compiler sends it to the external modification endpoint and when added to the queue for the worker.
 
-<!-- Answer here -->
-
 4. Are there any related issues? Please provide them below if any exist.
+
+<!-- Answer here -->
 
 In the worker, we frequently need to iterate over the containers for steps/services. But the "init" stage/step is not really a container, so we have to identify which container's are not actually containers so they can be skipped. So far, the worker relies on `Name="init"`, but that does not work in all cases. when the executor is checking trusted+privileged settings in `AssembleBuild`, it checks for `Image="#init"` instead because service containers can be named "init" by users.
 
 This issue is even worse with the kubernetes runtime. There, the number of containers has to be counted and indexed. Given a particular step or service the Kubernetes runtime has to look up which container it needs to edit. So there are many places where that count/index has to be adjusted by one to account for the init step. Then with the injected clone step, figuring out when to add or subtract one or 2 to get the index can be confusing. Also, the kubernetes runtime breaks when running a pipeline with a service named "init" because the container setup is skipped in  one place but not another. That was uncovered by attempting to use it in the executor AssembleBuild test.
 
 So, relying on a magic `"init"` string is surprising and problematic. Relying on `"#init"` as a magic string on step.Image is only marginally better.
-
-<!-- Answer here -->
 
 ## Design
 
@@ -132,13 +136,25 @@ Adds structs:
 
 We explicitly do NOT want to add a `yaml.InitStep` struct, as this is only for server/worker to report on build init. It shouldn't be exposed in the user's pipeline.
 
+`InitStep` will have these fields:
+
+- ID (db, library, pipeline)
+- RepoID (db, library)
+- BuildID (db, library)
+- StepID (db, library): optional step relationship
+- ServiceID (db, library): optional service relationship
+- Number (db, library, pipeline): unique number within the build
+- Reporter (db, library, pipeline): generator of the InitStep Log
+- Name (db, library, pipeline)
+
 Also add these fields:
 
-- `pipeline.Build.InitSteps`: an `InitStepSlice` / a slice of `pipeline.InitStep` structs
-- `library.Log.InitStepID`: to associate a `library.Log` with a `library.InitStep` instead of a step or a service.
 - `database.Log.InitStepID`: to associate a `database.Log` with a `database.InitStep` instead of a step or a service.
+- `library.Log.InitStepID`: to associate a `library.Log` with a `library.InitStep` instead of a step or a service.
+- `pipeline.Build.InitSteps`: an `InitStepSlice` / a slice of `pipeline.InitStep` structs that report on build init
+- `pipeline.Container.InitSteps`: an `InitStepSlice` / a slice of `pipeline.InitStep` structs that report on step/service init
 
-Future enhancement, also add `Mimetype` to the `Log` structs.
+Future enhancement: also add `Mimetype` to the `Log` structs.
 
 ### Server
 
