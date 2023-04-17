@@ -46,12 +46,12 @@ func main() {
 		&cli.BoolFlag{
 			EnvVars: []string{"VELA_ACTION_ALL", "ACTION_ALL"},
 			Name:    "action.all",
-			Usage:   "enables running all actions for v0.16.x",
+			Usage:   "enables running all actions for v0.19.x",
 		},
 		&cli.BoolFlag{
 			EnvVars: []string{"VELA_ALTER_TABLES", "ALTER_TABLES"},
 			Name:    "alter.tables",
-			Usage:   "enables altering the table configuration for v0.9.x",
+			Usage:   "enables altering the table configuration for v0.19.x",
 		},
 
 		// Logger Flags
