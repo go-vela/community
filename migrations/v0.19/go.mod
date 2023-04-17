@@ -1,4 +1,4 @@
-module github.com/go-vela/community/migrations/v0.16
+module github.com/go-vela/community/migrations/v0.19
 
 go 1.19
 
