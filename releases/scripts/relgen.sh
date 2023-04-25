@@ -28,12 +28,11 @@ repos=(cli sdk-go server types ui worker)
 # main loop to iterate over repos
 echo "📣 generating release notes for core vela repos"
 for repo in "${repos[@]}"; do
-    # get the tags
-    LAST_TWO_TAGS="$(gh api repos/go-vela/$repo/releases --jq '[.[] | select(.prerelease != true) | .tag_name] | join(" ")')"
-    LAST_TAG="$(echo $LAST_TWO_TAGS | awk '{print $1}')"
-    PREVIOUS_TAG="$(echo $LAST_TWO_TAGS | awk '{print $2}')"
+	# get the tags
+	LAST_TWO_TAGS="$(gh api repos/go-vela/$repo/releases --jq '[.[] | select(.prerelease != true) | .tag_name] | join(" ")')"
+	LAST_TAG="$(echo $LAST_TWO_TAGS | awk '{print $1}')"
+	PREVIOUS_TAG="$(echo $LAST_TWO_TAGS | awk '{print $2}')"
 
-	LAST_NON_RC_TAG="$(gh release view --repo "go-vela/$repo" --json tagName --jq '.tagName')"
 	printf "📝 fetching entries for for %s (from %s to %s)\n" "$repo" "$PREVIOUS_TAG" "$LAST_TAG"
 
 	# fetch the changes since last tag and append to file
@@ -46,17 +45,17 @@ done
 
 # getting unique contributors
 echo "📣 creating contributor list"
-CONTRIBUTORS="$(perl -ne 'if(/\[(@[a-z0-9\[\]_-]+)\]\(/) { print "- $1\n";}' "$RELEASE_FILE" | sort -u)"
+CONTRIBUTORS="$(perl -ne 'if(/\[(@[a-z0-9\[\]_-]+)\]\(/i) { print "- $1\n";}' "$RELEASE_FILE" | sort --ignore-case --unique)"
 
 # filter commits
 # - only keep conventional commit formatted commits
 # - ignore dependency updates, reverts, and release commits
 cat "$RELEASE_FILE" |
-grep --ignore-case --extended-regexp "^-\s+\([a-z\-]+\)\s+[a-z]+(\([a-z\-_ ]+\))?!?:\s.+" |
-grep --invert-match --ignore-case --extended-regexp "^-\s+\([a-z\-]+\)\s+(chore|fix)\(deps\)" |
-grep --invert-match --ignore-case --extended-regexp "^-\s+\([a-z\-]+\)\s+revert(\([a-z\-_ ]+\))?:" |
-grep --invert-match --ignore-case --extended-regexp "^-\s+\([a-z\-]+\)\s+chore.*release" |
-sponge "$RELEASE_FILE"
+	grep --ignore-case --extended-regexp "^-\s+\([a-z\-]+\)\s+[a-z]+(\([a-z\-_ ]+\))?!?:\s.+" |
+	grep --invert-match --ignore-case --extended-regexp "^-\s+\([a-z\-]+\)\s+(chore|fix)\(deps\)" |
+	grep --invert-match --ignore-case --extended-regexp "^-\s+\([a-z\-]+\)\s+revert(\([a-z\-_ ]+\))?:" |
+	grep --invert-match --ignore-case --extended-regexp "^-\s+\([a-z\-]+\)\s+chore.*release" |
+	sponge "$RELEASE_FILE"
 
 # sort releases by type (fixes, features, etc) and and then by component (server, cli, etc)
 echo "🔃 sorting release notes"
@@ -80,12 +79,12 @@ awk '/(enhance)(\([a-z\-_ ]+\))?:/ && !x {print "\n### 🚸 Enhancements\n"; x=1
 awk '/(chore)(\([a-z\-_ ]+\))?:/ && !x {print "\n### 🔧 Miscellaneous\n"; x=1} 1' "$RELEASE_FILE" | sponge "$RELEASE_FILE"
 
 echo "🐙 adding repo release links"
-printf "\n## 🔗 %s\n\n" "Release Links" >> "$RELEASE_FILE"
+printf "\n## 🔗 %s\n\n" "Release Links" >>"$RELEASE_FILE"
 for repo in "${repos[@]}"; do
-	echo "- https://github.com/go-vela/${repo}/releases" >> "$RELEASE_FILE"
+	echo "- https://github.com/go-vela/${repo}/releases" >>"$RELEASE_FILE"
 done
 
 echo "🥹 adding contributors"
-printf "\n## 💟 Thank you to all the contributors in this release!\n\n%s\n" "$CONTRIBUTORS" >> "$RELEASE_FILE"
+printf "\n## 💟 Thank you to all the contributors in this release!\n\n%s\n" "$CONTRIBUTORS" >>"$RELEASE_FILE"
 
 echo "🪩 all done! see '$RELEASE_FILE' for your release notes."
