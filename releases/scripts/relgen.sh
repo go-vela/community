@@ -10,6 +10,7 @@
 # - reorder output to follow current
 #   pre-established output
 # - help output
+# - sed/gsed detection
 
 set -Eeuo pipefail
 
