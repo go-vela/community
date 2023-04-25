@@ -9,8 +9,8 @@ require (
 	github.com/sirupsen/logrus v1.9.0
 	github.com/urfave/cli/v2 v2.17.1
 	gorm.io/driver/postgres v1.4.4
-	gorm.io/driver/sqlite v1.4.3
-	gorm.io/gorm v1.24.0
+	gorm.io/driver/sqlite v1.5.0
+	gorm.io/gorm v1.24.7-0.20230306060331-85eaf9eeda11
 )
 
 require (
