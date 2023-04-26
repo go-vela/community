@@ -1,8 +1,15 @@
 #!/usr/bin/env bash
 
 # cross repo release notes generation
-# relies heavily on the github cli 'gh'
-# and `gsed` (for Mac usage)
+# relies heavily on the github cli 'gh'.
+# part of the reason is that it provides
+# an easy method of retrieving GitHub
+# user name for attribution.
+#
+# this is not meant to produce publishable
+# release notes, but rather to serve as
+# a starting point. a human touch is expected
+# after the notes have been generated.
 #
 # TODO:
 # - allow passing in flag to generate release notes
@@ -10,7 +17,6 @@
 # - reorder output to follow current
 #   pre-established output
 # - help output
-# - sed/gsed detection
 
 set -Eeuo pipefail
 
@@ -25,6 +31,10 @@ echo "📣 release notes will be generated at: $RELEASE_FILE"
 # all the core vela repos
 repos=(cli sdk-go server types ui worker)
 
+# adding top of file
+echo "⚓ adding main header"
+printf '# __TARGET_VERSION__ 🚀\n\nThis document contains all release notes pertaining to the `__TARGET_VERSION__.x` releases of Vela.\n\n/' >> "$RELEASE_FILE"
+
 # main loop to iterate over repos
 echo "📣 generating release notes for core vela repos"
 for repo in "${repos[@]}"; do
@@ -35,7 +45,7 @@ for repo in "${repos[@]}"; do
 
 	printf "📝 fetching entries for for %s (from %s to %s)\n" "$repo" "$PREVIOUS_TAG" "$LAST_TAG"
 
-	# fetch the changes since last tag and append to file
+	# fetch the changes since between given tags
 	# awk prepends each line with "- (<repo>) " to maintain a reference
 	gh api "repos/go-vela/$repo/compare/$PREVIOUS_TAG...$LAST_TAG" \
 		--jq '.commits.[] | "\(.commit.message|split(" \\(#[0-9]{3,}\\)";"")[0]) [\(.commit.message|capture("\\((?<pr>#[0-9]{3,})"; "")|.pr)](\(.html_url)) - thanks [@\(.author.login)](\(.author.html_url))!"' |
@@ -64,9 +74,6 @@ sort --ignore-case --ignore-leading-blanks --key=3,3.3 --key=2,2 "$RELEASE_FILE"
 # move breaking changes to the beginning of the file
 # store matching and non-matching lines in array and return them
 perl -ne 'push @{/!:/ ? \@A : \@B}, $_}{print @A, @B' "$RELEASE_FILE" | sponge "$RELEASE_FILE"
-
-echo "⚓ adding main header"
-gsed -i '1s/^/## Release Notes 🚀\n\n/' "$RELEASE_FILE"
 
 echo "📑 demarking sections"
 # each line here, find the first occurence of the given pattern
