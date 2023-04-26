@@ -12,9 +12,9 @@ The name of this markdown file should:
 
 | Key           | Value |
 | :-----------: | :-: |
-| **Author(s)** | Kelly.Merrick |
+| **Author(s)** | Kelly.Merrick, Tim.Huynh, Easton.Crupper, David.Vader, David.May |
 | **Reviewers** |  |
-| **Date**      | March 2nd, 2023 |
+| **Date**      | April 25th, 2023 |
 | **Status**    | In Progress |
 
 <!--
@@ -59,7 +59,7 @@ This is a step towards a push vs pull queue model, as well as set the groundwork
 
 1. Why is this required?
 
-* These additional fields will expand visibility into the current status of each worker, allowing for...
+* These additional fields will expand visibility into the current status of each worker.
 
 2. If this is a redesign or refactor, what issues exist in the current implementation?
 
