@@ -124,17 +124,16 @@ NOTE: If there are no current plans for implementation, please leave this sectio
 1. Is this something you plan to implement yourself?
 
 <!-- Answer here -->
-
+Yes, with help
 2. What's the estimated time to completion?
 
 <!-- Answer here -->
-
+1-3 weeks, pending discussion
 **Please provide all tasks (gists, issues, pull requests, etc.) completed to implement the design:**
 
 <!-- Answer here -->
-
-## Questions
-
-**Please list any questions you may have:**
-
-<!-- Answer here -->
+Server:
+  - https://github.com/go-vela/server/pull/773
+  - https://github.com/go-vela/server/pull/772
+Types:
+  - https://github.com/go-vela/types/pull/277
