@@ -142,11 +142,11 @@ This will follow a similar approach as seen on the `secrets` tab for a repo:
 
 https://vela.example.com/-/secrets/native/repo/MyOrg/MyRepo
 
-| Name                 | Entry     | Created At     | Created By     | Updated At     | Updated By    |
-| -------------------- | --------- | -------------- | -------------- | -------------- | ------------- |
-| [unit_test]()        | 0 2 * * * | 5 minutes ago  | JordanBrockopp | 1 minute ago   | JordanSussman |
-| [integration_test]() | 0 4 * * * | 10 minutes ago | JordanBrockopp | 5 minutes ago  | JordanSussman |
-| [nightly]()          | 0 0 * * * | 15 minutes ago | JordanBrockopp | 10 minutes ago | JordanSussman |
+| Name                 | Entry     | Created At     | Created By     | Updated At     | Updated By    | Active |
+| -------------------- | --------- | -------------- | -------------- | -------------- | ------------- | ------ |
+| [unit_test]()        | 0 2 * * * | 5 minutes ago  | JordanBrockopp | 1 minute ago   | JordanSussman | false  |
+| [integration_test]() | 0 4 * * * | 10 minutes ago | JordanBrockopp | 5 minutes ago  | JordanSussman | true   |
+| [nightly]()          | 0 0 * * * | 15 minutes ago | JordanBrockopp | 10 minutes ago | JordanSussman | true   |
 
 When you click on one of those `schedules`, you'll navigate to a "View/Edit" page for the schedule like `secrets`:
 
@@ -154,9 +154,18 @@ https://vela.example.com/-/secrets/native/repo/MyOrg/MyRepo/MySecret
 
 On this page, you should be able to perform the following interactions with that schedule:
 
-* update the `name`
-* update the `entry`
+* update the `name` field
+* update the `entry` field
+* update the `active` field (enable/disable)
 * remove the schedule
+
+The following URIs would be created for the new `schedules` functionality:
+
+```
+// NEW   /:org/:repo/add-schedule        | create a new schedule for a repo
+// LIST  /:org/:repo/schedules           | list schedules for a repo
+// EDIT  /:org/:repo/schedules/:schedule | view/update/remove an existing schedule
+```
 
 ### API
 
@@ -180,14 +189,6 @@ vela get schedule --org MyOrg --repo MyRepo                                     
 vela view schedule --org MyOrg --repo MyRepo --name nightly                       | view an existing schedule for a repo
 vela update schedule --org MyOrg --repo MyRepo --name nightly --entry '0 0 * * *' | update an existing schedule for a repo
 vela remove schedule --org MyOrg --repo MyRepo --name nightly                     | remove an existing schedule for a repo
-```
-
-### UI
-
-```
-// NEW   /:org/:repo/add-schedule           | create a new schedule for a repo
-// LIST  /:org/:repo/schedules              | list schedules for a repo
-// EDIT  /:org/:repo/schedules/:schedule.   | view / edit / delete an existing schedule
 ```
 
 ### YAML
@@ -246,6 +247,8 @@ NOTE: If there are no current plans for implementation, please leave this sectio
 
 Users will be able to manage schedules for a repo via the UI, API and CLI.
 
+Only repos within the allowlist (`VELA_SCHEDULE_ALLOWLIST`) will be able to create schedules.
+
 Only users with `admin` access to a repo will be able to manage schedules for that repo.
 
 Vela will support having multiple schedules setup for a repo.
@@ -286,7 +289,10 @@ TBD - we assume this will require at least a couple weeks to write the code and 
 
 <!-- Answer here -->
 
-https://github.com/go-vela/community/issues/538
+* https://github.com/go-vela/community/issues/538
+* https://github.com/go-vela/server/pull/833
+* https://github.com/go-vela/server/pull/834
+* https://github.com/go-vela/server/pull/836
 
 ## Questions
 
