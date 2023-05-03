@@ -182,6 +182,14 @@ vela update schedule --org MyOrg --repo MyRepo --name nightly --entry '0 0 * * *
 vela remove schedule --org MyOrg --repo MyRepo --name nightly                     | remove an existing schedule for a repo
 ```
 
+### UI
+
+```
+// NEW   /:org/:repo/add-schedule           | create a new schedule for a repo
+// LIST  /:org/:repo/schedules              | list schedules for a repo
+// EDIT  /:org/:repo/schedules/:schedule.   | view / edit / delete an existing schedule
+```
+
 ### YAML
 
 A `schedule` event type will be added under `ruleset` for the new `schedules` functionality.
