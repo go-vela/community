@@ -111,7 +111,18 @@ NOTE: If there are no current plans for a solution, please leave this section bl
 For reference please review the following design diagram that explains the approach from a high level.
 
 ```mermaid
-TODO: convert image to mermaid
+flowchart TD
+    A[GitHub] --> B[Vela Server]
+    B --> |compile\npush compiled| C[Redis Queue]
+    C --> |pop compiled| D[Vela Worker]
+    D --> E(execute build)
+
+    F[GitHub] --> G[Vela Server]
+    G --> |compile\npush compiled| H[Database]
+    G --> |push build_id| K[Redis Queue]
+    K --> |pop build_id| I[Vela Worker]
+    I --> |request compiled| H
+    H --> J(execute build)
 ```
 
 New functionality that is absolutely required:
