@@ -121,8 +121,8 @@ flowchart TD
     G --> |compile\npush compiled| H[Database]
     G --> |push build_id| K[Redis Queue]
     K --> |pop build_id| I[Vela Worker]
-    I --> |request compiled| H
-    H --> J(execute build)
+    I --> |request compiled from server\nvia build_token| G
+    I --> J(execute build)
 ```
 
 New functionality that is absolutely required:
