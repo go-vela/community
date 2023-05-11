@@ -140,14 +140,15 @@ New functionality that is absolutely required:
 
 #### Types
 
+Removing the `pipeline.Build` from the `Item` published to the queue, which represents the "compiled pipeline".
+
 ```diff
 // Item is the queue representation of an item to publish to the queue.
 type Item struct {
--	Build    *library.Build  `json:"build"`
+	Build    *library.Build  `json:"build"`
 -	Pipeline *pipeline.Build `json:"pipeline"`
--	Repo     *library.Repo   `json:"repo"`
--	User     *library.User   `json:"user"`
-+	Build_ID     int64   `json:"build_id"`
+	Repo     *library.Repo   `json:"repo"`
+	User     *library.User   `json:"user"`
 }
 ```
 
