@@ -98,7 +98,8 @@ NOTE: If there are no current plans for a solution, please leave this section bl
 
 * new database table to store interim compiled pipelines
 * new endpoint to retrieve a compiled pipeline from the server
-* modification to the Item currently placed on the queue
+* modification to the [Item](https://github.com/go-vela/types/blob/main/item.go#L12C1-L18) currently placed on the queue to only push build ID
+* modification to webhook processing to push the compiled pipeline to a separate table
 * added interaction between worker and server to request a compiled pipeline
 
 <!-- Answer here -->
@@ -115,10 +116,25 @@ New functionality that is absolutely required:
 
 - GET `api/v1/<org>/<repo>/build/<number>/compiled` or `api/v1/search/builds/<id>/compiled` to retrieve a compiled pipeline using a build token
 - `database/compiled` package and a new database table `compiled` that will contain precompiled pipelines in bytes, formerly stored directly on the Redis queue.
+- separate database row creation in addition to the Redis [Item](https://github.com/go-vela/types/blob/main/item.go#L12C1-L18) push
+
 
 #### Worker
 
 - should perform a GET `api/v1/<org>/<repo>/build/<number>/compiled` or `api/v1/search/builds/<id>/compiled` to retrieve a compiled pipeline using a build token
+
+#### Types
+
+```diff
+// Item is the queue representation of an item to publish to the queue.
+type Item struct {
+-	Build    *library.Build  `json:"build"`
+-	Pipeline *pipeline.Build `json:"pipeline"`
+-	Repo     *library.Repo   `json:"repo"`
+-	User     *library.User   `json:"user"`
++	Build_ID     int64   `json:"build_id"`
+}
+```
 
 ## Implementation
 
