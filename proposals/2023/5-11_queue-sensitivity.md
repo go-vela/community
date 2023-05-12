@@ -129,8 +129,8 @@ New functionality that is absolutely required:
 
 #### Server
 
-- GET `api/v1/<org>/<repo>/build/<number>/compiled` or `api/v1/search/builds/<id>/compiled` to retrieve a compiled pipeline using a build token
-- `database/compiled` package and a new database table `compiled` that will contain precompiled pipelines in bytes, formerly stored directly on the Redis queue.
+- GET `api/v1/<org>/<repo>/build/<number>/executable` or `api/v1/search/builds/<id>/executable` to retrieve an executable pipeline build using a build token
+- `database/executable-build` package and a new database table `executable_build` that will contain serialized executable pipeline builds in bytes, formerly stored directly on the Redis queue.
 - separate database row creation in addition to the Redis [Item](https://github.com/go-vela/types/blob/main/item.go#L12C1-L18) push
 
 
