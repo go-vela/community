@@ -136,11 +136,11 @@ New functionality that is absolutely required:
 
 #### Worker
 
-- should perform a GET `api/v1/<org>/<repo>/build/<number>/compiled` or `api/v1/search/builds/<id>/compiled` to retrieve a compiled pipeline using a build token
+- should perform a GET `api/v1/<org>/<repo>/build/<number>/executable` or `api/v1/search/builds/<id>/executable` to retrieve an executable pipeline build using a build token
 
 #### Types
 
-Removing the `pipeline.Build` from the `Item` published to the queue, which represents the "compiled pipeline".
+Removing the `pipeline.Build` from the `Item` published to the queue, which represents the "executable pipeline build" (aka "executable build").
 
 ```diff
 // Item is the queue representation of an item to publish to the queue.
