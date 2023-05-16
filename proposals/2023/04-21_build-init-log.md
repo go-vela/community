@@ -15,7 +15,7 @@ The name of this markdown file should:
 | **Author(s)** | Jacob Floyd        |
 | **Reviewers** | @jbrockopp, @plyr4 |
 | **Date**      | April 21st, 2023   |
-| **Status**    | Reviewed           |
+| **Status**    | Approved           |
 
 <!--
 If you're already working with someone, please add them to the proper author/reviewer category.
