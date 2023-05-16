@@ -100,11 +100,11 @@ NOTE: If there are no current plans for a solution, please leave this section bl
 
 **Please describe your solution to the proposal. This includes, but is not limited to:**
 
-* new database table to store interim compiled pipelines
-* new endpoint to retrieve a compiled pipeline from the server
+* new database table to store interim executable builds
+* new endpoint to retrieve a executable build from the server
 * modification to the [Item](https://github.com/go-vela/types/blob/main/item.go#L12C1-L18) currently placed on the queue to only push build ID
-* modification to webhook processing to push the compiled pipeline to a separate table
-* added interaction between worker and server to request a compiled pipeline
+* modification to webhook processing to push the executable build to a separate table
+* added interaction between worker and server to request an executable build
 
 <!-- Answer here -->
 
