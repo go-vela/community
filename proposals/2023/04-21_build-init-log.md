@@ -13,9 +13,9 @@ The name of this markdown file should:
 | Key           | Value              |
 | :-----------: | :----------------: |
 | **Author(s)** | Jacob Floyd        |
-| **Reviewers** |                    |
+| **Reviewers** | @jbrockopp, @plyr4 |
 | **Date**      | April 21st, 2023   |
-| **Status**    | Waiting for Review |
+| **Status**    | Reviewed           |
 
 <!--
 If you're already working with someone, please add them to the proper author/reviewer category.
@@ -141,14 +141,14 @@ No changes are needed in the `pipeline` or the `yaml` layers because there is no
 Adjust `CreateLog`, `UpdateLog`, and `DeleteLog` to handle the build `Log` (adding a `logger.Tracef` entry and an `Error` specific to the Build Log).
 
 Add `database/log/get_build.go` with:
-```
+```go
 // GetLogForBuild gets a log by build ID from the database.
 func (e *engine) GetLogForBuild(b *library.Build) (*library.Log, error) {
 ```
 
 See if we can make the build log sort before the step logs in `ListLogsForBuild`:
 <!-- https://github.com/go-vela/server/blob/main/database/log/list_build.go#L37-L40 -->
-```
+```go
 	err = e.client.
 		Table(constants.TableLog).
 		Where("build_id = ?", b.GetID()).
@@ -157,9 +157,26 @@ See if we can make the build log sort before the step logs in `ListLogsForBuild`
 
 Sqlite sorts with `NULLS FIRST` by default, and Postgres sorts with `NULLS LAST` (see: [How Are NULLs Sorted by Default?](https://learnsql.com/blog/how-to-order-rows-with-nulls/)).
 So this query is inconsistent between databases. And, the service logs returned by this query are not sorted. It would be nice to have this method return the logs sorted in a consistent manner.
-I would like to see the Build Log, then Step Logs sorted by step_id, then Service Logs sorted by service_id. Any suggestions on how to do that with gorm?
+I would like to see the Build Log, then Step Logs sorted by step_id, then Service Logs sorted by service_id. GORM supports multiple [order](https://gorm.io/docs/query.html#Order) statements, so something like this should be possible:
 
-We might need some kind of index or constraint on the `Log` table so that rows with NULL step_id and NULL service_id must have a unique build_id. But, I'm not sure how to create such an index/constraint.
+```go
+	err = e.client.
+		Table(constants.TableLog).
+		Where("build_id = ?", b.GetID()).
+		Order("(step_id IS NULL AND service_id IS NULL) DESC"). // the build init log
+		Order("step_id ASC NULLS LAST").
+		Order("service_id ASC").
+```
+
+We might need some kind of index or constraint on the `Log` table so that rows with NULL step_id and NULL service_id must have a unique build_id. A partial unique index seems like the simplest way to do this:
+
+```sql
+CREATE UNIQUE INDEX
+	IF NOT EXISTS
+	logs_build_init_log
+	ON logs (build_id)
+	WHERE step_id IS NULL AND service_id IS NULL;
+```
 
 #### Server - API
 
@@ -186,9 +203,7 @@ The compiler needs to deprecate and stop adding the `InitStage` and `InitStep`. 
 - remove the `Init*()` calls from `compiler/native/compile.go`, and
 - remove the magic `"init"` string special-casing in `compiler/native/validate.go`.
 
-Backwards compatibility is a concern with the compiler. Referencing old builds/pipelines should work just fine as it includes the "init" step and stage, thus preserving references to the underlying log. But, recompiling the pipeline will create a slightly different pipeline--one without the injected "init" stage and/or step. The worker will no longer handle the old pipeline with the injected "init" step, so any re-runs MUST re-compile the pipeline.
-
-Does re-running a build ALWAYS re-compile the pipeline?
+Backwards compatibility is a concern with the compiler. Referencing old builds/pipelines should work just fine as it includes the "init" step and stage, thus preserving references to the underlying log. But, recompiling the pipeline will create a slightly different pipeline--one without the injected "init" stage and/or step. The worker will no longer handle the old pipeline with the injected "init" step, so any re-runs MUST re-compile the pipeline. Luckily re-runs always re-compile the pipeline.
 
 #### Server - Queue
 
@@ -198,24 +213,24 @@ Also, when upgrading, we need to ensure that:
 - the queue is empty, or
 - all queued builds get re-compiled (or more particularly `item.Pipeline` which is a `types.pipeline.Build` and includes the injected init step) before execution in the worker starts.
 
-To make the worker backwards compatible, could we trigger the rebuild in `server.queue.redis.Pop()` after the item is created?
-Or perhaps we'll just need to include queued build migrations in the migration script.
+We need to gracefully handle any stale queued items in the queue after upgrading server and worker. Items are stale if they were queued with a previous version of Vela.
 
 ### Worker
 
 Save init logs to the Build `Log` instead of the magic init step.
 Nothing in the worker should check for these magic strings any more: `"init"`, `"#init"`
 
-We might need something that rejects an old build when popped off the queue if it is an older version that includes the injected "init" `Step`.
+Hopefully we can do this in one release, documenting any required queue flushing or similar. To make this work well, the queue item will need some kind of version number (TODO: create community issue for this).
+Then the worker should fail a build popped from the queue if that item was created by an earlier version of Vela.
 
-We might need to spread this change over a couple of versions.
+If needed, we can also spread this change over a couple of versions:
 - In one version, we start logging to the Build `Log` and deprecate support for the magic "init" step.
 - In the next (or a future) version, we remove support for the magic string checking.
 
 In my previous [`InitStep` proposal](https://github.com/go-vela/community/pull/771), I suggested logging to both places for at least one version while waiting for the UI to catch up.
-However, the primary objection to that proposal was increased database storage costs. So, this proposal recommends a hard break the worker will only create the init logs in one place.
-The backwards compatibility is achieved by continuing to ignore Stages/Steps with the magic "init" or "#init" strings. Even if those strings are present, the worker will still send
-the build init logs to the server via the new build init logs endpoints.
+However, the primary objection to that proposal was increased database storage costs. So, this proposal recommends a hard break--the worker will only create the init logs in one place.
+If we do spread this over two releases, then the worker will continue to ignore Stages/Steps with the magic "init" or "#init" strings. Even if those strings are present, the worker will
+still send the build init logs to the server via the new build init logs endpoints.
 
 ### SDK
 
@@ -228,19 +243,17 @@ initstep logs without change by virue of re-using the `Log` types for this.
 
 We also need a new command to retrieve the "init" logs for a Build.
 
-One way to provide this would be an `--init` flag to specify we only want the build's init log, not all of the logs for the build:
+We will provide this with an `--init` flag to specify we only want the build's init log, not all of the logs for the build:
 ```
   3. View init logs for a build.
     $ vela view log --org MyOrg --repo MyRepo --build 1 --init
 ```
 
-Another alternitve is adding a separate "initlog" subcommand:
+If anyone has issues with that method, an alternitve is adding a separate "initlog" subcommand:
 ```
   3. View init logs for a build.
     $ vela view initlog --org MyOrg --repo MyRepo --build 1
 ```
-
-I have not used the vela CLI much, so I'm not sure which option would be more ergonomic, or if we need something else entirely.
 
 ### UI
 
@@ -266,7 +279,7 @@ NOTE: If there are no current plans for implementation, please leave this sectio
 
 Yes for the go code in Types, Server, Worker, sdk-go, and CLI.
 
-The UI, however, is beyond me at this point. I need someone familiar eith elm to handle the UI.
+@plyr4 will help out with the UI, beginning with mocking out some ideas on how to separate init logs in a backwards-compatible way (ie supporting builds with the magic init step).
 
 2. What's the estimated time to completion?
 
@@ -284,9 +297,4 @@ TBD
 
 <!-- Answer here -->
 
-This is a summary of the questions listed above:
-- How can we add an index or constraint to the database so that each build can only have one init Log? (see "Server" > "Server - Database" above)
-- Does re-running a build ALWAYS re-compile the pipeline? (see  "Server" > "Server - Compiler" above)
-- Do we need to trigger a re-compile for old builds on the queue when the worker Pops them off the queue? (see  "Server" > "Server - Queue" above)
-- Do we need to migrate / re-compile any builds on the queue in an upgrade migration script? (see  "Server" > "Server - Queue" above)
-- Does anyone have bandwidth to help with the UI piece? (see "UI" above)
+All questions have been answered.
