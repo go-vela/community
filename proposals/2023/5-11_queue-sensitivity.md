@@ -113,15 +113,15 @@ For reference please review the following design diagram that explains the appro
 ```mermaid
 flowchart TD
     A[GitHub] --> B[Vela Server]
-    B --> |compile\npush compiled| C[Redis Queue]
-    C --> |pop compiled| D[Vela Worker]
+    B --> |compile\npush executable build| C[Redis Queue]
+    C --> |pop executable build| D[Vela Worker]
     D --> E(execute build)
 
     F[GitHub] --> G[Vela Server]
-    G --> |compile\npush compiled| H[Database]
+    G --> |compile\npush executable build| H[Database]
     G --> |push build_id| K[Redis Queue]
     K --> |pop build_id| I[Vela Worker]
-    I --> |request compiled from server\nvia build_token| G
+    I --> |request executable build\nfrom server via build_token| G
     I --> J(execute build)
 ```
 
