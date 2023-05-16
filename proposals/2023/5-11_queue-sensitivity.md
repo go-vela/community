@@ -52,9 +52,9 @@ Provide your description here.
 
 This proposal is small piece to a larger effort to increase the overall security of the platform.
 
-The problem being solved is that the Redis queue is currently a potential attack vector with direct regard to the information compiled in plaintext into the pipeline object, namely the `NETRC_PASSWORD` placed in the environment.
+The problem being solved is that the Redis queue is currently a potential attack vector with direct regard to the information compiled in plaintext into the executable pipeline build object, namely the `NETRC_PASSWORD` placed in the environment.
 
-The feature proposed is a modification to what data the server places directly on the queue and to offload the potentially sensitive compiled pipeline to a table in the database that must be requested when the build is ready for execution. The server would enqueue only the build's ID, which the worker would pop from the queue. The worker would use a minted build token to retrieve the compiled pipeline, increasing the work required to compromise a repo owner's token in the event of a worker compromise. This should not impact the functionality of the platform, and is moreso a security-driven improvement to decrease Redis' potential as an attack vector.
+The feature proposed is a modification to what data the server places directly on the queue and to offload the potentially sensitive executable pipeline build to a table in the database that must be requested when the build is ready for execution. The server would enqueue only the build's ID, which the worker would pop from the queue. The worker would use a minted build token to retrieve the executable pipeline build, increasing the work required to compromise a repo owner's token in the event of a worker compromise. This should not impact the functionality of the platform, and is moreso a security-driven improvement to decrease Redis' potential as an attack vector.
 
 The main advantage to this approach would be that the `NETRC_PASSWORD` is no longer stored on the Redis queue at any point in the build execution workflow.
 
