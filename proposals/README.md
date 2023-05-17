@@ -31,4 +31,4 @@ To create a new proposal, make a PR into master using the [template](https://git
 
 ### 2023
 
-* [03/02 Worker Visibility](03_02_worker_visibility.md): contains proposal information for extending the worker table with additional fields, and their uses.
+* [05/16 Worker Visibility](05_16_worker_visibility.md): contains proposal information for extending the worker table with additional fields, and their uses.
