@@ -62,7 +62,7 @@ Provide your description here.
   | busy | build limit is met | =>1 |
   | error | an error has occurred | =>1 |
 
-* Give worker the ability to update the `running_build_ids` array, `last_status_update_at` and `last_build_finished_at` timestamps.
+* Give worker the ability to update the `running_build_ids` array, `last_status_update_at`, `last_build_started_at`, and `last_build_finished_at` timestamps.
 
 **Please briefly answer the following questions:**
 
@@ -109,6 +109,7 @@ NOTE: If there are no current plans for a solution, please leave this section bl
     * `error`
   * `last_status_update_at`
   * `running_build_ids`
+  * `last_build_started_at`
   * `last_build_finished_at`
 
 ### Worker
@@ -118,14 +119,6 @@ NOTE: If there are no current plans for a solution, please leave this section bl
 * Update status to `busy` when build limit is met
 * Update status to `error` when applicable
 * Update current `running_build_ids` when worker picks up a build or finishes a build
-
-### Sdk
-* Need support for updating current `running_build_ids` in the database
-
-### Endpoints:
-
-* Expand functionality/usage:
-  * PUT /api/v1/workers/{worker} UpdateWorker
 
 ## Implementation
 
