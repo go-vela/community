@@ -22,7 +22,7 @@ func main() {
 
 	app.Name = "vela-migration"
 	app.HelpName = "vela-migration"
-	app.Usage = "Vela utility used to migrate from v0.18.x to v0.19.x"
+	app.Usage = "Vela utility used to migrate from v0.19.x to v0.20.x"
 	app.Copyright = "Copyright (c) 2023 Target Brands, Inc. All rights reserved."
 	app.Authors = []*cli.Author{
 		{
@@ -46,12 +46,12 @@ func main() {
 		&cli.BoolFlag{
 			EnvVars: []string{"VELA_ACTION_ALL", "ACTION_ALL"},
 			Name:    "action.all",
-			Usage:   "enables running all actions for v0.19.x",
+			Usage:   "enables running all actions for v0.20.x",
 		},
 		&cli.BoolFlag{
 			EnvVars: []string{"VELA_ALTER_TABLES", "ALTER_TABLES"},
 			Name:    "alter.tables",
-			Usage:   "enables altering the table configuration for v0.19.x",
+			Usage:   "enables altering the table configuration for v0.20.x",
 		},
 
 		// Logger Flags
