@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	AlterReposTopics = `
+	AlterWorkers = `
   ALTER TABLE workers 
       ADD COLUMN IF NOT EXISTS status VARCHAR(50),
       ADD COLUMN IF NOT EXISTS last_status_update_at INTEGER,
@@ -30,9 +30,9 @@ const (
 func (d *db) Alter() error {
 	logrus.Debug("executing alter from provided configuration")
 
-	logrus.Infof("altering %s table to add topics column", constants.TableRepo)
+	logrus.Infof("altering %s table to add visibility columns", constants.TableWorker)
 	// alter builds table to add event_action column
-	err := d.Gorm.Exec(AlterReposTopics).Error
+	err := d.Gorm.Exec(AlterWorkers).Error
 	if err != nil {
 		return fmt.Errorf("unable to alter %s table: %v", constants.TableRepo, err)
 	}
