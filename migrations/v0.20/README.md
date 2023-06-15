@@ -5,7 +5,7 @@
 When migrating from Vela version [v0.19](../../releases/v0.19.md) to [v0.20](../../releases/v0.20.md) the Vela
 administrator will want to ensure the following actions are being performed:
 
-1. `v0.20.x` introduces a new enhancement where repository topics will be injected as an environment variable and available to all builds. These topics will be stored in the `repos` table. In order to effectively use this enhancement, the platform administrators will need to run the following query:
+1. `v0.20.x` introduces multiple new columns in `workers` table to enhance worker's visibility. In order to effectively use this enhancement, the platform administrators will need to run the following query:
   ```sql
   ALTER TABLE workers 
       ADD COLUMN IF NOT EXISTS status VARCHAR(50),

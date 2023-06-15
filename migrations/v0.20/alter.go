@@ -34,7 +34,7 @@ func (d *db) Alter() error {
 	// alter builds table to add event_action column
 	err := d.Gorm.Exec(AlterWorkers).Error
 	if err != nil {
-		return fmt.Errorf("unable to alter %s table: %v", constants.TableRepo, err)
+		return fmt.Errorf("unable to alter %s table: %v", constants.TableWorker, err)
 	}
 
 	return nil
