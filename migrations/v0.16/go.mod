@@ -6,8 +6,8 @@ require (
 	github.com/go-vela/server v0.15.1
 	github.com/go-vela/types v0.15.1
 	github.com/joho/godotenv v1.5.1
-	github.com/sirupsen/logrus v1.9.0
-	github.com/urfave/cli/v2 v2.25.1
+	github.com/sirupsen/logrus v1.9.3
+	github.com/urfave/cli/v2 v2.25.7
 	gorm.io/driver/postgres v1.4.4
 	gorm.io/driver/sqlite v1.4.3
 	gorm.io/gorm v1.24.0

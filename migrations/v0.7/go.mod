@@ -8,7 +8,7 @@ require (
 	github.com/jinzhu/gorm v1.9.16
 	github.com/joho/godotenv v1.5.1
 	github.com/lib/pq v1.10.0 // indirect
-	github.com/sirupsen/logrus v1.9.0
-	github.com/urfave/cli/v2 v2.25.1
+	github.com/sirupsen/logrus v1.9.3
+	github.com/urfave/cli/v2 v2.25.7
 	golang.org/x/sync v0.1.0
 )
