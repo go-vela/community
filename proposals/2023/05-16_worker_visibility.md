@@ -143,3 +143,9 @@ NOTE: If there are no current plans for implementation, please leave this sectio
 **Please provide all tasks (gists, issues, pull requests, etc.) completed to implement the design:**
 
 <!-- Answer here -->
+
+PRs:
+* https://github.com/go-vela/types/pull/277
+* https://github.com/go-vela/server/pull/772
+* https://github.com/go-vela/worker/pull/482
+* https://github.com/go-vela/community/pull/822
