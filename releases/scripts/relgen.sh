@@ -61,7 +61,7 @@ CONTRIBUTORS="$(perl -ne 'if(/\[(@[a-z0-9\[\]_-]+)\]\(/i) { print "- $1\n";}' "$
 # - only keep conventional commit formatted commits
 # - ignore dependency updates, reverts, and release commits
 cat "$RELEASE_FILE" |
-	grep --ignore-case --extended-regexp "^-\s+\([a-z\-]+\)\s+[a-z]+(\([a-z\-_ ]+\))?!?:\s.+" |
+	grep --ignore-case --extended-regexp "^-\s+\([a-z\-]+\)\s+[a-z]+(\([a-z_[:space:]\-]+\))?!?:\s.+" |
 	grep --invert-match --ignore-case --extended-regexp "^-\s+\([a-z\-]+\)\s+(chore|fix)\(deps\)" |
 	grep --invert-match --ignore-case --extended-regexp "^-\s+\([a-z\-]+\)\s+revert(\([a-z\-_ ]+\))?:" |
 	grep --invert-match --ignore-case --extended-regexp "^-\s+\([a-z\-]+\)\s+chore.*release" |
