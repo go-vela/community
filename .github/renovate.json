@@ -5,8 +5,13 @@
   ],
   "packageRules": [
     {
-      "matchPackagePatterns": ["*"],
-      "excludePackagePatterns": ["^github.com/go-vela"]
+      "matchPackagePatterns": [
+        "^github\\.com/go-vela/"
+      ],
+      "matchUpdateTypes": [ "patch" ]
     }
-  ]
+  ],
+  "dockerfile": {
+    "enabled": false
+  }
 }
