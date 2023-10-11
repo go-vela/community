@@ -175,3 +175,13 @@ Yes, with help
 **Please provide all tasks (gists, issues, pull requests, etc.) completed to implement the design:**
 
 <!-- Answer here -->
+
+Types: https://github.com/go-vela/types/pull/283
+
+Server: https://github.com/go-vela/server/pull/790
+
+SDK: https://github.com/go-vela/sdk-go/pull/212
+     https://github.com/go-vela/sdk-go/pull/214
+
+Worker: https://github.com/go-vela/worker/pull/449
+        https://github.com/go-vela/worker/pull/452

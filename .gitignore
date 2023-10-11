@@ -1,2 +1,3 @@
 # ignore all downstream directories
 */**/release/
+release-*.md

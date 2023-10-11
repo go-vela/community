@@ -34,3 +34,9 @@ To create a new proposal, make a PR into master using the [template](https://git
 * [02/23 Enhanced Event Support](2023/02-23_build-tokens.md): contains proposal information for using `build tokens` for worker build API interactions.
 * [03/15 Worker Authentication](2023/03-15_worker-auth.md): contains proposal information for enhancing worker authentication.
 * [03/16 Scheduled Builds](2023/03-16_scheduled-builds.md): contains proposal information for scheduling builds for a repo.
+* [02/17 Enhanced Event Support](02-17_enhanced-event-support.md): contains proposal information for enhancing `events` and `rulesets`.
+
+### 2023
+* [02/23 Build Tokens](02-23_build-tokens.md): contains proposal information for using `build tokens` for worker build API interactions.
+* [03/15 Worker Authentication](03-15_worker-auth.md): contains proposal information for enhancing worker authentication.
+* [05/16 Worker Visibility](05_16_worker_visibility.md): contains proposal information for extending the worker table with additional fields, and their uses.

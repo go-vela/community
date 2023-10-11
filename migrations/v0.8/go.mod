@@ -8,10 +8,10 @@ require (
 	github.com/go-vela/types v0.8.2
 	github.com/golang/protobuf v1.5.1 // indirect
 	github.com/jinzhu/gorm v1.9.16
-	github.com/joho/godotenv v1.4.0
+	github.com/joho/godotenv v1.5.1
 	github.com/leodido/go-urn v1.2.1 // indirect
-	github.com/sirupsen/logrus v1.9.0
+	github.com/sirupsen/logrus v1.9.3
 	github.com/ugorji/go v1.2.4 // indirect
-	github.com/urfave/cli/v2 v2.17.1
-	golang.org/x/sync v0.1.0
+	github.com/urfave/cli/v2 v2.25.7
+	golang.org/x/sync v0.3.0
 )
