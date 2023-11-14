@@ -33,7 +33,7 @@ repos=(cli sdk-go server types ui worker)
 
 # adding top of file
 echo "⚓ adding main header"
-printf '# __TARGET_VERSION__ 🚀\n\nThis document contains all release notes pertaining to the `__TARGET_VERSION__.x` releases of Vela.\n\n/' >> "$RELEASE_FILE"
+printf '# __TARGET_VERSION__ 🚀\n\nThis document contains all release notes pertaining to the `__TARGET_VERSION__.x` releases of Vela.\n\n/' >>"$RELEASE_FILE"
 
 # main loop to iterate over repos
 echo "📣 generating release notes for core vela repos"
@@ -61,10 +61,10 @@ CONTRIBUTORS="$(perl -ne 'if(/\[(@[a-z0-9\[\]_-]+)\]\(/i) { print "- $1\n";}' "$
 # - only keep conventional commit formatted commits
 # - ignore dependency updates, reverts, and release commits
 cat "$RELEASE_FILE" |
-	grep --ignore-case --extended-regexp "^-\s+\([a-z\-]+\)\s+[a-z]+(\([a-z_[:space:]\-\/]+\))?!?:\s.+" |
-	grep --invert-match --ignore-case --extended-regexp "^-\s+\([a-z\-]+\)\s+(chore|fix)\(deps\)" |
-	grep --invert-match --ignore-case --extended-regexp "^-\s+\([a-z\-]+\)\s+revert(\([a-z\-_[:space:]\/]+\))?:" |
-	grep --invert-match --ignore-case --extended-regexp "^-\s+\([a-z\-]+\)\s+chore.*release" |
+	grep --ignore-case --extended-regexp '^-\s+\([a-z\-]+\)\s+[a-z]+(\([a-z_\/[:space:]\-]+\))?!?:\s.+' |
+	grep --invert-match --ignore-case --extended-regexp '^-\s+\([a-z\-]+\)\s+(chore|fix)\(deps\)' |
+	grep --invert-match --ignore-case --extended-regexp '^-\s+\([a-z\-]+\)\s+revert(\([a-z_\/[:space:]\-]+\))?:' |
+	grep --invert-match --ignore-case --extended-regexp '^-\s+\([a-z\-]+\)\s+chore.*release' |
 	sponge "$RELEASE_FILE"
 
 # sort releases by type (fixes, features, etc) and and then by component (server, cli, etc)
