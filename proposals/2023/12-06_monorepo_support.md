@@ -114,6 +114,36 @@ NOTE: If there are no current plans for a solution, please leave this section bl
 
 <!-- Answer here -->
 
+### Database
+Add a new `mono-apps` table to the database. Each row is associated to a repo via `repo_id` column
+
+Since there are multiple `mono-apps` per repo there will be a unique constraint for `repo_id, name`
+
+The name will be the path to the root of an application (where the .vela.yaml is found)
+
+```sql
+CREATE TABLE
+IF NOT EXISTS
+mono_apps (
+    id SERIAL PRIMARY KEY,
+    repo_id INTEGER,
+    name VARCHAR(250),
+    UNIQUE(repo_id, name)
+)
+```
+
+The following tables will need to have a nullable column `mono_app_id` added:
+* builds
+* logs
+* pipelines
+* schedules
+* services
+* steps
+
+The above tables will also need a UNIQUE Key for `repo_id, mono_app_id` unless `repo_id` is already part of an existing key.
+In that case the `mono_app_id` will be added to the existing key.
+Postgres treats NULL as distinct by default which works in this case.
+
 ## Implementation
 
 <!--
