@@ -5,6 +5,50 @@
 When migrating from Vela version [v0.22](../../releases/v0.22.md) to [v0.23](../../releases/v0.23.md) the Vela
 administrator will want to ensure the following actions are being performed:
 
+1. `v0.23.x` introduces a new `deployments` table that will be created automatically by default. However, if you are running the `server` component with the `VELA_DATABASE_SKIP_CREATION` set to `true`, you will need to manually create this table using the following:
+  * Postgres: 
+    ```sql
+      CREATE TABLE
+      IF NOT EXISTS
+      deployments (
+        id           SERIAL PRIMARY KEY,
+        repo_id      INTEGER,
+        number       INTEGER,
+        url          VARCHAR(500),
+        commit       VARCHAR(500),
+        ref          VARCHAR(500),
+        task         VARCHAR(500),
+        target       VARCHAR(500),
+        description  VARCHAR(2500),
+        payload      VARCHAR(2500),
+        created_at   INTEGER,
+        created_by   VARCHAR(250),
+        builds       VARCHAR(50),
+        UNIQUE(repo_id, number)
+      );
+    ```
+  * SQLite:
+    ```sql
+      CREATE TABLE
+      IF NOT EXISTS
+      deployments (
+        id           SERIAL PRIMARY KEY,
+        repo_id      INTEGER,
+        number       INTEGER,	
+        url     	 VARCHAR(1000),
+        "commit"     VARCHAR(500),
+        ref          VARCHAR(500),
+        task         VARCHAR(500),
+        target       VARCHAR(500),
+        description  VARCHAR(2500),
+        payload      VARCHAR(2500),
+        created_at   INTEGER,
+        created_by   VARCHAR(250),
+        builds       VARCHAR(50),
+        UNIQUE(repo_id, number)
+      );
+    ```
+
 1. `v0.23.x` introduces a new `approve_build` column to the repos table for approve build policy setting. In order to effectively use this enhancement, the platform administrators will need to run the following query:
   ```sql
   ALTER TABLE repos
