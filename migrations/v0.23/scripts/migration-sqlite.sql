@@ -45,7 +45,7 @@ ALTER TABLE builds
 ;
 
 ALTER TABLE builds
-    ADD COLUMN IF NOT EXISTS approved_by INTEGER
+    ADD COLUMN IF NOT EXISTS approved_by TEXT
 ;
 
 -- Add allow_events to secrets table
