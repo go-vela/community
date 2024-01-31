@@ -39,13 +39,17 @@ ALTER TABLE repos
     ADD COLUMN IF NOT EXISTS allow_events INTEGER
 ;
 
--- Add approved_at and approved_by to builds table
+-- Add approved_at, approved_by, and deploy_number to builds table
 ALTER TABLE builds
     ADD COLUMN IF NOT EXISTS approved_at INTEGER
 ;
 
 ALTER TABLE builds
     ADD COLUMN IF NOT EXISTS approved_by VARCHAR(250)
+;
+
+ALTER TABLE builds 
+    ADD COLUMN IF NOT EXISTS deploy_number INTEGER
 ;
 
 -- Add allow_events to secrets table
