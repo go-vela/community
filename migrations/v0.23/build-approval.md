@@ -2,11 +2,11 @@
 
 If attempting to contribute to a repository from a fork, you may encounter the following status:
 
-![Screenshot 2024-02-09 at 10 29 36 AM](https://media.git.target.com/user/17043/files/90939cdf-ea62-43af-a5b2-c1c23b2cc448)
+![Screenshot 2024-02-09 at 10 29 36 AM](https://gist.github.com/assets/4662429/73892735-497d-4994-ab7d-7227d8ed5929)
 
 On the Vela page for the build, you will see this:
 
-![Screenshot 2024-02-09 at 10 33 40 AM](https://media.git.target.com/user/17043/files/a2623966-6085-4d52-9467-16cc4872178c)
+![Screenshot 2024-02-09 at 10 33 40 AM](https://gist.github.com/assets/4662429/1e90a9bd-e684-49be-9900-38df0a2b61e0)
 
 What this means is that the build is now in a `pending approval` state and must be approved by a repository admin to run.
 
@@ -20,7 +20,7 @@ To deny the build, simply press the `Cancel Build` button.
 
 This setting is enabled by default on all repositories with the release of `v0.23.0`. It can be edited by repository admins in the settings page:
 
-![Screenshot 2024-02-09 at 10 37 47 AM](https://media.git.target.com/user/17043/files/80d7e4df-7e2e-4c0c-954e-6e45f77ed731)
+![Screenshot 2024-02-09 at 10 37 47 AM](https://gist.github.com/assets/4662429/de2196bc-7182-40d3-a966-260297f856f7)
 
 
 ## Why keep this setting enabled?
