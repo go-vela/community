@@ -2,11 +2,11 @@
 
 If attempting to contribute to a repository from a fork, you may encounter the following status:
 
-![status.png](..%2F..%2F..%2F..%2F..%2FDownloads%2F68747470733a2f2f6d656469612e6769742e7461726765742e636f6d2f757365722f31373034332f66696c65732f39303933396364662d656136322d343361662d613562322d633163323362326363343438.png)
+![status](https://github.com/go-vela/community/assets/4662429/5ca3e0a6-c087-4493-9a1e-a2acfa150e4d)
 
 On the Vela page for the build, you will see this:
 
-![velaUI.png](..%2F..%2F..%2F..%2F..%2FDownloads%2F68747470733a2f2f6d656469612e6769742e7461726765742e636f6d2f757365722f31373034332f66696c65732f61323632333936362d363038352d346435322d393436372d313663633438373231373863.png)
+![velaUI](https://github.com/go-vela/community/assets/4662429/2515943e-7bd0-4f3a-9e96-14f28f9c4e15)
 
 What this means is that the build is now in a `pending approval` state and must be approved by a repository admin to run.
 
@@ -20,7 +20,7 @@ To deny the build, simply press the `Cancel Build` button.
 
 This setting is enabled by default on all repositories with the release of `v0.23.0`. It can be edited by repository admins in the settings page:
 
-![permission.png](..%2F..%2F..%2F..%2F..%2FDownloads%2F68747470733a2f2f6d656469612e6769742e7461726765742e636f6d2f757365722f31373034332f66696c65732f38306437653464662d376532652d346330632d393534652d366534356637376564373331.png)
+![permission](https://github.com/go-vela/community/assets/4662429/cd4bab4e-149b-49b0-b7ff-244818ec582e)
 
 
 ## Why keep this setting enabled?
