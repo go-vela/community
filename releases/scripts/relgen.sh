@@ -11,6 +11,8 @@
 # a starting point. a human touch is expected
 # after the notes have been generated.
 #
+# needs sponge, use brew install coreutils
+# if full external release has not been cut, change line 45 to LAST_TAG="HEAD"
 # TODO:
 # - allow passing in flag to generate release notes
 #   from last non-rc tag to HEAD
