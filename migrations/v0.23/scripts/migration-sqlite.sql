@@ -54,7 +54,12 @@ ALTER TABLE builds
 
 -- Add allow_events to secrets table
 ALTER TABLE secrets
-	ADD COLUMN IF NOT EXISTS allow_events INTEGER
+    ADD COLUMN IF NOT EXISTS allow_events INTEGER
+;
+
+-- Add allow_substitution to secrets table (part of v0.23.2)
+ALTER TABLE secrets
+    ADD COLUMN IF NOT EXISTS allow_substitution BOOLEAN
 ;
 
 /*

@@ -23,3 +23,5 @@ administrator will want to ensure the following actions are being performed. All
   - https://github.com/go-vela/server/pull/1033
 
 5. The `allow_events` column should be prepopulated using the SQL query in the migration script to ensure a smooth transition to the new system.
+
+6. `v0.23.x` (starting in v0.23.2) also adds an `allow_substitution` column to the secrets table to give more control on secret usage.
