@@ -52,6 +52,7 @@ Provide your description here.
 -->
 
 * Build a system that gives platform admins the ability to update platform settings on the fly, without requiring a platform redeploy.
+* Potentially support multiple configs and an ability to switch the "active" configuration.
 
 **Please briefly answer the following questions:**
 
@@ -102,11 +103,16 @@ NOTE: If there are no current plans for a solution, please leave this section bl
 
 ### Server
 
+* Logic for creating the initial platform settings on startup (using environment variables?).
 * A new API handler `GET /admin/settings` that returns a JSON for platform settings.
 * A new API handler `PUT /admin/settings` that receives a JSON payload for updating platform settings.
 * Alerting/logging specifically for tracking changes made.
 * A source of truth definition for all configurable platform settings.
 * A system for mapping platform settings database type to urfave flags.
+
+### CLI
+
+* Commands for managing platform settings.
 
 ### Pros
 
@@ -119,6 +125,7 @@ NOTE: If there are no current plans for a solution, please leave this section bl
 * It does not scale well without some boiler plate code. It might get annoying to modify database tables every time you add a server configuration.
 * It would require full-stack development every time a new field is added that we should be able to update.
 * It leans heavily on the `admin` user flag which does not have the best control experience.
+* More code (hidden pro?).
 
 ## Solution 2: Use a Feature Flag Provider
 
