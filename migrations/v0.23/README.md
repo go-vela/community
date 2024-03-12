@@ -25,3 +25,15 @@ administrator will want to ensure the following actions are being performed. All
 5. The `allow_events` column should be prepopulated using the SQL query in the migration script to ensure a smooth transition to the new system.
 
 6. `v0.23.x` (starting in v0.23.2) also adds an `allow_substitution` column to the secrets table to give more control on secret usage.
+
+## Recommended
+
+For increased security we recommend to set `allow_command` and `allow_substitution` to `false` for shared secrets in your secrets table. You can use the following SQL commands to do so:
+
+```sql
+UPDATE secrets SET allow_commands = false WHERE type = 'shared';
+```
+
+```sql
+UPDATE secrets SET allow_substitution = false WHERE type = 'shared';
+```

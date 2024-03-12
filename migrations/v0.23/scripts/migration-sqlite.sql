@@ -93,3 +93,6 @@ UPDATE secrets
         (CASE WHEN events LIKE '%comment%' THEN 16384 | 32768 ELSE 0 END) |
         (CASE WHEN events LIKE '%schedule%' THEN 65536 ELSE 0 END)
 ;
+
+-- Match the field for the new allow_substitution setting with the existing allow_command setting
+UPDATE secrets SET allow_substitution = CASE WHEN allow_command = false THEN false ELSE true END;
