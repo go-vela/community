@@ -54,7 +54,12 @@ ALTER TABLE builds
 
 -- Add allow_events to secrets table
 ALTER TABLE secrets
-	ADD COLUMN IF NOT EXISTS allow_events INTEGER
+    ADD COLUMN IF NOT EXISTS allow_events INTEGER
+;
+
+-- Add allow_substitution to secrets table (part of v0.23.2)
+ALTER TABLE secrets
+    ADD COLUMN IF NOT EXISTS allow_substitution BOOLEAN
 ;
 
 /*
@@ -88,3 +93,6 @@ UPDATE secrets
         (CASE WHEN events LIKE '%comment%' THEN 16384 | 32768 ELSE 0 END) |
         (CASE WHEN events LIKE '%schedule%' THEN 65536 ELSE 0 END)
 ;
+
+-- Match the field for the new allow_substitution setting with the existing allow_command setting
+UPDATE secrets SET allow_substitution = CASE WHEN allow_command = false THEN false ELSE true END;
