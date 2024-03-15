@@ -26,6 +26,12 @@ administrator will want to ensure the following actions are being performed. All
 
 6. `v0.23.x` (starting in v0.23.2) also adds an `allow_substitution` column to the secrets table to give more control on secret usage.
 
+## Vault Secret Engine
+
+Rather than migrate all Vault internal secrets to leverage `allow_events` and `allow_substition` via scripting, the Vela code has been updated to include [translation per request](https://github.com/go-vela/server/pull/1086) for Vault secrets that have yet to be updated since an upgrade to `v0.23.3`. These values will be rectified over time whenever users update the secret.
+
+For existing native secrets, please follow the provided DML query in the migration script.
+
 ## Recommended
 
 For increased security we recommend to set `allow_command` and `allow_substitution` to `false` for shared secrets in your secrets table. You can use the following SQL commands to do so:
