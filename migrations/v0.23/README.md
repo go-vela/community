@@ -37,7 +37,7 @@ For existing native secrets, please follow the provided DML query in the migrati
 For increased security we recommend to set `allow_command` and `allow_substitution` to `false` for shared secrets in your secrets table. You can use the following SQL commands to do so:
 
 ```sql
-UPDATE secrets SET allow_commands = false WHERE type = 'shared';
+UPDATE secrets SET allow_command = false WHERE type = 'shared';
 ```
 
 ```sql
