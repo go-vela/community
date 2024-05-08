@@ -36,3 +36,7 @@ To create a new proposal, make a PR into master using the [template](https://git
 - [03/16 Scheduled Builds](2023/03-16_scheduled-builds.md): contains proposal information for scheduling builds for a repo.
 - [05/11 Queue Sensitivity](2023/05-11_queue-sensitivity.md): contains proposal information for enhancing queue security.
 - [05/16 Worker Visibility](2023/05_16_worker_visibility.md): contains proposal information for extending the worker table with additional fields, and their uses.
+
+### 2024
+
+- [04/26 Container Outputs](2024/04-26_container-outputs.md): contains proposal information for the implementation of outputs from step containers during Vela builds.
