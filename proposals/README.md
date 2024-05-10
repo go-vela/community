@@ -36,3 +36,7 @@ To create a new proposal, make a PR into master using the [template](https://git
 - [03/16 Scheduled Builds](2023/03-16_scheduled-builds.md): contains proposal information for scheduling builds for a repo.
 - [05/11 Queue Sensitivity](2023/05-11_queue-sensitivity.md): contains proposal information for enhancing queue security.
 - [05/16 Worker Visibility](2023/05_16_worker_visibility.md): contains proposal information for extending the worker table with additional fields, and their uses.
+
+### 2024
+
+- [05/10 OpenID Connect](2024/05-10_OpenID-Connect.md): contains proposal information for identity providing via OpenID Connect in Vela pipelines.
