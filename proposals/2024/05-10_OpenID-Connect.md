@@ -31,16 +31,31 @@ The following diagram shows an example flow:
 ```mermaid
 sequenceDiagram
     participant vs as Vela Server
+    participant vks as Vela Public Key Set
     participant vw as Vela Worker
+	participant vbs as Vela Build Step
     participant cp as Cloud Provider
     participant r as Cloud Managed Resource
-    vs ->> vw: Start job(OIDC_TOKEN)
-    vw ->> cp: Exchange for provider access token(OIDC_TOKEN)
-    activate cp
-        cp -->> vw: Return CLOUD_PROVIDER_TOKEN
-    deactivate cp
-    vw ->> r: Configure cluster(CLOUD_PROVIDER_TOKEN)       
-    vw ->> r: Deploy cluster(CLOUD_PROVIDER_TOKEN)
+    vs ->> vks: Publish OpenID Config and JWKS
+    vs ->> vw: Start build with executor (BUILD_TOKEN)
+	vw ->> vbs: Prepare container
+	vbs ->> vw: YAML tag `id_request` is set
+	vw ->> vs: Request ID_TOKEN_REQUEST_TOKEN
+	vs ->> vw: Validate BUILD_TOKEN and return ID_TOKEN_REQUEST_TOKEN
+	vw ->> vbs: Inject ID_TOKEN_REQUEST_TOKEN into container env
+    vw ->> vbs: Start Container
+	activate vbs
+		vbs ->> vs: Exchange ID_TOKEN_REQUEST_TOKEN for ID_TOKEN
+		vs ->> vbs: Validate request and return ID_TOKEN
+		vbs ->> cp: Request provider access token using ID_TOKEN
+    	activate cp
+            cp ->> vks: Request JWKS (cache)
+            vks ->> cp: Public Keys
+            cp ->> cp: Validate ID Token + Claims
+        	cp ->> vbs: Return scoped CLOUD_PROVIDER_TOKEN
+    	deactivate cp
+    	vbs ->> r: Perform authenticated activity using CLOUD_PROVIDER_TOKEN      
+	deactivate vbs
 ```
 
 **Please briefly answer the following questions:**
