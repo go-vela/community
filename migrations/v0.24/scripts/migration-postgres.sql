@@ -1,7 +1,13 @@
 /*
+<<<<<<< HEAD
     VELA MIGRATION v0.23.4 --> v0.24.0
 
     Please note that this SQL file must be executed prior to upgrading Vela to version 0.24.X
+=======
+    VELA MIGRATION v0.23.x --> v0.24.x
+
+    Please note that this SQL file must be executed prior to upgrading Vela to version 0.24.x
+>>>>>>> 1d053cdf0179cfcbfa4c45b14f9d896df402db7d
 */
 
 /*
@@ -10,6 +16,7 @@ ___  ___  _
 |__/ |__/ |___ 
 */
 
+<<<<<<< HEAD
 -- Create dashboards table
 CREATE TABLE
 IF NOT EXISTS
@@ -64,3 +71,20 @@ ALTER TABLE repos
 -- Remove events from secrets table
 ALTER TABLE secrets
     DROP COLUMN IF EXISTS events;
+=======
+-- Add sender_scm_id to builds table
+ALTER TABLE builds
+    ADD COLUMN IF NOT EXISTS sender_scm_id VARCHAR(250)
+;
+
+/*
+___  _  _ _    
+|  \ |\/| |    
+|__/ |  | |___           
+*/
+
+-- Set sender_scm_id to '0' in builds table
+UPDATE builds 
+    SET sender_scm_id = '0'
+;
+>>>>>>> 1d053cdf0179cfcbfa4c45b14f9d896df402db7d

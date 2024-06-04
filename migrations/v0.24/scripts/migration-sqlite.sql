@@ -64,3 +64,19 @@ ALTER TABLE repos
 -- Remove events from secrets table
 ALTER TABLE secrets
     DROP COLUMN IF EXISTS events;
+
+-- Add sender_scm_id to builds table
+ALTER TABLE builds
+    ADD COLUMN IF NOT EXISTS sender_scm_id VARCHAR(250)
+;
+
+/*
+___  _  _ _    
+|  \ |\/| |    
+|__/ |  | |___           
+*/
+
+-- Set sender_scm_id to '0' in builds table
+UPDATE builds 
+    SET sender_scm_id = '0'
+;
