@@ -21,3 +21,5 @@ and utilities between versions.
 - [v0.20](./v0.20): contains information for migrating `v0.19.x` -> `v0.20.x`
 - [v0.21](./v0.21): contains information for migrating `v0.20.x` -> `v0.21.x`
 - [v0.22](./v0.22): no migration needed
+- [v0.23](./v0.23): contains information for migrating `v0.22.x` -> `v0.23.x`
+- [v0.24](./v0.24): contains information for migrating `v0.23.x` -> `v0.24.x`
