@@ -26,3 +26,5 @@ brief overview of the changes made.
 - [v0.20](v0.20.md): contains release information for `v0.20.x`
 - [v0.21](v0.21.md): contains release information for `v0.21.x`
 - [v0.22](v0.22.md): contains release information for `v0.22.x`
+- [v0.23](v0.23.md): contains release information for `v0.23.x`
+- [v0.24](v0.24.md): contains release information for `v0.24.x`
