@@ -43,6 +43,15 @@ settings (
 	updated_by         		TEXT
 );
 
+-- Create jwks table
+CREATE TABLE
+IF NOT EXISTS
+jwks (
+	id     TEXT PRIMARY KEY,
+	active BOOLEAN,
+	key    TEXT
+);
+
 -- Add report_as to steps table
 ALTER TABLE steps
     ADD COLUMN IF NOT EXISTS report_as TEXT

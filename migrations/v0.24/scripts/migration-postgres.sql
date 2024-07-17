@@ -43,6 +43,15 @@ settings (
 	updated_by         		VARCHAR(250)
 );
 
+-- Create jwks table
+CREATE TABLE
+IF NOT EXISTS
+jwks (
+	id     UUID PRIMARY KEY,
+	active BOOLEAN,
+	key    JSON DEFAULT NULL
+);
+
 -- Add report_as to steps table
 ALTER TABLE steps
     ADD COLUMN IF NOT EXISTS report_as VARCHAR(250)
