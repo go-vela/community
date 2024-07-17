@@ -98,7 +98,7 @@ NOTE: If there are no current plans for a solution, please leave this section bl
 <!-- Answer here -->
 
 ### Authorization Flow (First Time)
-Current flow
+**Current flow:**
 - User clicks "GitHub" button in the Vela UI.
 - Users gets directed to GitHub Enterprise sign in page.
 - User is presented with a [page](https://pages.git.target.com/vela/doc-site/getting-started/logging-in/index.html) outlining resources that the OAuth app wants access to:
@@ -107,7 +107,7 @@ Current flow
     - Repositories: Read and write access to ALL public and private repository data.
 - User gets directed back to Vela UI.
 
-Proposed flow
+**Proposed flow:**
 - User clicks "GitHub" button in the Vela UI.
 - Users gets directed to GitHub Enterprise sign in page.
 - User is presented with a page where they allow the GitHub App to verify their GitHub identity.
@@ -116,15 +116,30 @@ Proposed flow
 - User gets directed back to Vela UI.
 
 ### Permissions and Scope
-What [permissions](https://docs.github.com/en/enterprise-server@3.11/rest/authentication/permissions-required-for-github-apps?apiVersion=2022-11-28) should be select for the GitHub App?
+What [permissions](https://docs.github.com/en/enterprise-server@3.13/rest/authentication/permissions-required-for-github-apps?apiVersion=2022-11-28) should the GitHub App have?
 
-### First Iteration
-- The first iteration of the GitHub App will provide improved status checks. 
+**List of permission:**
+- [Repository permissions for "Checks"](https://docs.github.com/en/enterprise-server@3.13/rest/authentication/permissions-required-for-github-apps?apiVersion=2022-11-28#repository-permissions-for-checks)
+- [Repository permissions for "Commit statuses"](https://docs.github.com/en/enterprise-server@3.13/rest/authentication/permissions-required-for-github-apps?apiVersion=2022-11-28#repository-permissions-for-commit-statuses)
+- [Repository permissions for "Pull requests"](https://docs.github.com/en/enterprise-server@3.13/rest/authentication/permissions-required-for-github-apps?apiVersion=2022-11-28#repository-permissions-for-pull-requests)
+- [Repository permissions for "Webhooks"](https://docs.github.com/en/enterprise-server@3.13/rest/authentication/permissions-required-for-github-apps?apiVersion=2022-11-28#repository-permissions-for-webhooks)
+- [User permissions for "Email addresses"](https://docs.github.com/en/enterprise-server@3.13/rest/authentication/permissions-required-for-github-apps?apiVersion=2022-11-28#user-permissions-for-email-addresses)
+- [User permissions for "Profile"](https://docs.github.com/en/enterprise-server@3.13/rest/authentication/permissions-required-for-github-apps?apiVersion=2022-11-28#user-permissions-for-profile)
+
+### Code Integration
+How does the GitHub app integrate with Vela?
+
+### Rollout
+How do we fully switch from OAuth App to GitHub App?
+
+**Phase 1:** Offering improved status checks
+- Making a GitHub App with advanced status checks will incentive teams to install the app in their organizational repos. 
 - This can be accomplished by using GitHub's [REST API to manage checks](https://docs.github.com/en/enterprise-server@3.13/rest/checks/runs?apiVersion=2022-11-28), which is exclusive to GitHub Apps.
 - How do we track GH App installations in the Vela server?
 
-### Rollout
-How do we have teams switch from the OAuth App to GitHub App?
+**Phase 2:** Replacing NETRC
+
+**Phase 3:** Moving off of OAuth entirely
 
 ## Implementation
 
