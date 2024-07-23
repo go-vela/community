@@ -61,6 +61,7 @@ Provide your description here.
 
 - [GitHub Apps are preferred to OAuth apps](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/differences-between-github-apps-and-oauth-apps) because they use fine-grained permissions, give more control over which repositories the app can access, and use short-lived tokens. 
 - These properties can harden security by limiting the damage that could be done if the app's credentials were leaked.
+- GitHub Apps can also leverage GitHub's REST API endpoints for checks to create powerful and informative checks.
 
 2. If this is a redesign or refactor, what issues exist in the current implementation?
 
@@ -97,49 +98,109 @@ NOTE: If there are no current plans for a solution, please leave this section bl
 
 <!-- Answer here -->
 
-### Authorization Flow (First Time)
-**Current flow:**
-- User clicks "GitHub" button in the Vela UI.
-- Users gets directed to GitHub Enterprise sign in page.
-- User is presented with a [page](https://pages.git.target.com/vela/doc-site/getting-started/logging-in/index.html) outlining resources that the OAuth app wants access to:
-    - Personal user data: Email addresses (read-only), profile information (read-only)
-    - Organizations and teams: Read access to user's organization, team membership, and private project boards.
-    - Repositories: Read and write access to ALL public and private repository data.
-- User gets directed back to Vela UI.
+## Rollout Phases
+### Phase 1: Advanced checks
+- Create a GitHub App (GHA) that provides advanced checks
+- This will incentivize teams to install the app onto their organizational repos
+- Checks could include pipeline validation, formatting, linting, and status reporting.
+- Make use of [GitHub's REST API endpoints for checks](https://docs.github.com/en/enterprise-server@3.13/rest/checks?apiVersion=2022-11-28), exclusive to GHAs
+	- Allows for code annotations
+	- Enables users to select an action offered by the app
 
-**Proposed flow:**
-- User clicks "GitHub" button in the Vela UI.
-- Users gets directed to GitHub Enterprise sign in page.
-- User is presented with a page where they allow the GitHub App to verify their GitHub identity.
-- User is presented with a page outlining resources that the GitHub App wants access to and selects which repositories to install the app on:
-    - Repositories: Read and write access to either ALL repositories or SELECT repositories.
-- User gets directed back to Vela UI.
+**GHA Installation Scenarios**
+1. User installs GHA onto an organization account and enables organization repo in Vela
+	1. Vela server grabs installation id for that organization. Requires [authenticating as a GHA](https://docs.github.com/en/enterprise-server@3.13/apps/creating-github-apps/authenticating-with-a-github-app/about-authentication-with-a-github-app#authentication-as-a-github-app) in order to grab the [list of installations](https://docs.github.com/en/enterprise-server@3.13/rest/apps/installations?apiVersion=2022-11-28#list-repositories-accessible-to-the-app-installation) across accounts (orgs and users).
+	2. Vela server creates Repo in DB with installation id set
+3. User installs GHA onto an organization repo but repo has already been enabled in Vela
+	1. Acting on an installation addition event ([1](https://docs.github.com/en/enterprise-server@3.13/webhooks/webhook-events-and-payloads#installation), [2](https://docs.github.com/en/enterprise-server@3.13/webhooks/webhook-events-and-payloads#installation_repositories)), Vela server searches for Repo in DB
+	2. Vela server sets installation id for that Repo
+4. User removes GHA from an organization repo
+	1. Acting on an installation removal event ([1](https://docs.github.com/en/enterprise-server@3.13/webhooks/webhook-events-and-payloads?actionType=deleted#installation), [2](https://docs.github.com/en/enterprise-server@3.13/webhooks/webhook-events-and-payloads?actionType=removed#installation_repositories)), Vela server searches for Repo in DB
+	2. Vela server zeroes installation id for that Repo??
 
-### Permissions and Scope
-What [permissions](https://docs.github.com/en/enterprise-server@3.13/rest/authentication/permissions-required-for-github-apps?apiVersion=2022-11-28) should the GitHub App have?
+**Check Run Flow**
+1. Branch with an open PR receives a new commit
+2. [Generate a JWT](https://docs.github.com/en/apps/creating-github-apps/authenticating-with-a-github-app/generating-a-json-web-token-jwt-for-a-github-app) using the private key and app ID of GHA
+3. [Exchange the JWT](https://docs.github.com/en/enterprise-server@3.13/apps/creating-github-apps/authenticating-with-a-github-app/authenticating-as-a-github-app-installation#using-an-installation-access-token-to-authenticate-as-an-app-installation) for an installation access token
+5. Use installation access token to [create check run(s)](https://docs.github.com/en/enterprise-server@3.13/rest/checks/runs?apiVersion=2022-11-28#create-a-check-run)
+6. Initiate check run(s)
+7. Use installation access token to [update status of check run(s)](https://docs.github.com/en/enterprise-server@3.13/rest/checks/runs?apiVersion=2022-11-28#update-a-check-run)
+8. Optional: Take action offered by check run(s)
 
-**List of permission:**
-- [Repository permissions for "Checks"](https://docs.github.com/en/enterprise-server@3.13/rest/authentication/permissions-required-for-github-apps?apiVersion=2022-11-28#repository-permissions-for-checks)
-- [Repository permissions for "Commit statuses"](https://docs.github.com/en/enterprise-server@3.13/rest/authentication/permissions-required-for-github-apps?apiVersion=2022-11-28#repository-permissions-for-commit-statuses)
-- [Repository permissions for "Pull requests"](https://docs.github.com/en/enterprise-server@3.13/rest/authentication/permissions-required-for-github-apps?apiVersion=2022-11-28#repository-permissions-for-pull-requests)
-- [Repository permissions for "Webhooks"](https://docs.github.com/en/enterprise-server@3.13/rest/authentication/permissions-required-for-github-apps?apiVersion=2022-11-28#repository-permissions-for-webhooks)
-- [User permissions for "Email addresses"](https://docs.github.com/en/enterprise-server@3.13/rest/authentication/permissions-required-for-github-apps?apiVersion=2022-11-28#user-permissions-for-email-addresses)
-- [User permissions for "Profile"](https://docs.github.com/en/enterprise-server@3.13/rest/authentication/permissions-required-for-github-apps?apiVersion=2022-11-28#user-permissions-for-profile)
+**Code Integration**
+- Add GHA's private key and app ID to SCM setup
+```diff
+// scm/setup.go
 
-### Code Integration
-How does the GitHub app integrate with Vela?
+type Setup struct {
+	// scm Configuration
+	...
++	GithubAppID         int64
++	GithubAppPrivateKey string
+```
+- Add GHA installation ID to Repo
+```diff
+type Repo struct {
+	ID           *int64    `json:"id,omitempty"`
+	Owner        *User     `json:"owner,omitempty"`
+	...
++	InstallID    *int64    `json:"install_id,omitempty"`
+}
+```
+- Add check suite ID to Build
+```diff
+type Build struct {
+	ID            *int64              `json:"id,omitempty"`
+	Repo          *Repo               `json:"repo,omitempty"`
+	...
++	CheckID       *int64              `json:"check_id,omitempty"`
+}
+```
+- Generate a JWT using the GHA's private key and app ID
+```go
+// Create a JWT token
+func createJWT(appID int64, key *rsa.PrivateKey) (string, error) {
+    now := time.Now()
+    claims := jwt.MapClaims{
+        "iat": now.Unix(),                       // Issued at time
+        "exp": now.Add(time.Minute * 10).Unix(), // Expiration time
+        "iss": appID,                            // GitHub App ID
+    }
 
-### Rollout
-How do we fully switch from OAuth App to GitHub App?
+    token := jwt.NewWithClaims(jwt.SigningMethodRS256, claims)
+    return token.SignedString(key)
+}
+```
+- Exchange the JWT for an installation access token
+```go
+// Get installation access token
+func getInstallationToken(ctx context.Context, jwtToken string, installationID int64) (string, error) {
+    ts := oauth2.StaticTokenSource(
+        &oauth2.Token{AccessToken: jwtToken},
+    )
+    tc := oauth2.NewClient(ctx, ts)
 
-**Phase 1:** Offering improved status checks
-- Making a GitHub App with advanced status checks will incentive teams to install the app in their organizational repos. 
-- This can be accomplished by using GitHub's [REST API to manage checks](https://docs.github.com/en/enterprise-server@3.13/rest/checks/runs?apiVersion=2022-11-28), which is exclusive to GitHub Apps.
-- How do we track GH App installations in the Vela server?
+    client := github.NewClient(tc)
 
-**Phase 2:** Replacing NETRC
+    token, _, err := client.Apps.CreateInstallationToken(ctx, installationID, nil)
+    if err != nil {
+        return "", err
+    }
 
-**Phase 3:** Moving off of OAuth entirely
+    return token.GetToken(), nil
+}
+```
+
+**Questions**
+- What [permissions](https://docs.github.com/en/enterprise-server@3.13/rest/authentication/permissions-required-for-github-apps?apiVersion=2022-11-28) should the GitHub App have?
+    - [Repository permissions for "Checks"](https://docs.github.com/en/enterprise-server@3.13/rest/authentication/permissions-required-for-github-apps?apiVersion=2022-11-28#repository-permissions-for-checks)
+    - [Repository permissions for "Commit statuses"](https://docs.github.com/en/enterprise-server@3.13/rest/authentication/permissions-required-for-github-apps?apiVersion=2022-11-28#repository-permissions-for-commit-statuses)
+    - [Repository permissions for "Contents"](https://docs.github.com/en/enterprise-server@3.13/rest/authentication/permissions-required-for-github-apps?apiVersion=2022-11-28#repository-permissions-for-contents)
+- What checks should the GHA run?
+
+### Phase 2: Replacing NETRC
+
+### Phase 3: Moving off of OAuth App
 
 ## Implementation
 
@@ -160,6 +221,8 @@ Yes
 2. What's the estimated time to completion?
 
 <!-- Answer here -->
+
+Several weeks
 
 **Please provide all tasks (gists, issues, pull requests, etc.) completed to implement the design:**
 
