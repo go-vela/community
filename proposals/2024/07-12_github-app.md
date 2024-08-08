@@ -118,8 +118,8 @@ type Setup struct {
 ```
 
 One thing we'll have to consider is how GHA installations will be tracked. 
-1. For repos already enabled in Vela, installing the GHA will trigger an installation addition event ([installation event documentation](https://docs.github.com/en/enterprise-server@3.13/webhooks/webhook-events-and-payloads#installation), [installation_repositories event documentation](https://docs.github.com/en/enterprise-server@3.13/webhooks/webhook-events-and-payloads#installation_repositories)). Upon this event, Vela server will search for the repos in the database and update its installation ID field.
-2. For repos not yet enabled in Vela but with the GHA installed, enabling the repo will prompt Vela server to retrieve the installation ID associated with the repo. This process requires [authenticating as a GHA](https://docs.github.com/en/enterprise-server@3.13/apps/creating-github-apps/authenticating-with-a-github-app/about-authentication-with-a-github-app) to access the [list of installations](https://docs.github.com/en/enterprise-server@3.13/rest/apps/installations?apiVersion=2022-11-28#list-repositories-accessible-to-the-app-installation) across accounts (orgs and users). The installation ID will then be set when creating the repo in Vela.
+1. For repos already enabled in Vela, installing the GHA will trigger an installation addition event ([installation event documentation](https://docs.github.com/en/enterprise-server@3.13/webhooks/webhook-events-and-payloads#installation), [installation_repositories event documentation](https://docs.github.com/en/enterprise-server@3.13/webhooks/webhook-events-and-payloads#installation_repositories)). Upon this event, Vela server will search for the repo in the database and update its installation ID field.
+2. For repos not yet enabled in Vela but with the GHA installed, enabling the repo will prompt Vela server to retrieve the installation ID associated with the repo. This process requires [authenticating as a GHA](https://docs.github.com/en/enterprise-server@3.13/apps/creating-github-apps/authenticating-with-a-github-app/about-authentication-with-a-github-app) to access the list of installations across accounts (orgs and users). The installation ID will then be set when creating the repo in Vela.
 3. When a user removes the GHA from an organization, an installation removal event ([installation removal event documentation](https://docs.github.com/en/enterprise-server@3.13/webhooks/webhook-events-and-payloads?actionType=deleted#installation), [installation_repositories removal event documentation](https://docs.github.com/en/enterprise-server@3.13/webhooks/webhook-events-and-payloads?actionType=removed#installation_repositories)) will be triggered. Vela server will act on this event by searching the database for the repo and clearing its installation ID field.
 
 ```diff
@@ -176,7 +176,7 @@ func getInstallationToken(ctx context.Context, jwtToken string, installationID 
 6. Use installation access token to [update status of check run(s)](https://docs.github.com/en/enterprise-server@3.13/rest/checks/runs?apiVersion=2022-11-28#update-a-check-run)
 7. Optional: Take action offered by check run(s)
 
-## Phase 2: Replace use of PAT with installation token
+## Phase 2: Reduce usage of PAT with installation token
 By default, Vela clones the repo of a build into a local volume that is mounted into each container. The cloning of the repo happens in the "clone" step. Currently, the repo owner's personal access token (PAT) is used to authenticate the clone request. 
 
 This is not ideal as the PAT allows for unscoped access. More specifically, the PAT cannot be scoped to specific repositories or resources. A GHA installation access token is more favorable as it allows for scoped access. More specifically, during token creation, we are able to [fine tune the access](https://docs.github.com/en/enterprise-server@3.13/apps/creating-github-apps/authenticating-with-a-github-app/generating-an-installation-access-token-for-a-github-app#generating-an-installation-access-token) that the installation access token has, such as specifying individual repositories and permissions. For our purposes, we'd allow the installation access token read-only access to just the repo associated with the build.
@@ -187,7 +187,7 @@ When setting up the environment for a pipeline, we'll need to check which token 
 // compiler/native/environment.go
 
 // helper function that creates the standard set of environment variables for a pipeline.
-func environment(b *api.Build, m *internal.Metadata, r *api.Repo, u *api.User) map[string]string {
+func environment(b *api.Build, m *internal.Metadata, r *api.Repo, u *api.User, iat string) map[string]string {
 	// ...
 	env := make(map[string]string)
 
@@ -197,19 +197,10 @@ func environment(b *api.Build, m *internal.Metadata, r *api.Repo, u *api.User) m
 		env["VELA_NETRC_PASSWORD"] = u.GetToken()
 		env["VELA_NETRC_USERNAME"] = "x-oauth-basic"
 	} else {
-		env["VELA_NETRC_PASSWORD"] = r.GetInstallationAccessToken()
+		env["VELA_NETRC_PASSWORD"] = iat
 		env["VELA_NETRC_USERNAME"] = "x-access-token"
 	}
 	// ...
-```
-
-```diff
-type Repo struct {
-	ID                     *int64    `json:"id,omitempty"`
-	Owner                  *User     `json:"owner,omitempty"`
-	...
-+	InstallationAcessToken *string   `json:"-"`
-}
 ```
 
 We can further utilize installation access tokens to interact with the SCM, replacing a user's PAT for the following functions:
@@ -217,13 +208,12 @@ We can further utilize installation access tokens to interact with the SCM, repl
 - `GetOrgName`: Fetches the organization name from GitHub.
 - `GetRepo`: Retrieves repository information from GitHub.
 - `GetOrgAndRepoName`: Returns the names of the organization and repository in the SCM.
-- `ListUserRepos`: Lists all repositories the user has access to.
 - `GetPullRequest`: Retrieves a pull request for a repository.
 - `GetBranch`: Retrieves a branch for a repository.
 
-## Phase 3: Retire OAuth App
-- How do we configure webhooks?
-- How do we authenticate users?
+It's important to note that we still need a user's PAT to access user-specific resources, such as the following:
+- `ListUserRepos`: Lists all repositories the user has access to.
+- `ListUsersTeamsForOrg`: Lists a user's teams for an org.
 
 ## Implementation
 
