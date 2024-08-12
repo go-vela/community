@@ -8,6 +8,7 @@ To create a new proposal, make a PR into master using the [template](https://git
 ### 2024
 
 - [03/07 Platform Settings](2024/03-07_platform-settings.md): contains proposal information for `platform settings` and dynamic configurations.
+- [04/26 Container Outputs](2024/04-26_container-outputs.md): contains proposal information for the implementation of outputs from step containers during Vela builds.
 
 ### 2023
 
@@ -36,28 +37,7 @@ To create a new proposal, make a PR into master using the [template](https://git
 
 ### 2019
 
-<<<<<<< HEAD
-- [07/22 Log Streaming](2021/07-22_log-streaming.md): contains proposal information for streaming `logs` for `builds`
-- [08/25 Repo Structure](2021/08-25_repo-structure.md): contains proposal information for condensing the repo structure for Vela
-
-### 2022
-
-- [02/17 Enhanced Event Support](2022/02-17_enhanced-event-support.md): contains proposal information for enhancing `events` and `rulesets`.
-
-### 2023
-
-- [02/23 Build Tokens](2023/02-23_build-tokens.md): contains proposal information for using `build tokens` for worker build API interactions.
-- [03/15 Worker Authentication](2023/03-15_worker-auth.md): contains proposal information for enhancing worker authentication.
-- [03/16 Scheduled Builds](2023/03-16_scheduled-builds.md): contains proposal information for scheduling builds for a repo.
-- [05/11 Queue Sensitivity](2023/05-11_queue-sensitivity.md): contains proposal information for enhancing queue security.
-- [05/16 Worker Visibility](2023/05_16_worker_visibility.md): contains proposal information for extending the worker table with additional fields, and their uses.
-
-### 2024
-
-- [04/26 Container Outputs](2024/04-26_container-outputs.md): contains proposal information for the implementation of outputs from step containers during Vela builds.
-=======
 - [07/01 Templates](2019/07-01_templates.md): contains proposal information for `templates`
 - [07/16 Secrets](2019/07-16_secrets.md): contains proposal information for `secrets`
 - [08/13 Stages](2019/08-13_stages.md): contains proposal information for `stages`
 - [11/05 Routing](2019/11-05_routing.md): contains proposal information for routing `builds` to the queue
->>>>>>> main
