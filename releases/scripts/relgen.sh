@@ -41,8 +41,8 @@ printf '# __TARGET_VERSION__ 🚀\n\nThis document contains all release notes pe
 echo "📣 generating release notes for core vela repos"
 for repo in "${repos[@]}"; do
 	# get the tags
-	LAST_TWO_TAGS="$(gh api repos/go-vela/$repo/releases --jq '[.[] | select(.prerelease != true) | .tag_name] | join(" ")')"
-	LAST_TAG="$(echo $LAST_TWO_TAGS | awk '{print $1}')"
+	LAST_TWO_TAGS="$(gh api repos/go-vela/$repo/releases --jq '[.[] | .tag_name] | join(" ")')"
+	LAST_TAG="HEAD"
 	PREVIOUS_TAG="$(echo $LAST_TWO_TAGS | awk '{print $2}')"
 
 	printf "📝 fetching entries for for %s (from %s to %s)\n" "$repo" "$PREVIOUS_TAG" "$LAST_TAG"
