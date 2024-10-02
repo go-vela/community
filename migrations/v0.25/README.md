@@ -2,7 +2,7 @@
 
 > NOTE: This applies when upgrading to the latest `v0.25.x` release.
 
-**No database changes are required** when migrating from Vela version [v0.24](../../releases/v0.23.md) to [v0.25](../../releases/v0.24.md).
+**No database changes are required** when migrating from Vela version [v0.24](../../releases/v0.24.md) to [v0.25](../../releases/v0.25.md).
 
 ## API Responses
 
