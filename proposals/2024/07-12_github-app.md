@@ -233,6 +233,8 @@ git:
 - The GHA installation must have the permissions listed.
 - The token will have default values to read content, but not write.
 
+#### Should IAT be replaced for other actions?
+
 We can further utilize installation access tokens to interact with the SCM, replacing a user's IAT for the following functions:
 - `Changeset`: Lists the files changed in a commit.
 - `GetOrgName`: Fetches the organization name from GitHub.
