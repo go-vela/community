@@ -176,10 +176,10 @@ func getInstallationToken(ctx context.Context, jwtToken string, installationID 
 6. Use installation access token to [update status of check run(s)](https://docs.github.com/en/enterprise-server@3.13/rest/checks/runs?apiVersion=2022-11-28#update-a-check-run)
 7. Optional: Take action offered by check run(s)
 
-## Phase 2: Reduce usage of PAT with installation token
-By default, Vela clones the repo of a build into a local volume that is mounted into each container. The cloning of the repo happens in the "clone" step. Currently, the repo owner's personal access token (PAT) is used to authenticate the clone request. 
+## Phase 2: Reduce usage of OAuth IAT with installation token
+By default, Vela clones the repo of a build into a local volume that is mounted into each container. The cloning of the repo happens in the "clone" step. Currently, the repo owner's integration access token (IAT) is used to authenticate the clone request. 
 
-This is not ideal as the PAT allows for unscoped access. More specifically, the PAT cannot be scoped to specific repositories or resources. A GHA installation access token is more favorable as it allows for scoped access. More specifically, during token creation, we are able to [fine tune the access](https://docs.github.com/en/enterprise-server@3.13/apps/creating-github-apps/authenticating-with-a-github-app/generating-an-installation-access-token-for-a-github-app#generating-an-installation-access-token) that the installation access token has, such as specifying individual repositories and permissions. For our purposes, we'd allow the installation access token read-only access to just the repo associated with the build.
+This is not ideal as the IAT allows for unscoped access. More specifically, the IAT cannot be scoped to specific repositories or resources. A GHA installation access token is more favorable as it allows for scoped access. More specifically, during token creation, we are able to [fine tune the access](https://docs.github.com/en/enterprise-server@3.13/apps/creating-github-apps/authenticating-with-a-github-app/generating-an-installation-access-token-for-a-github-app#generating-an-installation-access-token) that the installation access token has, such as specifying individual repositories and permissions. For our purposes, we'd allow the installation access token read-only access to just the repo associated with the build.
 
 When setting up the environment for a pipeline, we'll need to check which token type to use, since we can't assume that a repo has the Vela GHA installed. If the repo has installation ID set, we'll choose the more secure method of [authenticating](https://docs.github.com/en/apps/creating-github-apps/authenticating-with-a-github-app/authenticating-as-a-github-app-installation#about-authentication-as-a-github-app-installation) our clone request with a GHA installation access token.
 
@@ -203,7 +203,37 @@ func environment(b *api.Build, m *internal.Metadata, r *api.Repo, u *api.User, i
 	// ...
 ```
 
-We can further utilize installation access tokens to interact with the SCM, replacing a user's PAT for the following functions:
+Users can specify granular permissions for the installation token:
+
+This config applies additional repos and `write` to contents.
+```yaml
+git: # brand new yaml key
+  access:
+    repositories: # list of repositories to grant permissions
+      - "demo-repo"
+      - "helloworld"
+    permissions: # non-default permissions to apply
+      content: read
+      checks: write
+```
+
+The default would be `contents:read` with only the target repo:
+
+```yaml
+git:
+  access:
+    repositories:
+      - "${VELA_REPO_NAME}
+    permissions:
+      contents: read
+      checks: write
+```
+
+- The GHA installation must have access to the repos listed.
+- The GHA installation must have the permissions listed.
+- The token will have default values to read content, but not write.
+
+We can further utilize installation access tokens to interact with the SCM, replacing a user's IAT for the following functions:
 - `Changeset`: Lists the files changed in a commit.
 - `GetOrgName`: Fetches the organization name from GitHub.
 - `GetRepo`: Retrieves repository information from GitHub.
@@ -211,7 +241,7 @@ We can further utilize installation access tokens to interact with the SCM, repl
 - `GetPullRequest`: Retrieves a pull request for a repository.
 - `GetBranch`: Retrieves a branch for a repository.
 
-It's important to note that we still need a user's PAT to access user-specific resources, such as the following:
+It's important to note that we still need a user's IAT to access user-specific resources, such as the following:
 - `ListUserRepos`: Lists all repositories the user has access to.
 - `ListUsersTeamsForOrg`: Lists a user's teams for an org.
 
