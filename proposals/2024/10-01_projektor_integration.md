@@ -161,8 +161,8 @@ To effectively manage test artifacts and large volumes of test result data, Go-V
 - **Access and Retrieval**: Provide a straightforward API for storing and retrieving artifacts, ensuring easy access from Vela’s user interface and other tools.
 - **Scalability**: Enable seamless scalability to accommodate growing amounts of test data over time.
 - **Data Retention Policies**: Implement retention policies to manage the lifecycle of stored artifacts, ensuring that outdated data is archived or deleted as necessary.
-### 5. Slack Integration
-To keep teams informed about test results in real-time, Go-Vela will include integration with Slack. This feature will notify designated channels or users about the outcomes of test runs and any significant changes in test performance.
+### 5. Slack Integration (Feature Flag)
+To keep teams informed about test results in real-time, Go-Vela will include integration with Slack as a feature flag. This feature will notify designated channels or users about the outcomes of test runs and any significant changes in test performance.
 #### Notification Features
 - **Test Result Notifications**: Send messages to a specified Slack channel with a summary of test results, including the number of tests run, passed, failed, and any relevant error messages.
 - **Flaky Test Alerts**: Notify teams when flaky tests are detected, prompting investigation and resolution.
@@ -196,7 +196,7 @@ Vela’s UI will be enhanced to display test results in an intuitive and user-fr
 **NOTES**: The list above is not a complete list of API endpoints but provides a starting point for implementing test reporting features in Vela. The API endpoints listed above are subject to change based on the final implementation details.
 ## Implementation
 ### Phases
-1. **Phase 1: Basic Test Reporting**
+- **Phase 1: Basic Test Reporting**
   - Implement the `test-report` step and backend support for storing test results.
   - Simple UI to display test results.
 - **Phase 2: Advanced Features**
