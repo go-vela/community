@@ -138,6 +138,22 @@ Based on the Projektor.dev architecture, here is a comprehensive list of tables 
 17. **`shedlock`**: Used for distributed locking to prevent concurrent processing issues.
 
 Tables related to git metadata are omitted as Vela already has a robust git integration system.
+
+
+#### Proposed API Endpoints
+Vela’s backend will expose new API endpoints to support test reporting and analytics features.
+1. **`/api/v1/test-report`**: POST endpoint to submit test results for processing and storage.
+2. **`/api/v1/test-report/{run_id}`**: GET endpoint to retrieve test results for a specific test run.
+3. **`/api/v1/code-coverage`**: POST endpoint to submit code coverage data for processing and storage.
+4. **`/api/v1/code-coverage/{run_id}`**: GET endpoint to fetch code coverage data for a specific run.
+5. **`/api/v1/performance-metrics`**: POST endpoint to submit performance metrics for processing and storage.
+6. **`/api/v1/performance-metrics/{run_id}`**: GET endpoint to retrieve performance metrics for a specific run.
+7. **`/api/v1/code-quality`**: POST endpoint to submit code quality reports for processing and storage.
+8. **`/api/v1/code-quality/{run_id}`**: GET endpoint to fetch code quality data for a specific run.
+9. **`/api/v1/flaky-tests`**: GET endpoint to list flaky tests detected in the system.
+10. **`/api/v1/test-notifications`**: POST endpoint to send test result notifications to Slack channels.
+
+
 ### 4. Object Store Integration
 To effectively manage test artifacts and large volumes of test result data, Go-Vela will incorporate an object store as part of the test reporting solution.
 #### Key Features of the Object Store
@@ -176,20 +192,6 @@ Vela’s UI will be enhanced to display test results in an intuitive and user-fr
 - **Code Quality Reports**: Display code quality metrics, such as common patterns and potential bugs.
 - **Flaky Test Detection**: Identify and flag flaky tests for further investigation.
 - **Real-time Notifications**: Send Slack notifications for test results, flaky tests, and other critical events.
-
-### 8. API Endpoints
-Vela’s backend will expose new API endpoints to support test reporting and analytics features.
-#### Proposed API Endpoints
-1. **`/api/v1/test-report`**: POST endpoint to submit test results for processing and storage.
-2. **`/api/v1/test-report/{run_id}`**: GET endpoint to retrieve test results for a specific test run. 
-3. **`/api/v1/code-coverage`**: POST endpoint to submit code coverage data for processing and storage.
-4. **`/api/v1/code-coverage/{run_id}`**: GET endpoint to fetch code coverage data for a specific run.
-5. **`/api/v1/performance-metrics`**: POST endpoint to submit performance metrics for processing and storage.
-6. **`/api/v1/performance-metrics/{run_id}`**: GET endpoint to retrieve performance metrics for a specific run.
-7. **`/api/v1/code-quality`**: POST endpoint to submit code quality reports for processing and storage.
-8. **`/api/v1/code-quality/{run_id}`**: GET endpoint to fetch code quality data for a specific run.
-9. **`/api/v1/flaky-tests`**: GET endpoint to list flaky tests detected in the system.
-10. **`/api/v1/test-notifications`**: POST endpoint to send test result notifications to Slack channels.
 
 **NOTES**: The list above is not a complete list of API endpoints but provides a starting point for implementing test reporting features in Vela. The API endpoints listed above are subject to change based on the final implementation details.
 ## Implementation
