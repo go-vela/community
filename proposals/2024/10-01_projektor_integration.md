@@ -57,9 +57,7 @@ Provide your description here.
 
 1. Why is this required?
 
-* Current Projektor is an open-source project and not actively maintained. 
-* This allows users to access test reports without needing use special test plugins that interact with other infrastructure.
-* It may set the groundwork for feature flags, meaning faster feature rollout and easier feature rollback.
+* Test reporting is a widely used feature in CI/CD pipelines, providing insights into test results, code quality, and performance metrics. By integrating Projektor's test reporting features natively into Vela, users can easily track and analyze test data across builds.
 
 2. If this is a redesign or refactor, what issues exist in the current implementation?
 
@@ -71,7 +69,7 @@ Provide your description here.
 
 4. Are there any related issues? Please provide them below if any exist.
 
-* This proposal will replace the current projektor-vela plugin. But it will not be replacing projektor-tap plugin.
+* https://github.com/go-vela/community/issues/528
 
 ## Design
 
