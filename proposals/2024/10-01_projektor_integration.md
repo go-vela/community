@@ -58,7 +58,7 @@ Provide your description here.
 1. Why is this required?
 
 * Current Projektor is an open-source project and not actively maintained. 
-* This allows users to access test reports without needing use vela-projektor plugin.
+* This allows users to access test reports without needing use special test plugins that interact with other infrastructure.
 * It may set the groundwork for feature flags, meaning faster feature rollout and easier feature rollback.
 
 2. If this is a redesign or refactor, what issues exist in the current implementation?
