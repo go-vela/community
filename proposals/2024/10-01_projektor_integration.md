@@ -67,7 +67,7 @@ Provide your description here.
 
 3. Are there any other workarounds, and if so, what are the drawbacks?
 
-* Yes. Users can use the projektor-vela plugin to access test reports. However, this is not a native solution and requires additional setup.
+* Yes. Users can set up separate infra and interact with it using a plugin to upload and access test reports. However, this is not a native solution and requires additional setup.
 
 4. Are there any related issues? Please provide them below if any exist.
 
