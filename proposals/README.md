@@ -8,6 +8,7 @@ To create a new proposal, make a PR into master using the [template](https://git
 ### 2024
 
 - [03/07 Platform Settings](2024/03-07_platform-settings.md): contains proposal information for `platform settings` and dynamic configurations.
+- [04/26 Container Outputs](2024/04-26_container-outputs.md): contains proposal information for the implementation of outputs from step containers during Vela builds.
 
 ### 2023
 
