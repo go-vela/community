@@ -51,7 +51,13 @@ This section is intended to describe the new feature, redesign or refactor.
 Provide your description here.
 -->
 
-* Currently, there is a lack of native support for handling, visualizing, and tracking test results across builds. Inspired by the feature set in Projektor.dev, this proposal aims to add a dedicated, native support `test-report` feature to Vela.This feature will allow users to parse, store, and visualize test results in a more user-friendly manner.
+* Test reporting is a widely used capability across CI/CD platforms and often implemented as a bolt-on component requiring separate management of plugins and infrastructure. This proposal seeks to streamline the experience by integrating test reporting into Vela itself.
+* Many platforms like Semaphore, CircleCI, Github Actions, Gitlab CI, Travis CI, Buildkite and Codefresh already offer robust test-reporting mechanisms such as:
+  - Enabling workflows to store, view, and manage artifacts, including test logs, for visibility across builds.
+  - Parsing JUnit XML, JSON, and other test result formats to display test results, pass/fail rates, and error messages.
+  - Visualizing test executions and integrates with advance analytics engines.
+* With this integration, Vela can deliver similar capabilities but tailored to its ecosystem while ensuring compatibility with modern development workflows.
+
 
 **Please briefly answer the following questions:**
 
