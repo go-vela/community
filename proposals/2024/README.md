@@ -4,4 +4,5 @@ This directory is meant to house a historical record of the more substantial pot
 
 ## Index
 
-- [03/07 Platform Settings](2024/03-07_platform-settings.md): contains proposal information for `platform settings` and dynamic configurations.
+- [03/07 Platform Settings](03-07_platform-settings.md): contains proposal information for `platform settings` and dynamic configurations.
+- [12/04 YAML Migration](12-04_yaml-migration.md): contains proposal information for `yaml migraton` to go-yaml v3.
