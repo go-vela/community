@@ -10,6 +10,9 @@ ___  ___  _
 |__/ |__/ |___ 
 */
 
+-- Start table alter transaction
+BEGIN TRANSACTION;
+
 -- Add warnings to pipelines table
 ALTER TABLE pipelines
     ADD COLUMN IF NOT EXISTS warnings VARCHAR(5000)
@@ -38,6 +41,9 @@ DROP INDEX IF EXISTS builds_source
 CREATE INDEX IF NOT EXISTS builds_event ON builds (event)
 ;
 
+-- Save changes
+COMMIT;
+
 
 /*
 ___  _  _ _    
@@ -45,7 +51,12 @@ ___  _  _ _
 |__/ |  | |___           
 */
 
+-- Start transaction
+BEGIN TRANSACTION;
+
 -- Set approval_timeout to 7 (or configured default approval_timeout) in repos table for all repos
 UPDATE repos 
     SET approval_timeout = 7
 ;
+
+COMMIT;
