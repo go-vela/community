@@ -37,3 +37,15 @@ DROP INDEX IF EXISTS builds_source
 -- Add builds_event index
 CREATE INDEX IF NOT EXISTS builds_event ON builds (event)
 ;
+
+
+/*
+___  _  _ _    
+|  \ |\/| |    
+|__/ |  | |___           
+*/
+
+-- Set approval_timeout to 7 (or configured default approval_timeout) in repos table for all repos
+UPDATE repos 
+    SET approval_timeout = 7
+;
