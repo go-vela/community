@@ -24,3 +24,4 @@ and utilities between versions.
 - [v0.23](./v0.23): contains information for migrating `v0.22.x` -> `v0.23.x`
 - [v0.24](./v0.24): contains information for migrating `v0.23.x` -> `v0.24.x`
 - [v0.25](./v0.25): contains information for migrating `v0.24.x` -> `v0.25.x`
+- [v0.26](./v0.26): contains information for migrating `v0.25.x` -> `v0.26.x`
