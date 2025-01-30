@@ -33,12 +33,21 @@ ALTER TABLE builds
     ADD COLUMN IF NOT EXISTS fork BOOLEAN
 ;
 
+-- Update hook error field to be larger
+ALTER TABLE hooks
+    ALTER COLUMN error TYPE VARCHAR(5000)
+;
+
 -- Delete builds_source index
 DROP INDEX IF EXISTS builds_source
 ;
 
 -- Add builds_event index
 CREATE INDEX IF NOT EXISTS builds_event ON builds (event)
+;
+
+-- Add builds_repo_id_created index
+CREATE INDEX IF NOT EXISTS builds_repo_id_created ON builds (repo_id, created)
 ;
 
 -- Save changes
