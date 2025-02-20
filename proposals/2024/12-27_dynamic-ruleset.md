@@ -126,9 +126,9 @@ N/A
 
 ### YAML
 
-A `evaluation` key will be added under `ruleset` for the new dynamic functionality.
+A `eval` key will be added under `ruleset` for the new dynamic functionality.
 
-This will instruct Vela to execute the step if the `evaluation` expression returns `true`.
+This will instruct Vela to execute the step if the `eval` expression returns `true`.
 
 Example pipeline:
 
@@ -136,19 +136,19 @@ Example pipeline:
 steps:
   - name: simple-match
     ruleset:
-      evaluation: "VELA_BUILD_AUTHOR == 'JordanSussman'"
+      eval: "VELA_BUILD_AUTHOR == 'JordanSussman'"
     commands:
       - echo "this will only run if the build author name is JordanSussman"
 
   - name: function-match
     ruleset:
-      evaluation: "hasPrefix(VELA_BUILD_AUTHOR, 'Jordan')"
+      eval: "hasPrefix(VELA_BUILD_AUTHOR, 'Jordan')"
     commands:
       - echo "this will only run if the build author name has the prefix of Jordan"
       
   - name: new-and-old
     ruleset:
-      evaluation: "VELA_BUILD_AUTHOR == 'JordanSussman'"
+      eval: "VELA_BUILD_AUTHOR == 'JordanSussman'"
       event: [tag]
     commands:
       - echo "this will only run if JordanSussman triggered the tag event"
@@ -162,15 +162,17 @@ This section is intended to explain how the solution will be implemented for the
 NOTE: If there are no current plans for implementation, please leave this section blank.
 -->
 
-Users will be able to use [expr](https://expr-lang.org/) syntax within the `evaluation` key to filter steps.
+Users will be able to use [expr](https://expr-lang.org/) syntax within the `eval` key to filter steps.
 
 Expr describes itself as:
 
 > Expr is a Go-centric expression language designed to deliver dynamic configurations with unparalleled accuracy, safety, and speed. Expr combines simple syntax with powerful features for ease of use.
 
-All of the [built-in Vela environment variables](https://go-vela.github.io/docs/reference/environment/variables/) will be available within the `evaluation` key to perform logic with.
+All of the [built-in Vela environment variables](https://go-vela.github.io/docs/reference/environment/variables/) will be available within the `eval` key to perform logic with.
 
-The server code changes will involve updating the existing ruleset match function to consider both the `ruleset` and `evaluation` keys when determining if the step should execute. Both `ruleset` and `evaluation` must return true for the step to proceed.
+For those interested in understanding how `expr` works, the project [README](https://github.com/expr-lang/expr/tree/fb6792b2486778dd8a3eb5ab2e7550f5b1dad150?tab=readme-ov-file#examples) has a nice example of managing the underlying code for injecting environment variables. Additionally, I've created a [Go playground](https://go.dev/play/p/6dEEUPTzK8r) to demonstrate a more Vela-specific implementation.
+
+The server code changes will involve updating the existing ruleset match function to consider both the `ruleset` and `eval` keys when determining if the step should execute. Both `ruleset` and `eval` must return true for the step to proceed.
 
 **Please briefly answer the following questions:**
 
@@ -192,6 +194,6 @@ The code changes required to incorporate this should be relatively minor, so the
 
 ## Questions
 
-1. Should we name the new key `evaluation` or choose a different name?
+1. Should we name the new key `eval` or choose a different name?
 2. Should the new key be nested under `ruleset` or be at the same level?
-3. Should it be possible to use both the existing `ruleset` and the new `evaluation` feature simultaneously? If so, should both need to return true for the step to execute?
+3. Should it be possible to use both the existing `ruleset` and the new `eval` feature simultaneously? If so, should both need to return true for the step to execute?
