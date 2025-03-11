@@ -30,7 +30,7 @@ While Vela is adhering to [ZeroVer](https://0ver.org/) versioning, support will 
 That means, if the current version is `0.26.x`, support will extend to `0.25.x`. Security fixes will be backported
 to the supported versions only.
 
-Please see our [releases documentation](../releases/README.md) documentation for more information.
+Please see our [releases documentation](../releases/README.md) documentation for more information on current releases.
 
 ## License
 
