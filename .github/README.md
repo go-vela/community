@@ -26,9 +26,9 @@ Please see our [proposals documentation](../proposals/README.md) documentation f
 
 A collection of records (a.k.a. release notes) detailing the new features or modifications made to the product.
 
-While Vela is adhering to [ZeroVer](https://0ver.org/) versioning, support will be limited to `y-1` (where version is `x.y.z`).
-That means, if the current version is `0.26.x`, support will extend to `0.25.x`. Security fixes will be backported
-to the supported versions only.
+Vela uses semantic versioning and while Vela is at [major version zero](https://semver.org/#spec-item-4), support 
+will be limited to `y-1` (where version is `x.y.z`). That means, if the current version is `0.26.x`, support will 
+extend to `0.25.x`. Security fixes will be backported to the supported versions only.
 
 Please see our [releases documentation](../releases/README.md) documentation for more information on current releases.
 
