@@ -7,6 +7,7 @@ To create a new proposal, make a PR into master using the [template](https://git
 
 ### 2024
 
+- [12/27 Dynamic ruleset](2024/12-27_dynamic-ruleset.md): contains proposal information for enhancing `ruleset` to be more dynamic.
 - [03/07 Platform Settings](2024/03-07_platform-settings.md): contains proposal information for `platform settings` and dynamic configurations.
 - [12/04 YAML Migration](2024/12-04_yaml-migration.md): contains proposal information for `yaml migraton` to go-yaml v3.
 
