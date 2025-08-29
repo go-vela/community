@@ -1,7 +1,7 @@
 /*
     VELA MIGRATION v0.26.x --> v0.27.x
 
-    Please note that this SQL file must be executed prior to upgrading Vela to version 0.27.x
+    Please note that this SQL file must be executed prior to upgrading Vela to version 0.27co.x
 */
 
 /*
@@ -54,18 +54,6 @@ ALTER TABLE settings
 CREATE INDEX IF NOT EXISTS secret_repo_allowlists_secret_id ON secret_repo_allowlists (secret_id)
 ;
 
--- Add logs_created_at index
-CREATE INDEX IF NOT EXISTS logs_created_at ON logs (created_at)
-;
-
--- Add logs_service_id index
-CREATE INDEX IF NOT EXISTS logs_service_id ON logs (service_id)
-;
-
--- Add logs_step_id index
-CREATE INDEX IF NOT EXISTS logs_step_id ON logs (step_id)
-;
-
 -- Save changes
 COMMIT;
 
@@ -79,91 +67,48 @@ ___  _  _ _
 -- Start transaction
 BEGIN TRANSACTION;
 
+-- Set default scm role mapping in settings table
+UPDATE settings
+    SET scm = '{"repo_role_map":{"admin":"admin","maintain":"write","read":"read","triage":"read","write":"write"},"org_role_map":{"admin":"admin","member":"read"},"team_role_map":{"maintainer":"admin","member":"read"}}'
+    WHERE scm IS NULL
+;
+
+-- Set max_dashboard_repos to 10 (or configured default max_dashboard_repos) in settings table
+UPDATE settings
+    SET max_dashboard_repos = 10
+    WHERE max_dashboard_repos IS NULL
+;
+
+-- Set queue_restart_limit to 30 (or configured default queue_restart_limit) in settings table
+UPDATE settings
+    SET queue_restart_limit = 30
+    WHERE queue_restart_limit IS NULL
+;
+
 -- Backfill created_at in logs table
 -- Attempt to backfill from steps and services first for accuracy
 -- Fallback to builds (via step/service) if still NULL
 -- Final fallback to now() for any remaining NULLs
-
--- Backfill from steps
 UPDATE logs
-SET created_at = (
-    SELECT s.created
-    FROM steps s
-    WHERE s.id = logs.step_id
-        AND s.created IS NOT NULL
+SET created_at = COALESCE(
+        s.created,
+        sv.created,
+        b_step.created,
+        b_serv.created,
+        CAST(strftime('%s','now') AS INTEGER)
 )
-WHERE created_at IS NULL
-AND step_id IS NOT NULL
-AND EXISTS (
-    SELECT 1 FROM steps s
-    WHERE s.id = logs.step_id
-        AND s.created IS NOT NULL
-	)
-;
-
--- Backfill from services
-UPDATE logs
-SET created_at = (
-    SELECT sv.created
-    FROM services sv
-    WHERE sv.id = logs.service_id
-        AND sv.created IS NOT NULL
-)
-WHERE created_at IS NULL
-AND service_id IS NOT NULL
-AND EXISTS (
-    SELECT 1 FROM services sv
-    WHERE sv.id = logs.service_id
-        AND sv.created IS NOT NULL
-	)
-;
-
--- Optional: backfill from builds (via step) if still NULL
-UPDATE logs
-SET created_at = (
-    SELECT b.created
-    FROM steps s
-    JOIN builds b ON b.id = s.build_id
-    WHERE s.id = logs.step_id
-        AND b.created IS NOT NULL
-    LIMIT 1
-)
-WHERE created_at IS NULL
-AND step_id IS NOT NULL
-AND EXISTS (
-    SELECT 1
-    FROM steps s
-    JOIN builds b ON b.id = s.build_id
-    WHERE s.id = logs.step_id
-        AND b.created IS NOT NULL
-)
-;
-
--- Optional: backfill from builds (via service) if still NULL
-UPDATE logs
-SET created_at = (
-    SELECT b.created
-    FROM services sv
-    JOIN builds b ON b.id = sv.build_id
-    WHERE sv.id = logs.service_id
-        AND b.created IS NOT NULL
-    LIMIT 1
-)
-WHERE created_at IS NULL
-AND service_id IS NOT NULL
-AND EXISTS (
-    SELECT 1
-    FROM services sv
-    JOIN builds b ON b.id = sv.build_id
-    WHERE sv.id = logs.service_id
-        AND b.created IS NOT NULL
-)
-;
-
--- Final fallback to now() for any remaining NULLs
-UPDATE logs
-SET created_at = CAST(strftime('%s','now') AS INTEGER)
-WHERE created_at IS NULL
-;
+FROM logs AS l2
+LEFT JOIN steps    AS s      ON l2.step_id    = s.id
+LEFT JOIN services AS sv     ON l2.service_id = sv.id
+LEFT JOIN builds   AS b_step ON b_step.id = s.build_id
+LEFT JOIN builds   AS b_serv ON b_serv.id = sv.build_id
+WHERE logs.id = l2.id
+  AND logs.created_at IS NULL;
 
 COMMIT;
+
+-- Add logs_created_at index
+CREATE INDEX IF NOT EXISTS logs_created_at ON logs (created_at)
+;
+
+ANALYZE;

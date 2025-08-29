@@ -9,11 +9,11 @@ administrator will want to ensure the following actions are being performed. All
 
 2. The `builds` table adds a `route` (VARCHAR-250) column.
 
-3. The `logs` table adds a `created_at` (BIGINT) column to track when logs were created. Additional indexes are created to improve query performance: `logs_created_at` (on `created_at`), `logs_service_id` (on `service_id`), and `logs_step_id` (on `step_id`).
+3. The `logs` table adds a `created_at` (BIGINT) column to track when logs were created. An additional index is created to improve query performance: `logs_created_at` (on `created_at`).
 
 4. The `repos` table adds `custom_props` (JSON, nullable) for storing custom repository properties.
 
-5. The `settings` table adds `scm` (JSON, nullable) for source control management configuration.
+5. The `settings` table adds `scm` (JSON, nullable) for source control management configuration regarding role mappings.
 
 6. The `settings` table adds `max_dashboard_repos` (INTEGER).
 
@@ -25,4 +25,6 @@ administrator will want to ensure the following actions are being performed. All
 	- From `builds.created` via joins through steps or services if still NULL.
 	- Final fallback sets remaining NULLs to the current epoch time.
 	
-   If accuracy is less critical and speed is preferred, you can simplify to only the final fallback to current time.
+   If accuracy is less critical and speed is preferred, you can simplify to only the final fallback to current time or leave as-is.
+
+   For large `logs` tables, consider running the backfill in smaller batches to avoid long locks or timeouts.
