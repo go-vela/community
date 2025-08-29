@@ -13,7 +13,7 @@ administrator will want to ensure the following actions are being performed. All
 
 4. The `repos` table adds `custom_props` (JSON, nullable) for storing custom repository properties.
 
-5. The `settings` table adds `scm` (JSON, nullable) for source control management configuration regarding role mappings with default value of `{"repo_role_map":{"admin":"admin","maintain":"write","read":"read","triage":"read","write":"write"},"org_role_map":{"admin":"admin","member":"read"},"team_role_map":{"maintainer":"admin","member":"read"}}` (see https://github.com/go-vela/server/blob/ba344e5d571a790f5bd16046e199c45c29e20269/scm/flags.go#L174-L224)
+5. The `settings` table adds `scm` (JSON, nullable) for source control management configuration regarding role mappings with default value of `{"repo_role_map":{"admin":"admin","maintain":"write","read":"read","triage":"read","write":"write"},"org_role_map":{"admin":"admin","member":"read"},"team_role_map":{"maintainer":"admin","member":"read"}}` ([see default values defined in code](https://github.com/go-vela/server/blob/ba344e5d571a790f5bd16046e199c45c29e20269/scm/flags.go#L174-L224)).
 
 6. The `settings` table adds `max_dashboard_repos` (INTEGER) with default value of 10.
 
