@@ -15,9 +15,9 @@ administrator will want to ensure the following actions are being performed. All
 
 5. The `settings` table adds `scm` (JSON, nullable) for source control management configuration regarding role mappings.
 
-6. The `settings` table adds `max_dashboard_repos` (INTEGER).
+6. The `settings` table adds `max_dashboard_repos` (INTEGER) with default value of 10.
 
-7. The `settings` table adds `queue_restart_limit` (INTEGER).
+7. The `settings` table adds `queue_restart_limit` (INTEGER) with default value of 30.
 
 8. Backfill `logs.created_at` for existing rows. The migration attempts to populate values in the following order for accuracy:
 	- From `steps.created` where `logs.step_id = steps.id`.
