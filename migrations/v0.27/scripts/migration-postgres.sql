@@ -111,9 +111,7 @@ WHERE l.id = l2.id
 
 COMMIT;
 
--- Create indices on logs table AFTER backfilling created_at
-
--- Add logs_created_at index
+-- Add logs_created_at index AFTER backfilling created_at
 -- Note: remove CONCURRENTLY if your logs table is partitioned
 CREATE INDEX CONCURRENTLY IF NOT EXISTS logs_created_at ON logs (created_at)
 ;
