@@ -33,9 +33,19 @@ ALTER TABLE builds
     ADD COLUMN IF NOT EXISTS fork BOOLEAN
 ;
 
+-- Add route to builds table
+ALTER TABLE builds
+    ADD COLUMN IF NOT EXISTS route VARCHAR(250)
+;
+
 -- Update hook error field to be larger
 ALTER TABLE hooks
     ALTER COLUMN error TYPE VARCHAR(5000)
+;
+
+-- Add queue_restart_limit to settings table
+ALTER TABLE settings
+    ADD COLUMN IF NOT EXISTS queue_restart_limit INTEGER
 ;
 
 -- Delete builds_source index
