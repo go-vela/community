@@ -22,6 +22,8 @@ administrator will want to ensure the following actions are being performed. All
   - https://github.com/go-vela/server/pull/1221
 
 
-5. Lastly, `v0.26.x` introduces a new index (`builds_event`) to the default configuration. This index will be created automatically. However, if you are running the `server` component with the `VELA_DATABASE_SKIP_CREATION` set to `true`, you will need to manually create this index. This change accompanies a deletion of an unused index (`builds_source`). You will need to manually delete this index if it exists, regardless of the skip creation setting.
+5. `v0.26.x` introduces a new index (`builds_event`) to the default configuration. This index will be created automatically. However, if you are running the `server` component with the `VELA_DATABASE_SKIP_CREATION` set to `true`, you will need to manually create this index. This change accompanies a deletion of an unused index (`builds_source`). You will need to manually delete this index if it exists, regardless of the skip creation setting.
 
   - https://github.com/go-vela/server/pull/1228
+
+6. Specifically `v0.26.5` adds the `route` column to the `builds` table as well as the `queue_restart_limit` column to the `settings` table.
