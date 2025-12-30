@@ -37,3 +37,6 @@ release-*.md
 
 # Affinity lock files
 *~lock~
+
+# Ignore IDE files
+.idea/
