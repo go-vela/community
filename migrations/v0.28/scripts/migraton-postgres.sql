@@ -45,3 +45,24 @@ ALTER TABLE settings
 
 -- Save changes
 COMMIT;
+
+/*
+___  _  _ _    
+|  \ |\/| |    
+|__/ |  | |___           
+*/
+
+-- Start transaction
+
+BEGIN TRANSACTION;
+
+-- Update hook_counter in repos table
+UPDATE repos r
+SET hook_counter = COALESCE((
+    SELECT COUNT(*)
+    FROM hooks h
+    WHERE h.repo_id = r.id
+), 0);
+
+-- Save changes
+COMMIT;
