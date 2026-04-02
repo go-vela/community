@@ -1,6 +1,6 @@
 ---
 name: release-notes
-description: "Generates Vela release notes for a given target version by fetching commits from the five core go-vela repos (cli, sdk-go, server, ui, worker), filtering and categorizing them by conventional commit type, writing an AI-authored Highlights section, and producing a finished draft at releases/<version>.md. Supports two modes: tagged (compare previous x.(y-1).z to target .0) and unreleased (compare latest non-prerelease tag to HEAD on each repo)."
+description: "Generates Vela release notes for a given target version by fetching commits from the five core go-vela repos (cli, sdk-go, server, ui, worker), filtering and categorizing them by conventional commit type, writing an AI-authored Highlights section, and producing a finished draft at releases/<version>.md. Supports two modes: tagged (compare previous x.(y-1).z to target .0, with a forward-bridge if a repo has already released past target) and unreleased (compare latest non-prerelease tag to HEAD on each repo)."
 argument-hint: "<target-version> [--unreleased] (e.g. v0.28 or v0.28 --unreleased)"
 user-invokable: true
 ---
@@ -39,8 +39,12 @@ and narrative writing.
 - Do **not** commit or stage any files (`git commit`, `git add`).
 - `gh api` calls are permitted **only** for read operations (GET requests):
   fetching releases, tags, and commit comparisons.
-- The only write action permitted is creating or overwriting the local file
-  `releases/<TARGET_VERSION>.md` on disk.
+- Do **not** generate helper scripts under `releases/scripts/` (or anywhere in
+  the repo) as part of this workflow.
+- The only write actions permitted are creating or overwriting
+  `releases/<TARGET_VERSION>.md` and `releases/<TARGET_VERSION>-commits.txt`.
+  If temporary automation is needed, use ephemeral locations outside the repo
+  (for example `/tmp`) and do not leave generated files behind in the workspace.
 
 ---
 
@@ -73,14 +77,31 @@ gh api "repos/go-vela/<repo>/releases" \
 #### Tagged mode (`UNRELEASED=false`)
 
 Goal: compare the `x.y.0` tag of the target version to the `x.(y-1).z` tag of
-the previous minor series.
+the previous minor series, unless the repo has already cut a newer stable
+release in which case compare from `x.y.0` forward to that newer tag.
 
-1. Find `LAST_TAG`: the tag matching `v<MINOR_SERIES>.0` exactly (e.g. `v0.28.0`).
-   If no such tag exists for a given repo, skip that repo and note it in the output.
-2. Find `PREVIOUS_TAG`: iterate the semver-sorted tag list starting after
-   `LAST_TAG`; pick the first tag whose major.minor portion differs from
-   `MINOR_SERIES`. This will be the highest patch of the prior series
-   (e.g. `v0.27.5`, not necessarily `v0.27.0`).
+1. Find `TARGET_TAG`: the tag matching `v<MINOR_SERIES>.0` exactly (e.g. `v0.28.0`).
+  If no such tag exists for a given repo, skip that repo and note it in the output.
+2. Find `LATEST_STABLE_TAG`: the newest semver-sorted stable tag for that repo.
+3. Determine range mode:
+  - **Standard mode** (default): if `LATEST_STABLE_TAG == TARGET_TAG`, set
+    `LAST_TAG = TARGET_TAG`, then iterate the semver-sorted tag list starting
+    after `LAST_TAG` and pick the first tag whose major.minor differs from
+    `MINOR_SERIES` as `PREVIOUS_TAG`.
+  - **Forward-bridge mode**: if `LATEST_STABLE_TAG > TARGET_TAG`, set
+    `PREVIOUS_TAG = TARGET_TAG` and `LAST_TAG = LATEST_STABLE_TAG`.
+    Example: for target `v0.28`, if UI has `v0.29.0`, use
+    `v0.28.0...v0.29.0` for UI.
+4. If Standard mode cannot find a prior minor-series tag, skip that repo and
+  note it in the output.
+5. Do **not** derive `PREVIOUS_TAG` from the raw API order. Always derive both
+   `LATEST_STABLE_TAG` and `PREVIOUS_TAG` from the semver-sorted list.
+6. Add a per-repo range validation check before fetching commits:
+   - `TARGET_TAG` must exist for tagged mode, otherwise skip.
+   - In forward-bridge mode, ensure `PREVIOUS_TAG == TARGET_TAG` and
+     `LAST_TAG` is the highest semver tag.
+   - In standard mode, ensure `PREVIOUS_TAG` and `LAST_TAG` are different.
+   If a check fails, skip that repo and note the reason in the output.
 
 #### Unreleased mode (`UNRELEASED=true`)
 
@@ -88,9 +109,9 @@ Goal: capture all work since the last non-prerelease tag on each repo, regardles
 of version series.
 
 1. `LAST_TAG` = `HEAD`
-2. `PREVIOUS_TAG` = the first (newest) tag returned by the releases API for that
-   repo — i.e. the most recent non-prerelease tag on that repo. Repos may be on
-   different series; treat each independently.
+2. `PREVIOUS_TAG` = the first (newest) stable tag for that repo — i.e. the
+  most recent non-prerelease tag on that repo. Repos may be on
+  different series; treat each independently.
 
 ### 3. Fetch Commits
 
@@ -115,12 +136,14 @@ Extract per commit:
 Format each entry as:
 
 ```
-- (<repo>) <subject> [#NNN](https://github.com/go-vela/<repo>/pull/NNN) - thanks [@login](https://github.com/login)!
+- (<repo>) <subject with ([#NNN](https://github.com/go-vela/<repo>/pull/NNN)) inline when present> - thanks [@login](https://github.com/login)!
 ```
 
 Where `#NNN` is the PR number extracted from the commit subject if present
 (pattern: `(#NNN)` at the end of the subject line).
-If no PR number is present, link to the commit URL using the short SHA as the label.
+When present, replace the trailing `(#NNN)` in the subject with `([#NNN](...))`
+instead of appending a second PR link at the end of the line.
+If no PR number is present, append a link to the commit URL using the short SHA as the label.
 
 As entries are collected from each repo, append them to an in-memory **raw
 commit list** (all entries, unfiltered). This list is written to disk in Step 4.
@@ -147,6 +170,14 @@ together, grouped by repo, in the original fetch order) to:
 
 ```
 releases/<TARGET_VERSION>-commits.txt
+```
+
+For each repo section header in this file, include the resolved compare range
+and mode for traceability, for example:
+
+```text
+## ui (v0.28.0...v0.29.0, mode=forward-bridge)
+## server (v0.27.5...v0.28.0, mode=standard)
 ```
 
 This file is for human review only — it is excluded from version control via
@@ -234,3 +265,6 @@ Two files are written in total:
 |---|---|---|
 | `releases/<TARGET_VERSION>.md` | Finished release notes draft | Yes, after human review |
 | `releases/<TARGET_VERSION>-commits.txt` | Annotated raw commit audit log | No — excluded via `releases/.gitignore` |
+
+No additional generated helper scripts should be created or kept in the
+repository during this process.
